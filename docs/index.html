@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Digital Relating Artifacts</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <header class="hero-header">
+      <div class="brand-name">
+        <span class="brand-mark">DR</span>
+        <div>
+          <h1>Digital Relating</h1>
+          <p>Curated interactive artifacts and embeddable demos for your audience.</p>
+        </div>
+      </div>
+      <p class="hero-copy">Browse, preview, and manage your HTML artifacts from one polished gallery. Embed individual entries with a simple iframe link.</p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="#artifacts-section">View Artifacts</a>
+        <a class="button button-secondary" href="#upload-section">Upload New</a>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="intro-panel">
+        <div>
+          <h2>How it works</h2>
+          <p>Drop HTML/JS artifact files into <code>artifacts/</code> and list them in <code>artifacts/list.json</code>. Publish the folder as a static site, then embed any item by URL.</p>
+        </div>
+        <div class="notes-card">
+          <h3>Note</h3>
+          <p>The built-in upload and editor features require the Node backend. For public static embedding, publish only the static files.</p>
+        </div>
+      </section>
+
+      <section id="upload-section" class="section-grid">
+        <article class="panel card">
+          <h2>Upload Artifact</h2>
+          <p>Select an HTML file to add it to your gallery and artifact list.</p>
+          <form id="uploadForm" class="upload-form">
+            <label class="file-picker">
+              <input type="file" id="fileInput" name="file" />
+              Choose file
+            </label>
+            <button type="submit" class="button button-primary">Upload</button>
+          </form>
+        </article>
+
+        <article class="panel card" id="list-panel">
+          <div class="panel-header">
+            <h2>Available Artifacts</h2>
+            <span class="badge" id="artifactCount">0</span>
+          </div>
+          <ul id="artifacts"></ul>
+        </article>
+      </section>
+
+      <section id="artifacts-section" class="preview-grid">
+        <article class="panel card preview-panel">
+          <div class="panel-header">
+            <h2>Live Preview</h2>
+          </div>
+          <iframe id="viewer" src="" sandbox="allow-scripts allow-same-origin"></iframe>
+        </article>
+
+        <article class="panel card editor-panel">
+          <div class="panel-header">
+            <h2>Edit Artifact</h2>
+          </div>
+          <div class="editor-meta">
+            <strong id="editFilename">(select an artifact)</strong>
+          </div>
+          <textarea id="editArea" placeholder="Artifact content will load here"></textarea>
+          <button id="saveBtn" class="button button-secondary">Save edits</button>
+        </article>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Digital Relating • Embed your artifact pages anywhere with <code>&lt;iframe&gt;</code>.</p>
+    </footer>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>
