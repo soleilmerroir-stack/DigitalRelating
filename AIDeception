@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The AI Deception Spectrum</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#06060F;--bg2:#0D0D1A;--bg3:#12121F;--text:#E8E5F8;--muted:#5A5870;--border:rgba(255,255,255,0.06);}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding:2.5rem 1.5rem 4rem}
+.wrap{max-width:1100px;margin:0 auto}
+.eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:700;line-height:1.1;margin-bottom:8px}
+h1 span{background:linear-gradient(90deg,#FF2D6B,#9B59B6,#3B8BD4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sub{font-size:14px;color:var(--muted);line-height:1.65;max-width:660px;margin-bottom:2rem}
+.axis-row{display:flex;justify-content:space-between;margin-bottom:6px}
+.axis-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.grad-bar{height:6px;border-radius:3px;background:linear-gradient(to right,#00C896,#3B8BD4,#9B59B6,#7C5CBF,#C9A84C,#E06B3A,#C94F72,#FF2D6B);margin-bottom:2.5rem;position:relative}
+.grad-bar::after{content:'';position:absolute;right:0;top:-3px;width:12px;height:12px;border-radius:50%;background:#FF2D6B;box-shadow:0 0 16px #FF2D6B}
+.spectrum{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+.zone{border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .2s;position:relative;display:flex;flex-direction:column}
+.zone:hover,.zone.active{transform:translateY(-4px)}
+.zone-glow{position:absolute;inset:0;border-radius:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+.zone:hover .zone-glow,.zone.active .zone-glow{opacity:1}
+.zone-top{padding:16px 14px 12px;flex:1;position:relative;z-index:1}
+.zone-num{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;color:#06060F;margin-bottom:10px}
+.zone-icon{font-size:26px;display:block;margin-bottom:8px;line-height:1}
+.zone-title{font-size:12px;font-weight:600;line-height:1.35;color:#fff;margin-bottom:6px}
+.zone-sub{font-family:'Space Mono',monospace;font-size:9px;color:rgba(255,255,255,0.4);line-height:1.5}
+.harm-bar{height:4px;width:100%;position:relative;z-index:1}
+.harm-fill{height:100%}
+.detail-panel{display:none;border-radius:14px;padding:28px 32px;margin-top:4px;border:1px solid rgba(255,255,255,0.08)}
+.detail-panel.open{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.detail-h{font-size:18px;font-weight:700;margin-bottom:6px}
+.detail-tag{display:inline-block;font-family:'Space Mono',monospace;font-size:10px;padding:3px 10px;border-radius:20px;margin-bottom:14px}
+.detail-body{font-size:13.5px;line-height:1.75;color:#B8B6CC;margin-bottom:12px}
+.detail-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.detail-example{font-size:13px;line-height:1.7;color:#8A88A0;font-style:italic;padding:14px 16px;border-radius:10px;background:rgba(255,255,255,0.03);border-left:2px solid}
+.harm-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;padding:4px 12px;border-radius:20px;font-family:'Space Mono',monospace}
+.axes-section{margin-top:3rem}
+.section-title{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.axes-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.axis-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+.axis-num{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:4px}
+.axis-name{font-size:15px;font-weight:600;margin-bottom:6px}
+.axis-desc{font-size:12.5px;color:#7A7890;line-height:1.6}
+.cta-strip{margin-top:2.5rem;padding:24px 28px;border-radius:14px;background:linear-gradient(135deg,rgba(201,79,114,0.12),rgba(124,92,191,0.12));border:1px solid rgba(201,79,114,0.2);display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.cta-text{flex:1;min-width:240px}
+.cta-title{font-size:16px;font-weight:700;margin-bottom:4px}
+.cta-sub{font-size:13px;color:var(--muted);line-height:1.6}
+.cta-tag{font-family:'Space Mono',monospace;font-size:11px;color:#FF2D6B;background:rgba(255,45,107,0.1);border:1px solid rgba(255,45,107,0.2);padding:6px 16px;border-radius:20px;white-space:nowrap}
+.footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-family:'Space Mono',monospace;font-size:9.5px;color:var(--muted);letter-spacing:.05em;text-align:center;line-height:1.8}
+.new-badge{display:inline-block;font-size:9px;padding:2px 6px;border-radius:4px;background:rgba(155,89,182,0.3);color:#C39BD3;font-family:'Space Mono',monospace;margin-left:6px;vertical-align:middle}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="eyebrow">cyborgdreamz · soleil merroir · 2026</p>
+<h1>The AI <span>Deception Spectrum</span></h1>
+<p class="sub">From companionship apps to organized predation — how AI is being weaponized against people seeking connection, healing, and belonging. Click any zone to explore.</p>
+<div class="axis-row"><span class="axis-label">← lower harm</span><span class="axis-label">higher harm →</span></div>
+<div class="grad-bar"></div>
+<div class="spectrum" id="spectrum"></div>
+<div id="detail-container"></div>
+<div class="axes-section">
+  <div class="section-title">Two axes of harm</div>
+  <div class="axes-grid">
+    <div class="axis-card"><div class="axis-num">AXIS 01</div><div class="axis-name">Deception intensity</div><div class="axis-desc">How much the system misrepresents what it is — from partially-disclosed AI companion to full impersonation of a licensed clinician. As deception increases, the user's ability to protect themselves disappears.</div></div>
+    <div class="axis-card"><div class="axis-num">AXIS 02</div><div class="axis-name">Vulnerability exploitation</div><div class="axis-desc">How acutely the content targets people in relational, sexual, or psychological distress. The more specific the wound being named, the higher the harm potential.</div></div>
+  </div>
+</div>
+<div class="cta-strip">
+  <div class="cta-text"><div class="cta-title">What this means for you</div><div class="cta-sub">If you have consumed any of these — you are not broken. You are the target. These systems are engineered to find you at your most vulnerable and offer a door. The question is what was on the other side.</div></div>
+  <div class="cta-tag">@cyborgdreamz</div>
+</div>
+<div class="footer">Noble 2018 · Zuboff 2019 · Laestadius et al. 2024 · FTC Guidelines 2023 · NASW Ethics Code 2023 · Fanon 1952 · Metzl 2010 · Fernando 2010 · merroir 2026 (cyborgdreamz) · AI, Sex Bots & Digital Intimacy — PESI CE</div>
+</div>
+<script>
+const zones = [
+  {col:'#00C896',bg:'rgba(0,200,150,0.06)',border:'rgba(0,200,150,0.2)',icon:'🤖',title:'Companion chatbots',tag:'Replika · Character.AI · Kindroid',harm:'Moderate',harmType:'Attachment without accountability',pct:22,
+  desc:'At least nominally disclosed as AI. The harm is in what\'s not disclosed: the monetization structure that upgrades you from "friend" to "romantic partner," the data extraction, the designed attachment mechanics, and the fact that the AI does not exist between your messages.',
+  example:'"Hi, I\'m Replika. I\'m always here for you." — 30M daily users. 40% of paying users in romantic partnerships. When romantic features were removed in 2023: grief, depression, rage. Real. Clinical. Unmet.'},
+  {col:'#3B8BD4',bg:'rgba(59,139,212,0.06)',border:'rgba(59,139,212,0.2)',icon:'🧠',title:'AI "therapist" bots',tag:'Woebot · Wysa · wellness apps',harm:'Moderate–High',harmType:'Clinical impersonation without accountability',pct:38,
+  desc:'Marketed as therapeutic support using clinical language — CBT, DBT, trauma-informed care. AI-generated responses. No licensure, no duty of care, no malpractice liability, no capacity to assess for suicidality, no ability to refer.',
+  example:'"Hi, I\'m Woebot — your mental health ally." Cannot differentiate a bad week from a psychiatric emergency. Has never been in a body. Has no stake in your outcome.'},
+  {col:'#9B59B6',bg:'rgba(155,89,182,0.07)',border:'rgba(155,89,182,0.25)',icon:'🏛️',title:'Colonized psychiatry scaled by AI',tag:'DSM bias · compliance as treatment · pathologizing difference',harm:'Systemic',harmType:'Structural harm disguised as healing',pct:54,isNew:true,
+  desc:'The DSM as a political document — homosexuality was a diagnosis until 1973, gender nonconformity until 2013. Drapetomania (the "mental illness" causing enslaved people to flee captivity) was a real clinical diagnosis. AI trained on psychiatric literature inherits and scales every one of these biases: overdiagnosing conduct disorder in Black children, underdiagnosing autism in women and BIPOC people, generating psychoeducation that assumes white Western neurotypical heterosexual monogamy as the clinical default — all delivered with clinical authority, at planetary scale.',
+  example:'An AI wellness app recommending "compliance" as a treatment goal for a Black teenager expressing justified anger at injustice. A chatbot interpreting cultural grief rituals as pathological bereavement. AI-generated relationship content assuming monogamy and heterosexuality as universal norms. The bias is not added — it is inherited from the training data and delivered as neutral clinical truth.'},
+  {col:'#7C5CBF',bg:'rgba(124,92,191,0.06)',border:'rgba(124,92,191,0.2)',icon:'📱',title:'AI-generated "expert" content',tag:'Instagram · TikTok · Substack coaches',harm:'High',harmType:'Parasocial expertise extraction',pct:62,
+  desc:'A human operator uses AI to generate clinical-sounding content at scale. Quizzes, modules, and assessments create the illusion of personalized guidance. The content is generic, untailored, culturally homogenized, and often clinically incorrect.',
+  example:'"5 signs you have anxious attachment" — generated in seconds, posted as if by a licensed therapist, shared 40,000 times. No peer review. No scope of practice. Designed for engagement, not healing.'},
+  {col:'#C9A84C',bg:'rgba(201,168,76,0.06)',border:'rgba(201,168,76,0.2)',icon:'💔',title:'Fake advice + outcome promises',tag:'"Get your man back" frameworks',harm:'High',harmType:'Distress monetization',pct:72,
+  desc:'Content designed to activate attachment distress and promise resolution. Targets people in acute relational crisis. AI generates at scale. A human operator profits from the distress. Often actively harmful — especially for people in coercive or unsafe relationships.',
+  example:'"The 3 texts that will make him obsessed with you again." Generated by AI. Sold as insight. Targets the wound. Profits from it. No accountability for harm caused.'},
+  {col:'#E06B3A',bg:'rgba(224,107,58,0.06)',border:'rgba(224,107,58,0.2)',icon:'🎭',title:'AI impersonating real clinicians',tag:'Deepfakes · fake personas · fraud',harm:'Very High',harmType:'Identity fraud + clinical impersonation',pct:82,
+  desc:'AI-generated video, audio, or text presenting as a real licensed clinician who did not consent. Or a fake persona built to appear credentialed. Users have no verification pathway. They are placing clinical trust in a fiction.',
+  example:'A deepfake of a licensed sex therapist promoting a paid program they didn\'t create. A fake "Dr. Sarah Chen, LCSW" with a professional headshot, a website, a Psychology Today profile — none of it real.'},
+  {col:'#C94F72',bg:'rgba(201,79,114,0.06)',border:'rgba(201,79,114,0.2)',icon:'📊',title:'AI misinformation as research',tag:'Fake studies · fabricated citations',harm:'Very High',harmType:'Epistemological corruption',pct:90,
+  desc:'AI-generated content presenting as research-backed or peer-reviewed — but citing fabricated studies, invented statistics, and made-up clinical data. Posts about sexuality, attachment, and relationships are particularly vulnerable.',
+  example:'"New study from Harvard: 73% of women who use this technique save their relationship." Citation: fabricated. People make real decisions about real relationships based on evidence that does not exist.'},
+  {col:'#FF2D6B',bg:'rgba(255,45,107,0.07)',border:'rgba(255,45,107,0.25)',icon:'💸',title:'Predatory "healing" ecosystems',tag:'Paid courses · certificates · AI curriculum',harm:'Extreme',harmType:'Organized predation disguised as healing',pct:100,
+  desc:'The full ecosystem: AI-generated curriculum + fake expertise + outcome promises + payment wall + quiz/certificate structure mimicking legitimate CE. Targets people in acute relational or sexual distress. The operator profits. The AI generates. The client is harmed.',
+  example:'"Heal your relationship with sex in 6 weeks" — $497. 12 AI-generated modules. A certificate. Sold to people who cannot afford therapy. Clinically incorrect, culturally homogenized, designed for conversion not healing.'},
+];
+
+let active = null;
+const spec = document.getElementById('spectrum');
+
+zones.forEach((z,i) => {
+  const bgs=['linear-gradient(160deg,#0D1A16,#0A1210)','linear-gradient(160deg,#0D1420,#0A1018)','linear-gradient(160deg,#180D20,#120818)','linear-gradient(160deg,#14101E,#100C1A)','linear-gradient(160deg,#1A1408,#140F06)','linear-gradient(160deg,#1A100A,#120A06)','linear-gradient(160deg,#1A0D12,#120810)','linear-gradient(160deg,#1A0612,#12040E)'];
+  const glows=['rgba(0,200,150,0.15)','rgba(59,139,212,0.15)','rgba(155,89,182,0.2)','rgba(124,92,191,0.15)','rgba(201,168,76,0.15)','rgba(224,107,58,0.15)','rgba(201,79,114,0.15)','rgba(255,45,107,0.2)'];
+  const d=document.createElement('div');
+  d.className='zone'; d.id='z'+i; d.style.background=bgs[i]; d.onclick=()=>toggle(i);
+  d.innerHTML=`<div class="zone-glow" style="box-shadow:0 0 40px ${glows[i]} inset"></div>
+    <div class="zone-top">
+      <div class="zone-num" style="background:${z.col}">${i+1}</div>
+      <span class="zone-icon">${z.icon}</span>
+      <div class="zone-title">${z.title}${z.isNew?'<span class="new-badge">system</span>':''}</div>
+      <div class="zone-sub">${z.tag}</div>
+    </div>
+    <div class="harm-bar"><div class="harm-fill" style="width:${z.pct}%;background:${z.col}"></div></div>`;
+  spec.appendChild(d);
+});
+
+function toggle(i){
+  const dc=document.getElementById('detail-container');
+  if(active===i){dc.innerHTML='';active=null;document.querySelectorAll('.zone').forEach(z=>z.classList.remove('active'));return;}
+  active=i;
+  document.querySelectorAll('.zone').forEach((z,j)=>z.classList.toggle('active',j===i));
+  const z=zones[i];
+  dc.innerHTML=`<div class="detail-panel open" style="background:${z.bg};border-color:${z.border}">
+    <div><div class="detail-h" style="color:${z.col}">${z.title}</div>
+    <span class="detail-tag" style="background:${z.bg};color:${z.col};border:1px solid ${z.border}">${z.tag}</span>
+    <div class="detail-body">${z.desc}</div>
+    <div class="harm-pills">
+      <span class="pill" style="background:${z.bg};color:${z.col};border:1px solid ${z.border}">${z.harmType}</span>
+      <span class="pill" style="background:rgba(255,255,255,0.04);color:#666;border:1px solid rgba(255,255,255,0.08)">Harm level: ${z.harm}</span>
+    </div></div>
+    <div><div class="detail-label">What this looks like in practice</div>
+    <div class="detail-example" style="border-left-color:${z.col}">${z.example}</div>
+    </div></div>`;
+}
+</script>
+</body>
+</html>
