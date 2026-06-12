@@ -1,0 +1,668 @@
+import { useState, useRef, useCallback } from "react";
+
+// ─── DIMENSIONS from Self Assessment for Visualization survey ───
+const DIMENSIONS = [
+  {
+    id: "relational",
+    label: "Relational Style Flexibility",
+    color: "#E07B9A",
+    desc: "Openness to entanglement, commitment needs, multiple connections (Q24–29, Q38–39)",
+    questions: "How open to multiple partners, new situations, life intertwining, romantic experiences?",
+  },
+  {
+    id: "erotic",
+    label: "Erotic & Sensual Importance",
+    color: "#C97BE0",
+    desc: "Desire, kink, power dynamics, pain, sensuality, frequency (Q18–23, Q32, Q34–36)",
+    questions: "Importance of kink, power dynamics, pain, sensual touch, erotic exploration, taboo, play frequency.",
+  },
+  {
+    id: "emotional",
+    label: "Emotional Nurturance",
+    color: "#7EB8C9",
+    desc: "Need for co-regulation, emotional processing, calming experiences (Q27–28, Q48–49)",
+    questions: "Importance of emotional processing, co-regulation, calming, empathy differences in relationship.",
+  },
+  {
+    id: "neurodivergence",
+    label: "Neurodivergence",
+    color: "#A8C47B",
+    desc: "Sensory, attention, communication, memory, stimming, time perception (Q44–59)",
+    questions: "Altered states, attention differences, communication style, sensory needs, memory, stimming, plurality.",
+  },
+  {
+    id: "mentalhealth",
+    label: "Mental Health Load",
+    color: "#E0C47B",
+    desc: "Current intensity: anxiety, depression, dissociation, hypervigilance (Q7–17)",
+    questions: "Intrusive thoughts, hypervigilance, dissociation, depression, anxiety, OCD, psychotic symptoms, substance use.",
+  },
+  {
+    id: "identity",
+    label: "Identity & Body Stressors",
+    color: "#FF9F7A",
+    desc: "Gender expansiveness, somatic awareness, identity & religious trauma (Q10–11, Q40–43)",
+    questions: "Identity-related trauma, gender identity, somatic/body awareness, breathwork, physical disabilities.",
+  },
+  {
+    id: "needs",
+    label: "Unmet Basic Needs",
+    color: "#7BE0D0",
+    desc: "Gaps in community, basic needs, self-regulation, sex ed (Q1–4)",
+    questions: "Community gaps, basic needs (food/housing), difficulty with self-regulation, sex & relationship education gaps.",
+  },
+  {
+    id: "somatic",
+    label: "Somatic & Spiritual Importance",
+    color: "#D4A0FF",
+    desc: "Body-based awareness, breathwork, spirituality and ritual in play (Q33, Q40–41)",
+    questions: "Importance of spirituality/sacredness, breath regulation, somatic body awareness in play and relationships.",
+  },
+];
+
+const DEFAULT_PEOPLE = [
+  { id: 1, name: "You", x: 420, y: 310, color: "#FFFFFF" },
+  { id: 2, name: "Alex", x: 210, y: 155, color: "#E07B9A" },
+  { id: 3, name: "River", x: 630, y: 175, color: "#C97BE0" },
+  { id: 4, name: "Sam", x: 640, y: 430, color: "#A8C47B" },
+];
+
+const DEFAULT_RELATIONSHIPS = [
+  {
+    id: 1, from: 1, to: 2,
+    dims: { relational: 0.8, erotic: 0.85, emotional: 0.7, neurodivergence: 0.5, mentalhealth: 0.4, identity: 0.6, needs: 0.3, somatic: 0.5 }
+  },
+  {
+    id: 2, from: 1, to: 3,
+    dims: { relational: 0.2, erotic: 0.65, emotional: 0.3, neurodivergence: 0.2, mentalhealth: 0.2, identity: 0.15, needs: 0.1, somatic: 0.4 }
+  },
+  {
+    id: 3, from: 1, to: 4,
+    dims: { relational: 0.5, erotic: 0.0, emotional: 0.95, neurodivergence: 0.75, mentalhealth: 0.6, identity: 0.8, needs: 0.7, somatic: 0.3 }
+  },
+];
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return { r, g, b };
+}
+
+function RadarChart({ dims, size = 130 }) {
+  const cx = size / 2, cy = size / 2;
+  const r = size * 0.34;
+  const n = DIMENSIONS.length;
+  const angles = DIMENSIONS.map((_, i) => (i / n) * Math.PI * 2 - Math.PI / 2);
+
+  const getPoint = (angle, val) => ({
+    x: cx + Math.cos(angle) * r * val,
+    y: cy + Math.sin(angle) * r * val,
+  });
+
+  const dataPoints = DIMENSIONS.map((d, i) => getPoint(angles[i], dims[d.id] || 0));
+  const dataPath = dataPoints.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ") + " Z";
+
+  return (
+    <svg width={size} height={size} style={{ overflow: "visible" }}>
+      {[0.25, 0.5, 0.75, 1.0].map((lv) => {
+        const pts = angles.map(a => getPoint(a, lv));
+        const path = pts.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ") + " Z";
+        return <path key={lv} d={path} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="1" />;
+      })}
+      {angles.map((a, i) => {
+        const end = getPoint(a, 1);
+        return <line key={i} x1={cx} y1={cy} x2={end.x} y2={end.y} stroke="rgba(255,255,255,0.08)" strokeWidth="1" />;
+      })}
+      <path d={dataPath} fill="rgba(180,140,255,0.15)" stroke="rgba(180,140,255,0.55)" strokeWidth="1.5" />
+      {DIMENSIONS.map((d, i) => {
+        const val = dims[d.id] || 0;
+        const pt = getPoint(angles[i], val);
+        return <circle key={d.id} cx={pt.x} cy={pt.y} r={3} fill={d.color} opacity={0.9} />;
+      })}
+      {DIMENSIONS.map((d, i) => {
+        const labelPt = getPoint(angles[i], 1.38);
+        return (
+          <text key={d.id} x={labelPt.x} y={labelPt.y} textAnchor="middle" dominantBaseline="middle"
+            fontSize="6" fill={d.color} fontFamily="'DM Mono', monospace" opacity={0.82}>
+            {d.label.split(" ")[0]}
+          </text>
+        );
+      })}
+    </svg>
+  );
+}
+
+function ConnectionLine({ from, to, rel }) {
+  const mx = (from.x + to.x) / 2;
+  const my = (from.y + to.y) / 2;
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  const norm = { x: -dy / dist, y: dx / dist };
+  const curve = dist * 0.18;
+  const cp = { x: mx + norm.x * curve, y: my + norm.y * curve };
+
+  return (
+    <g>
+      {DIMENSIONS.map((dim, i) => {
+        const val = rel.dims[dim.id] || 0;
+        if (val < 0.05) return null;
+        const offset = (i - (DIMENSIONS.length - 1) / 2) * 2.6;
+        const fx = from.x + norm.x * offset;
+        const fy = from.y + norm.y * offset;
+        const tx = to.x + norm.x * offset;
+        const ty = to.y + norm.y * offset;
+        const cpx = cp.x + norm.x * offset;
+        const cpy = cp.y + norm.y * offset;
+        const rgb = hexToRgb(dim.color);
+        return (
+          <path key={dim.id}
+            d={`M${fx},${fy} Q${cpx},${cpy} ${tx},${ty}`}
+            fill="none"
+            stroke={`rgba(${rgb.r},${rgb.g},${rgb.b},${0.12 + val * 0.72})`}
+            strokeWidth={0.7 + val * 3.8}
+            strokeLinecap="round"
+          />
+        );
+      })}
+    </g>
+  );
+}
+
+function PersonNode({ person, isSelected, onClick, onDrag }) {
+  const isDragging = useRef(false);
+  const startPos = useRef({ x: 0, y: 0, px: 0, py: 0 });
+
+  const handleMouseDown = (e) => {
+    isDragging.current = false;
+    startPos.current = { x: e.clientX, y: e.clientY, px: person.x, py: person.y };
+    const onMove = (ev) => {
+      const moved = Math.abs(ev.clientX - startPos.current.x) + Math.abs(ev.clientY - startPos.current.y);
+      if (moved > 3) isDragging.current = true;
+      onDrag(person.id, startPos.current.px + ev.clientX - startPos.current.x, startPos.current.py + ev.clientY - startPos.current.y);
+    };
+    const onUp = () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+      if (!isDragging.current) onClick(person.id);
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    e.preventDefault();
+  };
+
+  return (
+    <g transform={`translate(${person.x},${person.y})`} style={{ cursor: "grab" }} onMouseDown={handleMouseDown}>
+      {isSelected && (
+        <circle r={34} fill="none" stroke={person.color} strokeWidth="1.5" opacity={0.35}
+          style={{ animation: "pulse 2s ease-in-out infinite" }} />
+      )}
+      <circle r={26} fill="rgba(18,14,28,0.9)" stroke={person.color} strokeWidth={isSelected ? 2 : 1.2} opacity={isSelected ? 1 : 0.85} />
+      <circle r={10} fill={person.color} opacity={0.22} />
+      <circle r={4} fill={person.color} />
+      <text y={40} textAnchor="middle" fontSize="11" fill={person.color}
+        fontFamily="'DM Mono', monospace" fontWeight="500" letterSpacing="0.05em">
+        {person.name}
+      </text>
+    </g>
+  );
+}
+
+export default function RelationshipEcosystem() {
+  const [people, setPeople] = useState(DEFAULT_PEOPLE);
+  const [relationships, setRelationships] = useState(DEFAULT_RELATIONSHIPS);
+  const [selectedRel, setSelectedRel] = useState(1);
+  const [selectedPerson, setSelectedPerson] = useState(null);
+  const [activeDim, setActiveDim] = useState(null);
+  const [addingPerson, setAddingPerson] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [view, setView] = useState("ecosystem");
+  const nextId = useRef(5);
+
+  const rel = relationships.find(r => r.id === selectedRel);
+  const fromPerson = rel ? people.find(p => p.id === rel.from) : null;
+  const toPerson = rel ? people.find(p => p.id === rel.to) : null;
+
+  const handleDrag = useCallback((id, x, y) => {
+    setPeople(ps => ps.map(p => p.id === id
+      ? { ...p, x: Math.max(60, Math.min(780, x)), y: Math.max(60, Math.min(560, y)) }
+      : p
+    ));
+  }, []);
+
+  const handlePersonClick = (id) => {
+    setSelectedPerson(prev => prev === id ? null : id);
+    if (id === 1) return;
+    const existing = relationships.find(r => (r.from === 1 && r.to === id) || (r.from === id && r.to === 1));
+    if (existing) setSelectedRel(existing.id);
+  };
+
+  const updateDim = (dimId, val) => {
+    setRelationships(rs => rs.map(r =>
+      r.id === selectedRel ? { ...r, dims: { ...r.dims, [dimId]: val } } : r
+    ));
+  };
+
+  const addPerson = () => {
+    if (!newName.trim()) return;
+    const id = nextId.current++;
+    const angle = Math.random() * Math.PI * 2;
+    const radius = 150 + Math.random() * 70;
+    const colors = ["#E07B9A","#C97BE0","#7EB8C9","#A8C47B","#E0C47B","#FF9F7A","#7BE0D0","#D4A0FF"];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const newPerson = { id, name: newName.trim(), x: 420 + Math.cos(angle) * radius, y: 310 + Math.sin(angle) * radius, color };
+    const newRelId = nextId.current++;
+    const emptyDims = Object.fromEntries(DIMENSIONS.map(d => [d.id, 0]));
+    setPeople(ps => [...ps, newPerson]);
+    setRelationships(rs => [...rs, { id: newRelId, from: 1, to: id, dims: emptyDims }]);
+    setSelectedRel(newRelId);
+    setNewName("");
+    setAddingPerson(false);
+  };
+
+  const removePerson = (id) => {
+    if (id === 1) return;
+    setPeople(ps => ps.filter(p => p.id !== id));
+    setRelationships(rs => rs.filter(r => r.from !== id && r.to !== id));
+    setSelectedPerson(null);
+    setSelectedRel(null);
+  };
+
+  const romanticNormDims = Object.fromEntries(DIMENSIONS.map(d => [d.id, 1]));
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#0d0b16", fontFamily: "'DM Mono', monospace", color: "#e8e4f0", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+        @keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:0.6} }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+        input[type=range] { -webkit-appearance:none; appearance:none; height:3px; border-radius:2px; outline:none; cursor:pointer; display:block; width:100%; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:13px; height:13px; border-radius:50%; cursor:pointer; border:2px solid #0d0b16; background:#e8e4f0; }
+        .tab-btn { background:none; border:none; cursor:pointer; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; padding:6px 14px; border-radius:20px; transition:all 0.2s; }
+        .node-btn { background:none; border:1px solid rgba(255,255,255,0.12); cursor:pointer; font-family:'DM Mono',monospace; font-size:10px; color:rgba(255,255,255,0.5); padding:4px 10px; border-radius:12px; transition:all 0.2s; }
+        .node-btn:hover { border-color:rgba(255,255,255,0.3); color:rgba(255,255,255,0.8); }
+        .dim-toggle { background:none; border:none; cursor:pointer; text-align:left; width:100%; padding:0; font-family:'DM Mono',monospace; }
+        input[type=text] { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:6px; color:#e8e4f0; font-family:'DM Mono',monospace; font-size:11px; padding:5px 10px; outline:none; }
+        input[type=text]:focus { border-color:rgba(255,255,255,0.35); }
+      `}</style>
+
+      {/* HEADER */}
+      <div style={{ padding: "16px 24px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div>
+          <div style={{ fontSize: 9, letterSpacing: "0.18em", color: "rgba(255,255,255,0.22)", textTransform: "uppercase", marginBottom: 3 }}>relational ecosystem</div>
+          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 20, fontWeight: 300, fontStyle: "italic" }}>
+            mapping love in all its shapes
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: 4, background: "rgba(255,255,255,0.04)", borderRadius: 20, padding: 3 }}>
+          {["ecosystem", "compare"].map(v => (
+            <button key={v} className="tab-btn" onClick={() => setView(v)}
+              style={{ color: view === v ? "#0d0b16" : "rgba(255,255,255,0.4)", background: view === v ? "rgba(255,255,255,0.85)" : "transparent" }}>
+              {v}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {view === "ecosystem" ? (
+        <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+
+          {/* SVG CANVAS */}
+          <div style={{ flex: 1, position: "relative" }}>
+            <svg width="100%" height="100%" viewBox="0 0 840 620" style={{ display: "block" }}>
+              <defs>
+                <radialGradient id="bg2" cx="50%" cy="50%">
+                  <stop offset="0%" stopColor="#1a1628" />
+                  <stop offset="100%" stopColor="#0d0b16" />
+                </radialGradient>
+              </defs>
+              <rect width="840" height="620" fill="url(#bg2)" />
+              {Array.from({ length: 17 }, (_, i) => (
+                <line key={`v${i}`} x1={i*52} y1={0} x2={i*52} y2={620} stroke="rgba(255,255,255,0.016)" strokeWidth="1" />
+              ))}
+              {Array.from({ length: 13 }, (_, i) => (
+                <line key={`h${i}`} x1={0} y1={i*52} x2={840} y2={i*52} stroke="rgba(255,255,255,0.016)" strokeWidth="1" />
+              ))}
+              {relationships.map(r => {
+                const from = people.find(p => p.id === r.from);
+                const to = people.find(p => p.id === r.to);
+                if (!from || !to) return null;
+                return (
+                  <g key={r.id} style={{ cursor: "pointer" }}
+                    onClick={() => { setSelectedRel(r.id); setSelectedPerson(r.to); }}>
+                    <ConnectionLine from={from} to={to} rel={r} />
+                    <line x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke="transparent" strokeWidth="20" />
+                  </g>
+                );
+              })}
+              {people.map(p => (
+                <PersonNode key={p.id} person={p}
+                  isSelected={selectedPerson === p.id || (rel && (rel.from === p.id || rel.to === p.id))}
+                  onClick={handlePersonClick} onDrag={handleDrag} />
+              ))}
+            </svg>
+
+            {/* Legend */}
+            <div style={{ position: "absolute", bottom: 14, left: 14, display: "flex", flexDirection: "column", gap: 5 }}>
+              {DIMENSIONS.map(d => (
+                <div key={d.id} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div style={{ width: 18, height: 2.5, borderRadius: 2, background: d.color, opacity: 0.7 }} />
+                  <span style={{ fontSize: 8.5, color: "rgba(255,255,255,0.3)", letterSpacing: "0.07em" }}>{d.label}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Add person */}
+            <div style={{ position: "absolute", top: 12, right: 12 }}>
+              {addingPerson ? (
+                <div style={{ display: "flex", gap: 6 }}>
+                  <input type="text" value={newName} onChange={e => setNewName(e.target.value)}
+                    onKeyDown={e => { if (e.key === "Enter") addPerson(); if (e.key === "Escape") setAddingPerson(false); }}
+                    placeholder="their name" autoFocus style={{ width: 110 }} />
+                  <button className="node-btn" onClick={addPerson} style={{ color: "rgba(180,255,180,0.7)", borderColor: "rgba(180,255,180,0.2)" }}>add</button>
+                  <button className="node-btn" onClick={() => setAddingPerson(false)}>×</button>
+                </div>
+              ) : (
+                <button className="node-btn" onClick={() => setAddingPerson(true)}>+ add person</button>
+              )}
+            </div>
+          </div>
+
+          {/* SIDE PANEL */}
+          <div style={{ width: 300, borderLeft: "1px solid rgba(255,255,255,0.06)", padding: "18px 18px", overflowY: "auto", display: "flex", flexDirection: "column", gap: 0, background: "rgba(10,9,18,0.65)" }}>
+            {rel && fromPerson && toPerson ? (
+              <div style={{ animation: "fadeIn 0.2s ease" }}>
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 8, letterSpacing: "0.15em", color: "rgba(255,255,255,0.2)", textTransform: "uppercase", marginBottom: 5 }}>editing</div>
+                  <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 17, fontStyle: "italic", color: toPerson.color }}>
+                    {fromPerson.name} & {toPerson.name}
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: 18, display: "flex", justifyContent: "center" }}>
+                  <RadarChart dims={rel.dims} size={150} />
+                </div>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+                  {DIMENSIONS.map(dim => {
+                    const val = rel.dims[dim.id] || 0;
+                    const rgb = hexToRgb(dim.color);
+                    const isActive = activeDim === dim.id;
+                    return (
+                      <div key={dim.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                        <button className="dim-toggle" onClick={() => setActiveDim(isActive ? null : dim.id)}
+                          style={{ padding: "10px 0" }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                            <span style={{ fontSize: 9.5, color: dim.color, letterSpacing: "0.06em" }}>{dim.label}</span>
+                            <span style={{ fontSize: 9, color: "rgba(255,255,255,0.25)" }}>{Math.round(val * 5)}/5 {isActive ? "▲" : "▼"}</span>
+                          </div>
+                          <div style={{ height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 2 }}>
+                            <div style={{ width: `${val * 100}%`, height: "100%", background: dim.color, borderRadius: 2, opacity: 0.7 }} />
+                          </div>
+                        </button>
+
+                        {isActive && (
+                          <div style={{ paddingBottom: 14, animation: "fadeIn 0.18s ease" }}>
+                            {/* survey context */}
+                            <div style={{ fontSize: 9, color: `rgba(${rgb.r},${rgb.g},${rgb.b},0.55)`, marginBottom: 4, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                              survey questions
+                            </div>
+                            <div style={{ fontSize: 9.5, color: "rgba(232,213,163,0.42)", lineHeight: 1.7, marginBottom: 10, fontStyle: "italic" }}>
+                              {dim.questions}
+                            </div>
+                            {/* score labels */}
+                            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+                              <span style={{ fontSize: 8.5, color: "rgba(255,255,255,0.25)" }}>0 — absent</span>
+                              <span style={{ fontSize: 10, color: dim.color, fontWeight: 600 }}>{Math.round(val * 5)} / 5</span>
+                              <span style={{ fontSize: 8.5, color: "rgba(255,255,255,0.25)" }}>5 — intense</span>
+                            </div>
+                            <input type="range" min={0} max={100} value={Math.round(val * 100)}
+                              onChange={e => updateDim(dim.id, parseInt(e.target.value) / 100)}
+                              style={{
+                                background: `linear-gradient(to right, rgba(${rgb.r},${rgb.g},${rgb.b},0.8) 0%, rgba(${rgb.r},${rgb.g},${rgb.b},0.8) ${val * 100}%, rgba(255,255,255,0.08) ${val * 100}%, rgba(255,255,255,0.08) 100%)`,
+                              }}
+                            />
+                            <style>{`input[type=range]::-webkit-slider-thumb { background: ${dim.color}; }`}</style>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {toPerson.id !== 1 && (
+                  <button onClick={() => removePerson(toPerson.id)} className="node-btn"
+                    style={{ marginTop: 18, width: "100%", color: "rgba(255,100,100,0.5)", borderColor: "rgba(255,100,100,0.15)" }}>
+                    remove {toPerson.name}
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div style={{ color: "rgba(255,255,255,0.2)", fontSize: 11, fontStyle: "italic", lineHeight: 1.8, paddingTop: 8 }}>
+                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 15, marginBottom: 10, color: "rgba(255,255,255,0.3)" }}>
+                  click a connection to edit
+                </div>
+                <p style={{ marginBottom: 10, fontSize: 10 }}>8 dimensions from the Self Assessment for Visualization survey. click any dimension to expand its survey context.</p>
+                <div style={{ marginTop: 16, borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 16 }}>
+                  {DIMENSIONS.map(d => (
+                    <div key={d.id} style={{ marginBottom: 10 }}>
+                      <div style={{ fontSize: 9.5, color: d.color, letterSpacing: "0.05em", marginBottom: 2 }}>{d.label}</div>
+                      <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.2)", lineHeight: 1.55 }}>{d.desc}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        /* COMPARE VIEW — dimension overlap map */
+        <div style={{ flex: 1, overflow: "auto", padding: "20px 28px 40px" }}>
+
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 17, fontStyle: "italic", color: "rgba(255,255,255,0.6)", marginBottom: 4 }}>
+              overlap & difference across the ecosystem
+            </div>
+            <div style={{ fontSize: 9.5, color: "rgba(255,255,255,0.22)", lineHeight: 1.7 }}>
+              each row is one dimension. bars show each person's intensity. overlap = resonance. gap = difference to navigate.
+            </div>
+          </div>
+
+          {/* PERSON KEY */}
+          <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 22, paddingBottom: 16, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+            {people.map(p => (
+              <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 7, cursor: "pointer" }}
+                onClick={() => { setView("ecosystem"); setSelectedPerson(p.id); }}>
+                <div style={{ width: 10, height: 10, borderRadius: "50%", background: p.color, flexShrink: 0 }}/>
+                <span style={{ fontSize: 10, color: p.color, letterSpacing: "0.05em" }}>{p.name}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* DIMENSION ROWS */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {DIMENSIONS.map(dim => {
+              const rgb = hexToRgb(dim.color);
+
+              // Compute overlap zones: for each pair, find shared range
+              const vals = people.map(p => {
+                const rel = relationships.find(r =>
+                  (r.from === 1 && r.to === p.id) || (r.from === p.id && r.to === 1)
+                );
+                return { person: p, val: p.id === 1
+                  ? Math.max(...relationships.map(r => r.dims[dim.id] || 0))
+                  : (rel ? (rel.dims[dim.id] || 0) : 0)
+                };
+              });
+
+              // Compute min/max spread across all relationships
+              const relVals = relationships.map(r => r.dims[dim.id] || 0);
+              const spread = Math.max(...relVals) - Math.min(...relVals);
+              const avgVal = relVals.reduce((a,b) => a+b, 0) / relVals.length;
+
+              return (
+                <div key={dim.id} style={{
+                  padding: "14px 0",
+                  borderBottom: "1px solid rgba(255,255,255,0.04)",
+                }}>
+                  {/* Dimension label + summary */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
+                    <span style={{ fontSize: 10, color: dim.color, letterSpacing: "0.06em", fontWeight: 500 }}>{dim.label}</span>
+                    <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
+                      <span style={{ fontSize: 8.5, color: "rgba(255,255,255,0.2)", fontStyle: "italic" }}>
+                        {spread < 0.2 ? "high resonance" : spread < 0.45 ? "some difference" : "navigate gap"}
+                      </span>
+                      <span style={{ fontSize: 8.5, color: `rgba(${rgb.r},${rgb.g},${rgb.b},0.5)` }}>
+                        avg {(avgVal * 5).toFixed(1)}/5
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Per-person bars stacked — each bar is the same track */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                    {relationships.map(r => {
+                      const to = people.find(p => p.id === r.to);
+                      if (!to) return null;
+                      const val = r.dims[dim.id] || 0;
+                      const toRgb = hexToRgb(to.color);
+                      // "you" value — use max across all rels for display as a baseline
+                      return (
+                        <div key={r.id} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          {/* name */}
+                          <div style={{ width: 52, textAlign: "right", fontSize: 9, color: to.color, letterSpacing: "0.04em", flexShrink: 0 }}>
+                            {to.name}
+                          </div>
+                          {/* bar track */}
+                          <div style={{ flex: 1, height: 14, background: "rgba(255,255,255,0.04)", borderRadius: 3, position: "relative", overflow: "hidden" }}>
+                            {/* filled bar */}
+                            <div style={{
+                              position: "absolute", left: 0, top: 0,
+                              width: `${val * 100}%`, height: "100%",
+                              background: `rgba(${toRgb.r},${toRgb.g},${toRgb.b},0.45)`,
+                              borderRadius: 3,
+                              transition: "width 0.3s ease"
+                            }}/>
+                            {/* dim color overlay at value point */}
+                            <div style={{
+                              position: "absolute", left: `${val * 100}%`, top: 0,
+                              width: 2, height: "100%",
+                              background: to.color,
+                              transform: "translateX(-1px)",
+                              opacity: 0.9
+                            }}/>
+                            {/* 5-unit tick marks */}
+                            {[1,2,3,4].map(t => (
+                              <div key={t} style={{
+                                position: "absolute", left: `${t * 20}%`, top: "25%",
+                                width: 1, height: "50%",
+                                background: "rgba(255,255,255,0.1)"
+                              }}/>
+                            ))}
+                          </div>
+                          {/* score */}
+                          <div style={{ width: 24, textAlign: "left", fontSize: 9, color: to.color, opacity: 0.7, flexShrink: 0 }}>
+                            {Math.round(val * 5)}
+                          </div>
+                          {/* edit button */}
+                          <div style={{ fontSize: 8, color: "rgba(255,255,255,0.15)", cursor: "pointer", flexShrink: 0 }}
+                            onClick={() => { setSelectedRel(r.id); setView("ecosystem"); setSelectedPerson(to.id); }}>
+                            edit
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                    {/* OVERLAP ZONE — visual band showing shared range */}
+                    {relationships.length > 1 && (() => {
+                      const rVals = relationships.map(r => r.dims[dim.id] || 0);
+                      const mn = Math.min(...rVals), mx = Math.max(...rVals);
+                      if (mx - mn < 0.08) return null; // all same, no gap to show
+                      return (
+                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 2 }}>
+                          <div style={{ width: 52, textAlign: "right", fontSize: 7.5, color: "rgba(255,255,255,0.18)", letterSpacing: "0.06em", flexShrink: 0 }}>
+                            gap
+                          </div>
+                          <div style={{ flex: 1, height: 6, background: "rgba(255,255,255,0.03)", borderRadius: 2, position: "relative" }}>
+                            {/* gap band */}
+                            <div style={{
+                              position: "absolute",
+                              left: `${mn * 100}%`,
+                              width: `${(mx - mn) * 100}%`,
+                              top: 0, height: "100%",
+                              background: spread > 0.4
+                                ? "rgba(255,140,80,0.25)"
+                                : "rgba(255,255,255,0.08)",
+                              borderRadius: 2,
+                              borderLeft: `1px solid ${spread > 0.4 ? "rgba(255,140,80,0.5)" : "rgba(255,255,255,0.2)"}`,
+                              borderRight: `1px solid ${spread > 0.4 ? "rgba(255,140,80,0.5)" : "rgba(255,255,255,0.2)"}`,
+                            }}/>
+                          </div>
+                          <div style={{ width: 24, fontSize: 7.5, color: spread > 0.4 ? "rgba(255,140,80,0.6)" : "rgba(255,255,255,0.18)" }}>
+                            {Math.round(spread * 5)}pt
+                          </div>
+                          <div style={{ width: 22 }}/>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* SUMMARY — biggest gaps and strongest overlaps */}
+          {relationships.length > 1 && (() => {
+            const scored = DIMENSIONS.map(dim => {
+              const rVals = relationships.map(r => r.dims[dim.id] || 0);
+              const spread = Math.max(...rVals) - Math.min(...rVals);
+              const avg = rVals.reduce((a,b)=>a+b,0)/rVals.length;
+              return { dim, spread, avg };
+            });
+            const gaps = [...scored].sort((a,b) => b.spread - a.spread).slice(0, 3);
+            const resonant = [...scored].sort((a,b) => a.spread - b.spread).filter(s => s.avg > 0.3).slice(0, 3);
+            return (
+              <div style={{ marginTop: 28, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <div style={{ background: "rgba(255,140,80,0.04)", border: "1px solid rgba(255,140,80,0.15)", borderRadius: 8, padding: 16 }}>
+                  <div style={{ fontSize: 8.5, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(255,140,80,0.6)", marginBottom: 10 }}>
+                    largest gaps to navigate
+                  </div>
+                  {gaps.map(({ dim, spread }) => (
+                    <div key={dim.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 7 }}>
+                      <span style={{ fontSize: 9.5, color: dim.color }}>{dim.label}</span>
+                      <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                        <div style={{ width: 48, height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 1 }}>
+                          <div style={{ width: `${spread * 100}%`, height: "100%", background: "rgba(255,140,80,0.5)", borderRadius: 1 }}/>
+                        </div>
+                        <span style={{ fontSize: 8.5, color: "rgba(255,140,80,0.7)" }}>{(spread * 5).toFixed(1)}pt</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ background: "rgba(160,255,180,0.04)", border: "1px solid rgba(160,255,180,0.12)", borderRadius: 8, padding: 16 }}>
+                  <div style={{ fontSize: 8.5, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(160,255,180,0.5)", marginBottom: 10 }}>
+                    strongest resonance
+                  </div>
+                  {resonant.map(({ dim, avg }) => (
+                    <div key={dim.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 7 }}>
+                      <span style={{ fontSize: 9.5, color: dim.color }}>{dim.label}</span>
+                      <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                        <div style={{ width: 48, height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 1 }}>
+                          <div style={{ width: `${avg * 100}%`, height: "100%", background: "rgba(160,255,180,0.4)", borderRadius: 1 }}/>
+                        </div>
+                        <span style={{ fontSize: 8.5, color: "rgba(160,255,180,0.6)" }}>{(avg * 5).toFixed(1)}/5</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+      )}
+    </div>
+  );
+}
