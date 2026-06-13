@@ -1,35 +1,54 @@
 # Static Artifacts Gallery
 
-Drop HTML/JS files into the `artifacts/` folder and add their filenames to `artifacts/list.json` (an array of filenames).
+This folder contains your live artifacts gallery.
 
-To view locally:
+## View the gallery
 
-Python 3:
+The site must be served over HTTP or HTTPS. Opening `docs/index.html` directly from the file system (`file://`) will prevent the gallery from loading correctly.
+
+### Local static preview
+
+If you only want to preview the gallery and artifacts without upload/edit support, serve the folder with a simple web server. If you have Node installed:
+
 ```bash
-cd static-site
+cd docs
+npx http-server . -p 8000
+# open http://localhost:8000
+```
+
+If you have Python installed:
+
+```bash
+cd docs
 python -m http.server 8000
 # open http://localhost:8000
 ```
 
-Node (serve):
+### GitHub Pages
+
+If this repository is published with GitHub Pages using the `docs/` folder, the page will be available at:
+
+`https://<your-username>.github.io/<your-repo>/`
+
+## Upload and edit artifacts
+
+The upload and edit features require the Node server in `docs/server.js`.
+
+Start the server like this:
+
 ```bash
-npm install -g serve
-cd static-site
-serve -s .
-```
-
-To publish static-only (no upload/edit server): push this folder to a GitHub repo and enable GitHub Pages (use the `main` branch or `gh-pages` branch) from the repo settings, or deploy to any static host.
-
-If you want upload and edit functionality, run the included Node server which serves the site and provides local endpoints to upload files and save edits:
-
-Node server:
-```bash
-cd static-site
+cd docs
 npm install
 npm start
 # open http://localhost:3000
 ```
 
-Notes:
-- GitHub Pages cannot run the Node server — uploads and edits require a server. For public upload/edit features, consider deploying the server to a VPS or a platform that supports Node (Heroku, Fly, Render) and secure it (authentication) before exposing uploads.
-- The server saves uploads to `artifacts/` and appends filenames to `artifacts/list.json`.
+Then use the upload form and edit panel on the page.
+
+> If Node is not installed, install it first or use GitHub Pages for static preview only.
+
+## Troubleshooting
+
+- If the gallery does not load, make sure the page is served via `http://` or `https://`, not `file://`.
+- If upload/save does not work, the Node server must be running.
+- If you only want a public site, publish the static files and do not expect upload/edit to work on GitHub Pages.

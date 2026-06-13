@@ -27,10 +27,17 @@
         <div>
           <h2>How it works</h2>
           <p>Drop HTML/JS artifact files into <code>artifacts/</code> and list them in <code>artifacts/list.json</code>. Publish the folder as a static site, then embed any item by URL.</p>
+          <p><strong>Important:</strong> Do not open this page directly from your file system (file://). Use a web server or GitHub Pages so the gallery can load correctly.</p>
         </div>
         <div class="notes-card">
           <h3>Note</h3>
           <p>The built-in upload and editor features require the Node backend. For public static embedding, publish only the static files.</p>
+        </div>
+      </section>
+      <section class="status-card">
+        <div class="notes-card">
+          <h3>Live mode</h3>
+          <p id="statusMessage">Loading artifact gallery…</p>
         </div>
       </section>
 
