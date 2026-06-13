@@ -264,8 +264,8 @@ const SECTIONS = [
     accent:"rgba(88,48,160,0.07)",
     questions:[
       {n:33, text:"How important is spirituality / sacredness and ritual for your play?", lo:"not important", hi:"essential"},
-      {n:69, text:"How connected are you to your somatic / body awareness in play and relationships?", lo:"disconnected", hi:"deeply connected"},
-      {n:70, text:"How connected are you to your breath and its capacity to regulate / enhance pleasure?", lo:"disconnected", hi:"deeply connected"},
+      {n:40, text:"How connected are you to your somatic / body awareness in play and relationships?", lo:"disconnected", hi:"deeply connected"},
+      {n:41, text:"How connected are you to your breath and its capacity to regulate / enhance pleasure?", lo:"disconnected", hi:"deeply connected"},
     ]
   },
   {
@@ -373,12 +373,12 @@ function renderSection(){
   document.getElementById('q-count').textContent=`Q${doneQ+1}–${doneQ+sec.questions.length} of ${totalQ}`;
   document.getElementById('btn-back').style.display=currentSection>0?'inline-block':'none';
   document.getElementById('btn-next').textContent=currentSection===SECTIONS.length-1?'See my results →':'Next →';
-  let html=`<div class="section-header" style="border-left-color:${sec.color};background:${sec.accent}"><h2 style="color:${sec.color}">${sec.label}</h2><p>${sec.desc}</p></div>`;
-  if(sec.intro) html+=`<p class="sub" style="margin-bottom:24px;font-style:italic">${sec.intro}</p>`;
-  if(sec.safety) html+=`<div class="safety-notice">If you're experiencing suicidal ideation, please reach out. <a href="https://www.mysafetyplan.org/" target="_blank">Safety planning →</a> | Crisis line: <strong>988</strong> | Text HOME to 741741</div>`;
+  let html=`<div class="section-header" style="border-left-color:${sec.color};background:${sec.accent}"><h2 style="color:${sec.color}">${sec.label}<\//h2><p>${sec.desc}<\//p><\//div>`;
+  if(sec.intro) html+=`<p class="sub" style="margin-bottom:24px;font-style:italic">${sec.intro}<\//p>`;
+  if(sec.safety) html+=`<div class="safety-notice">If you're experiencing suicidal ideation, please reach out. <a href="https://www.mysafetyplan.org/" target="_blank">Safety planning →<\//a> | Crisis line: <strong>988<\//strong> | Text HOME to 741741<\//div>`;
   sec.questions.forEach(q=>{
     const val=answers[q.n]!==undefined?answers[q.n]:null;
-    html+=`<div class="question"><div class="q-label"><strong>Q${q.n}</strong>${q.text}</div><div class="scale">${[0,1,2,3,4,5].map(v=>`<div class="scale-opt ${val===v?'selected':''}" onclick="selectAnswer(${q.n},${v},this)" data-q="${q.n}" data-v="${v}">${v}</div>`).join('')}</div><div class="scale-labels"><span>0 — ${q.lo}</span><span>${q.hi} — 5</span></div></div>`;
+    html+=`<div class="question"><div class="q-label"><strong>Q${q.n}<\//strong>${q.text}<\//div><div class="scale">${[0,1,2,3,4,5].map(v=>`<div class="scale-opt ${val===v?'selected':''}" onclick="selectAnswer(${q.n},${v},this)" data-q="${q.n}" data-v="${v}">${v}</div>`).join('')}<\//div><div class="scale-labels"><span>0 — ${q.lo}<\//span><span>${q.hi} — 5<\//span><\//div><\//div>`;
   });
   document.getElementById('section-content').innerHTML=html;
   window.scrollTo(0,0);
@@ -452,10 +452,10 @@ function showResults(){
   const tier=RESULT_TIERS[resultTier];
   document.getElementById('result-tier-box').innerHTML=`
     <div class="result-tier" style="background:${tier.bg};border-color:${tier.color}22">
-      <div class="eyebrow" style="color:${tier.color}">${tier.label}</div>
-      <h2 style="color:${tier.color};margin-bottom:8px">${tier.tagline}</h2>
-      <p class="sub" style="color:${tier.color};opacity:.8;margin-bottom:12px">${tier.text}</p>
-    </div>`;
+      <div class="eyebrow" style="color:${tier.color}">${tier.label}<\//div>
+      <h2 style="color:${tier.color};margin-bottom:8px">${tier.tagline}<\//h2>
+      <p class="sub" style="color:${tier.color};opacity:.8;margin-bottom:12px">${tier.text}<\//p>
+    <\//div>`;
 
   // Radar
   const svg=document.getElementById('radar-svg');
@@ -478,7 +478,7 @@ function showResults(){
     const short=words.length>2?words[0]+' '+words[1]:words[0];
     const anchor=Math.cos(angles[i])>.2?'start':Math.cos(angles[i])<-.2?'end':'middle';
     svgHtml+=`<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="5" fill="${sec.color}"/>`;
-    svgHtml+=`<text x="${lp.x.toFixed(1)}" y="${lp.y.toFixed(1)}" text-anchor="${anchor}" dominant-baseline="middle" font-size="9" fill="${sec.color}">${short}</text>`;
+    svgHtml+=`<text x="${lp.x.toFixed(1)}" y="${lp.y.toFixed(1)}" text-anchor="${anchor}" dominant-baseline="middle" font-size="9" fill="${sec.color}">${short}<\//text>`;
   });
   svg.innerHTML=svgHtml;
 
@@ -489,22 +489,22 @@ function showResults(){
     const pct=Math.round(score*100);
     const interp=getInterp(sec.id,score);
     const map=SKILL_MAP[sec.id];
-    const skillPills=map.skills.map((s,i)=>`<span class="skill-pill" style="background:${map.colors[i]}">${s}</span>`).join('');
-    cardsHtml+=`<div class="dim-card"><div class="dim-card-accent" style="background:${sec.color}"></div><div class="dim-card-label" style="color:${sec.color}">${sec.label}</div><div class="dim-card-bar"><div class="dim-card-fill" style="width:${pct}%;background:${sec.color}"></div></div><div class="dim-card-score">${(score*5).toFixed(1)} / 5</div><div class="dim-card-interp">${interp}</div><div class="skills-preview">${skillPills}</div></div>`;
+    const skillPills=map.skills.map((s,i)=>`<span class="skill-pill" style="background:${map.colors[i]}">${s}<\//span>`).join('');
+    cardsHtml+=`<div class="dim-card"><div class="dim-card-accent" style="background:${sec.color}"><\//div><div class="dim-card-label" style="color:${sec.color}">${sec.label}<\//div><div class="dim-card-bar"><div class="dim-card-fill" style="width:${pct}%;background:${sec.color}"><\//div><\//div><div class="dim-card-score">${(score*5).toFixed(1)} / 5<\//div><div class="dim-card-interp">${interp}<\//div><div class="skills-preview">${skillPills}<\//div><\//div>`;
   });
   document.getElementById('results-cards').innerHTML=cardsHtml;
 
   // Pathways
   document.getElementById('pathways-section').innerHTML=`
-    <div style="margin-bottom:12px"><div class="eyebrow">Recommended next steps</div></div>
+    <div style="margin-bottom:12px"><div class="eyebrow">Recommended next steps<\//div><\//div>
     <div class="pathway-box" style="border-color:rgba(0,229,255,0.3);background:rgba(0,229,255,0.04)">
-      <h3 style="color:#0D7A70">Ethical AI Tool Suite</h3>
-      <p>Based on your digital relating score, a curated set of AI tools with ethics built in — matched to your actual needs. <a href="https://soleilmerroir.com">Explore the toolkit →</a></p>
-    </div>
+      <h3 style="color:#0D7A70">Ethical AI Tool Suite<\//h3>
+      <p>Based on your digital relating score, a curated set of AI tools with ethics built in — matched to your actual needs. <a href="https://soleilmerroir.com">Explore the toolkit →<\//a><\//p>
+    <\//div>
     <div class="pathway-box" style="border-color:rgba(255,45,120,0.3);background:rgba(255,45,120,0.04)">
-      <h3 style="color:#C04878">Human Relating & Engagement Plan</h3>
-      <p>A graduated plan for rebuilding human relational capacity — online and AFK — starting where you actually are. <a href="https://soleilmerroir.com">Get the workbook →</a></p>
-    </div>`;
+      <h3 style="color:#C04878">Human Relating & Engagement Plan<\//h3>
+      <p>A graduated plan for rebuilding human relational capacity — online and AFK — starting where you actually are. <a href="https://soleilmerroir.com">Get the workbook →<\//a><\//p>
+    <\//div>`;
 
   showScreen('results');
   window.scrollTo(0,0);
