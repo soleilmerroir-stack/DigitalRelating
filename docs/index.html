@@ -98,8 +98,8 @@
     </p>
     <div class="safety-notice">
       This is not a comprehensive mental health or neurodivergency assessment. It's most helpful if you have some baseline understanding of your mental health before completing it.<br><br>
-      If you're experiencing suicidal ideation, please ask for help and make a safety plan. <a href="https://www.mysafetyplan.org/" target="_blank">Sample safety plan →</a> · Crisis line: <strong>988</strong> · Text HOME to 741741<br><br>
-      ND traits adapted from <a href="https://www.livedexperienceeducator.com/blog/theneurodiversitysmorgasbord" target="_blank">Sonny Wise</a>. Some categories adapted from Dimensions of Desire by <a href="https://drlizpowell.com/" target="_blank">Dr. Liz Powell</a>.
+      If you're experiencing suicidal ideation, please ask for help and make a safety plan. <a href="https://www.mysafetyplan.org/" target="_blank" rel="noopener noreferrer">Sample safety plan →</a> · Crisis line: <strong>988</strong> · Text HOME to 741741<br><br>
+      ND traits adapted from <a href="https://www.livedexperienceeducator.com/blog/theneurodiversitysmorgasbord" target="_blank" rel="noopener noreferrer">Sonny Wise</a>. Some categories adapted from Dimensions of Desire by <a href="https://drlizpowell.com/" target="_blank" rel="noopener noreferrer">Dr. Liz Powell</a>.
     </div>
     <div class="rule"></div>
     <p class="sub" style="margin-bottom:24px;font-size:11px">68 questions across 9 dimensions · takes about 12 minutes · all answers are private</p>
@@ -375,7 +375,7 @@ function renderSection(){
   document.getElementById('btn-next').textContent=currentSection===SECTIONS.length-1?'See my results →':'Next →';
   let html=`<div class="section-header" style="border-left-color:${sec.color};background:${sec.accent}"><h2 style="color:${sec.color}">${sec.label}<\//h2><p>${sec.desc}<\//p><\//div>`;
   if(sec.intro) html+=`<p class="sub" style="margin-bottom:24px;font-style:italic">${sec.intro}<\//p>`;
-  if(sec.safety) html+=`<div class="safety-notice">If you're experiencing suicidal ideation, please reach out. <a href="https://www.mysafetyplan.org/" target="_blank">Safety planning →<\//a> | Crisis line: <strong>988<\//strong> | Text HOME to 741741<\//div>`;
+  if(sec.safety) html += `<div class="safety-notice">If you're experiencing suicidal ideation, please reach out. <a href="https://www.mysafetyplan.org/" target="_blank" rel="noopener noreferrer">Safety planning →</a> | Crisis line: <strong>988</strong> | Text HOME to 741741</div>`;
   sec.questions.forEach(q=>{
     const val=answers[q.n]!==undefined?answers[q.n]:null;
     html+=`<div class="question"><div class="q-label"><strong>Q${q.n}<\//strong>${q.text}<\//div><div class="scale">${[0,1,2,3,4,5].map(v=>`<div class="scale-opt ${val===v?'selected':''}" onclick="selectAnswer(${q.n},${v},this)" data-q="${q.n}" data-v="${v}">${v}</div>`).join('')}<\//div><div class="scale-labels"><span>0 — ${q.lo}<\//span><span>${q.hi} — 5<\//span><\//div><\//div>`;

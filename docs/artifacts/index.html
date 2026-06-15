@@ -449,7 +449,7 @@ function renderSection(){
   let html=`<div class="section-header" style="border-left-color:${sec.color};background:${sec.accent}"><h2 style="color:${sec.color}">${sec.label}<\/h2><p>${sec.desc}<\/p><\/div>`;
   if(sec.intro) html+=`<p class="sub" style="margin-bottom:24px;font-style:italic">${sec.intro}<\/p>`;
   if(sec.safety){
-    html += `<div class="safety-notice">If you're experiencing suicidal ideation, please reach out. <a href="https://www.mysafetyplan.org/" target="_blank">Safety planning →</a>  |  Crisis line: <strong>988</strong>  |  Text HOME to 741741</div>`;
+    html += `<div class="safety-notice">If you're experiencing suicidal ideation, please reach out. <a href="https://www.mysafetyplan.org/" target="_blank" rel="noopener noreferrer">Safety planning →</a>  |  Crisis line: <strong>988</strong>  |  Text HOME to 741741</div>`;
   }
   sec.questions.forEach(q=>{
     const val=answers[q.n]!==undefined?answers[q.n]:null;
