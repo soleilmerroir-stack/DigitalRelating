@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F5F0E8; --ink: #1A1410; --muted: rgba(26,20,16,0.45);
+    --bg: #F5F0E8; --ink: #1A1410; --muted: rgba(26,20,16,0.68);
     --line: rgba(26,20,16,0.1); --accent: #8B4513; --teal: #0D7A70;
     --c-needs:#107870; --c-mentalhealth:#906010; --c-identity:#B85020;
     --c-erotic:#8040A8; --c-relational:#C04878; --c-emotional:#2878A0;
@@ -22,27 +22,27 @@
   h2{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;font-style:italic;margin-bottom:12px}
   .eyebrow{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
   .rule{height:1px;background:var(--line);margin:28px 0}
-  .sub{font-size:12px;color:var(--muted);line-height:1.75}
+  .sub{font-size:13px;color:var(--muted);line-height:1.85}
   .btn{display:inline-block;cursor:pointer;background:var(--ink);color:var(--bg);border:none;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;padding:14px 32px;border-radius:2px;transition:opacity .2s;margin-top:8px}
   .btn:hover{opacity:.8}
   .btn-outline{background:transparent;color:var(--ink);border:1px solid var(--ink)}
   .btn-teal{background:var(--teal)}
   .progress-bar{height:3px;background:var(--line);border-radius:2px;margin-bottom:36px;overflow:hidden}
   .progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease}
-  .progress-label{font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:.1em}
+  .progress-label{font-size:11px;color:rgba(26,20,16,0.55);margin-bottom:8px;letter-spacing:.1em}
   .section-header{background:rgba(26,20,16,.04);border-left:3px solid var(--accent);padding:14px 18px;margin-bottom:28px;border-radius:0 3px 3px 0}
   .section-header h2{margin-bottom:4px;font-size:18px}
-  .section-header p{font-size:11px;color:var(--muted)}
-  .question{margin-bottom:32px}
-  .q-label{font-size:13px;line-height:1.65;margin-bottom:14px;color:var(--ink)}
-  .q-label strong{font-weight:500;color:var(--accent);font-size:11px;letter-spacing:.08em;display:block;margin-bottom:4px}
+  .section-header p{font-size:13px;color:var(--muted);line-height:1.7}
+  .question{margin-bottom:40px;padding-bottom:8px}
+  .q-label{font-size:14px;line-height:1.78;margin-bottom:18px;color:var(--ink)}
+  .q-label strong{font-weight:500;color:var(--accent);font-size:12px;letter-spacing:.05em;display:block;margin-bottom:8px}
   .scale{display:flex;gap:0;background:rgba(26,20,16,.04);border-radius:4px;overflow:hidden;border:1px solid var(--line)}
-  .scale-opt{flex:1;text-align:center;padding:10px 4px;cursor:pointer;font-size:12px;font-weight:500;color:var(--muted);transition:all .15s;border-right:1px solid var(--line);user-select:none}
+  .scale-opt{flex:1;text-align:center;padding:12px 4px;cursor:pointer;font-size:13px;font-weight:500;color:rgba(26,20,16,0.65);transition:all .15s;border-right:1px solid var(--line);user-select:none}
   .scale-opt:last-child{border-right:none}
   .scale-opt:hover{background:rgba(26,20,16,.07);color:var(--ink)}
   .scale-opt.selected{background:var(--ink);color:var(--bg)}
   .scale-labels{display:flex;justify-content:space-between;margin-top:5px}
-  .scale-labels span{font-size:9px;color:var(--muted);letter-spacing:.06em}
+  .scale-labels span{font-size:11px;color:var(--muted);letter-spacing:.04em;margin-top:5px;display:inline-block}
   .safety-notice{background:rgba(139,69,19,.07);border:1px solid rgba(139,69,19,.2);border-radius:3px;padding:14px 18px;margin:20px 0;font-size:11px;color:var(--accent);line-height:1.75}
   .safety-notice a{color:var(--accent)}
   .nav-row{display:flex;gap:12px;align-items:center;margin-top:36px;flex-wrap:wrap}
@@ -60,7 +60,7 @@
   .dim-card-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:400;margin-bottom:8px;line-height:1.2}
   .dim-card-bar{height:6px;background:rgba(26,20,16,.08);border-radius:3px;margin-bottom:6px;overflow:hidden}
   .dim-card-fill{height:100%;border-radius:3px}
-  .dim-card-score{font-size:11px;color:var(--muted)}
+  .dim-card-score{font-size:12px;color:rgba(26,20,16,0.6)}
   .dim-card-interp{font-size:11px;color:var(--muted);line-height:1.65;margin-top:8px;font-style:italic;border-top:1px solid var(--line);padding-top:8px}
   .email-panel{background:rgba(13,122,112,.05);border:1px solid rgba(13,122,112,.25);border-radius:3px;padding:24px 28px;margin-top:32px}
   .email-panel h2{color:var(--teal);margin-bottom:8px}
@@ -68,7 +68,7 @@
   .email-input{flex:1;min-width:200px;padding:12px 14px;border:1px solid rgba(13,122,112,.3);border-radius:2px;font-family:'DM Mono',monospace;font-size:12px;background:white;color:var(--ink);outline:none}
   .email-input:focus{border-color:var(--teal)}
   .name-input{width:100%;padding:12px 14px;margin-bottom:10px;border:1px solid rgba(13,122,112,.3);border-radius:2px;font-family:'DM Mono',monospace;font-size:12px;background:white;color:var(--ink);outline:none}
-  .email-note{font-size:10px;color:var(--muted);margin-top:10px;line-height:1.6}
+  .email-note{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.7}
   .thankyou{text-align:center;padding:48px 24px}
   .thankyou h1{margin-bottom:16px}
   svg.radar text{font-family:'DM Mono',monospace}
@@ -90,19 +90,51 @@
     <div class="eyebrow">cyborgdreamz · Relationship Ecosystem Quiz</div>
     <h1>Relationship Ecosystem Quiz</h1>
     <div class="rule"></div>
-    <p class="sub" style="margin-bottom:20px">
-      Thank you for exploring who you are — and how to communicate all the aspects of you that would impact your sexuality, dating, and wellbeing.
+    <!-- INTRO COPY: Write your own language for these three slots -->
+
+    <p class="sub" style="margin-bottom:20px" id="intro-who-this-is-for">
+      <!-- SLOT 1: Who this is for — the felt experience, not demographics.
+           Who is the person who needs this? What are they trying to figure out?
+           Write 2-3 sentences. -->
+      [Your language here — who this is for and what they're working on]
     </p>
-    <p class="sub" style="margin-bottom:20px">
-      After you complete the survey you'll see a visual representation of your profile across 9 dimensions. Enter your email to receive it as a shareable image to explore with people in your life.
+
+    <p class="sub" style="margin-bottom:20px" id="intro-what-it-does">
+      <!-- SLOT 2: What the quiz does and how to use it.
+           Map not verdict. Starting point for conversation.
+           Can be used alone, with a therapist, with a partner, with someone new.
+           Write 2-3 sentences. -->
+      [Your language here — what this is and how to use it]
     </p>
-    <div class="safety-notice">
-      This is not a comprehensive mental health or neurodivergency assessment. It's most helpful if you have some baseline understanding of your mental health before completing it.<br><br>
-      If you're experiencing suicidal ideation, please ask for help and make a safety plan. <a href="https://www.mysafetyplan.org/" target="_blank">Sample safety plan →</a> · Crisis line: <strong>988</strong> · Text HOME to 741741<br><br>
-      ND traits adapted from <a href="https://www.livedexperienceeducator.com/blog/theneurodiversitysmorgasbord" target="_blank">Sonny Wise</a>. Some categories adapted from Dimensions of Desire by <a href="https://drlizpowell.com/" target="_blank">Dr. Liz Powell</a>.
+
+    <p class="sub" style="margin-bottom:12px" id="intro-what-it-is-not">
+      <!-- SLOT 3: What this explicitly is NOT.
+           Not a matching algorithm. Not a diagnosis. Not a ranking.
+           Brief — 1-2 sentences. -->
+      [Your language here — what this is not]
+    </p>
+    <div class="safety-notice" style="margin-bottom:20px">
+      <strong>Content notice:</strong> This quiz includes questions about mental health, sexuality, trauma, neurodivergence, suicidal ideation, and substance use. Take breaks as needed. Skip any question that doesn't feel safe right now.<br><br>
+      <strong>This is not a clinical assessment</strong> — it is a self-awareness tool. It is not a substitute for therapy, diagnosis, or crisis support. However, it is designed to be useful to share with your therapist, partner, or others in your life as a starting point for conversation.<br><br>
+      If you're experiencing suicidal ideation, please ask for help. <a href="https://www.mysafetyplan.org/" target="_blank">Safety planning →</a> · Crisis line: <strong>988</strong> · Text HOME to 741741<br><br>
+      ND traits adapted from <a href="https://www.livedexperienceeducator.com/blog/theneurodiversitysmorgasbord" target="_blank">Sonny Wise</a>. Some categories adapted from Dimensions of Desire by <a href="https://drlizpowell.com/" target="_blank">Dr. Liz Powell</a>. Power Threat Meaning Framework: Johnstone & Boyle (BPS, 2018).
     </div>
     <div class="rule"></div>
     <p class="sub" style="margin-bottom:24px;font-size:11px">68 questions across 9 dimensions · takes about 12 minutes · all answers are private</p>
+    <div style="margin-bottom:20px">
+      <div style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Referral or access code (optional)</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <input type="text" id="accessCode" placeholder="Enter code if you have one"
+          style="flex:1;min-width:180px;padding:10px 14px;border:1px solid var(--line);border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;background:rgba(26,20,16,.04);color:var(--ink);outline:none"
+          oninput="checkCode(this.value)">
+        <span id="codeStatus" style="display:none;padding:10px 14px;border-radius:3px;font-size:11px;font-family:'DM Mono',monospace;align-self:center"></span>
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.6">
+        Clinicians: share your referral code with clients for free access.<br>
+        Sex worker community members: use your community code.<br>
+        No code? The quiz is free — no code required.
+      </div>
+    </div>
     <button class="btn" onclick="startQuiz()">Begin →</button>
   </div>
 </div>
@@ -361,6 +393,47 @@ const RESULT_TIERS = {
 
 let currentSection = 0, answers = {}, scores = {}, resultTier = 'healthy';
 
+// Referral codes — add/change as needed
+const VALID_CODES = {
+  'SWFREE':      {label:'Sex Worker Community',    tier:'sw',         discount:true},
+  'SWCOMMUNITY': {label:'Sex Worker Community',    tier:'sw',         discount:true},
+  'THERAPIST':   {label:'Clinician Referral',      tier:'clinician',  discount:true},
+  'CLINICIAN':   {label:'Clinician Referral',      tier:'clinician',  discount:true},
+  'CYBORGDREAMZ':{label:'cyborgdreamz Community',  tier:'community',  discount:true},
+  'CYBER2026':   {label:'cyborgdreamz Community',  tier:'community',  discount:true},
+};
+let referralCode = null;
+let referralTier = null;
+
+function checkCode(val) {
+  const code = val.trim().toUpperCase();
+  const status = document.getElementById('codeStatus');
+  const input = document.getElementById('accessCode');
+  if (!code) { status.style.display='none'; return; }
+  if (VALID_CODES[code]) {
+    const entry = VALID_CODES[code];
+    referralCode = code;
+    referralTier = entry.tier;
+    status.style.display='inline-block';
+    status.style.background='rgba(16,120,112,.1)';
+    status.style.color='#107870';
+    status.style.border='1px solid rgba(16,120,112,.3)';
+    status.textContent='✓ ' + entry.label;
+    input.style.borderColor='rgba(16,120,112,.4)';
+  } else if (code.length >= 4) {
+    referralCode = null;
+    referralTier = null;
+    status.style.display='inline-block';
+    status.style.background='rgba(184,80,32,.08)';
+    status.style.color='#B85020';
+    status.style.border='1px solid rgba(184,80,32,.2)';
+    status.textContent='Code not recognised';
+    input.style.borderColor='rgba(184,80,32,.3)';
+  } else {
+    status.style.display='none';
+  }
+}
+
 function startQuiz(){ showScreen('quiz'); renderSection(); }
 
 function renderSection(){
@@ -373,12 +446,12 @@ function renderSection(){
   document.getElementById('q-count').textContent=`Q${doneQ+1}–${doneQ+sec.questions.length} of ${totalQ}`;
   document.getElementById('btn-back').style.display=currentSection>0?'inline-block':'none';
   document.getElementById('btn-next').textContent=currentSection===SECTIONS.length-1?'See my results →':'Next →';
-  let html=`<div class="section-header" style="border-left-color:${sec.color};background:${sec.accent}"><h2 style="color:${sec.color}">${sec.label}</h2><p>${sec.desc}</p></div>`;
-  if(sec.intro) html+=`<p class="sub" style="margin-bottom:24px;font-style:italic">${sec.intro}</p>`;
-  if(sec.safety) html+=`<div class="safety-notice">If you're experiencing suicidal ideation, please reach out. <a href="https://www.mysafetyplan.org/" target="_blank">Safety planning →</a> | Crisis line: <strong>988</strong> | Text HOME to 741741</div>`;
+  let html=`<div class="section-header" style="border-left-color:${sec.color};background:${sec.accent}"><h2 style="color:${sec.color}">${sec.label}<\/h2><p>${sec.desc}<\/p><\/div>`;
+  if(sec.intro) html+=`<p class="sub" style="margin-bottom:24px;font-style:italic">${sec.intro}<\/p>`;
+  if(sec.safety){var sn=document.createElement('div');sn.className='safety-notice';sn.innerHTML='If you\'re experiencing suicidal ideation, please reach out. '+'<a href="https://www.mysafetyplan.org/" target="_blank" onclick="event.stopPropagation()">Safety planning →<'+'/a>'+'  |  Crisis line: <strong>988<'+'/'+'strong>  |  Text HOME to 741741';document.getElementById('section-content').appendChild(sn);}
   sec.questions.forEach(q=>{
     const val=answers[q.n]!==undefined?answers[q.n]:null;
-    html+=`<div class="question"><div class="q-label"><strong>Q${q.n}</strong>${q.text}</div><div class="scale">${[0,1,2,3,4,5].map(v=>`<div class="scale-opt ${val===v?'selected':''}" onclick="selectAnswer(${q.n},${v},this)" data-q="${q.n}" data-v="${v}">${v}</div>`).join('')}</div><div class="scale-labels"><span>0 — ${q.lo}</span><span>${q.hi} — 5</span></div></div>`;
+    html+=`<div class="question"><div class="q-label"><strong>Q${q.n}<\/strong>${q.text}<\/div><div class="scale">${[0,1,2,3,4,5].map(v=>`<div class="scale-opt ${val===v?'selected':''}" onclick="selectAnswer(${q.n},${v},this)" data-q="${q.n}" data-v="${v}">${v}</div>`).join('')}<\/div><div class="scale-labels"><span>0 — ${q.lo}<\/span><span>${q.hi} — 5<\/span><\/div><\/div>`;
   });
   document.getElementById('section-content').innerHTML=html;
   window.scrollTo(0,0);
@@ -452,10 +525,10 @@ function showResults(){
   const tier=RESULT_TIERS[resultTier];
   document.getElementById('result-tier-box').innerHTML=`
     <div class="result-tier" style="background:${tier.bg};border-color:${tier.color}22">
-      <div class="eyebrow" style="color:${tier.color}">${tier.label}</div>
-      <h2 style="color:${tier.color};margin-bottom:8px">${tier.tagline}</h2>
-      <p class="sub" style="color:${tier.color};opacity:.8;margin-bottom:12px">${tier.text}</p>
-    </div>`;
+      <div class="eyebrow" style="color:${tier.color}">${tier.label}<\/div>
+      <h2 style="color:${tier.color};margin-bottom:8px">${tier.tagline}<\/h2>
+      <p class="sub" style="color:${tier.color};opacity:.8;margin-bottom:12px">${tier.text}<\/p>
+    <\/div>`;
 
   // Radar
   const svg=document.getElementById('radar-svg');
@@ -478,7 +551,7 @@ function showResults(){
     const short=words.length>2?words[0]+' '+words[1]:words[0];
     const anchor=Math.cos(angles[i])>.2?'start':Math.cos(angles[i])<-.2?'end':'middle';
     svgHtml+=`<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="5" fill="${sec.color}"/>`;
-    svgHtml+=`<text x="${lp.x.toFixed(1)}" y="${lp.y.toFixed(1)}" text-anchor="${anchor}" dominant-baseline="middle" font-size="9" fill="${sec.color}">${short}</text>`;
+    svgHtml+=`<text x="${lp.x.toFixed(1)}" y="${lp.y.toFixed(1)}" text-anchor="${anchor}" dominant-baseline="middle" font-size="9" fill="${sec.color}">${short}<\/text>`;
   });
   svg.innerHTML=svgHtml;
 
@@ -489,22 +562,22 @@ function showResults(){
     const pct=Math.round(score*100);
     const interp=getInterp(sec.id,score);
     const map=SKILL_MAP[sec.id];
-    const skillPills=map.skills.map((s,i)=>`<span class="skill-pill" style="background:${map.colors[i]}">${s}</span>`).join('');
-    cardsHtml+=`<div class="dim-card"><div class="dim-card-accent" style="background:${sec.color}"></div><div class="dim-card-label" style="color:${sec.color}">${sec.label}</div><div class="dim-card-bar"><div class="dim-card-fill" style="width:${pct}%;background:${sec.color}"></div></div><div class="dim-card-score">${(score*5).toFixed(1)} / 5</div><div class="dim-card-interp">${interp}</div><div class="skills-preview">${skillPills}</div></div>`;
+    const skillPills=map.skills.map((s,i)=>`<span class="skill-pill" style="background:${map.colors[i]}">${s}<\/span>`).join('');
+    cardsHtml+=`<div class="dim-card"><div class="dim-card-accent" style="background:${sec.color}"><\/div><div class="dim-card-label" style="color:${sec.color}">${sec.label}<\/div><div class="dim-card-bar"><div class="dim-card-fill" style="width:${pct}%;background:${sec.color}"><\/div><\/div><div class="dim-card-score">${(score*5).toFixed(1)} / 5<\/div><div class="dim-card-interp">${interp}<\/div><div class="skills-preview">${skillPills}<\/div><\/div>`;
   });
   document.getElementById('results-cards').innerHTML=cardsHtml;
 
   // Pathways
   document.getElementById('pathways-section').innerHTML=`
-    <div style="margin-bottom:12px"><div class="eyebrow">Recommended next steps</div></div>
+    <div style="margin-bottom:12px"><div class="eyebrow">Recommended next steps<\/div><\/div>
     <div class="pathway-box" style="border-color:rgba(0,229,255,0.3);background:rgba(0,229,255,0.04)">
-      <h3 style="color:#0D7A70">Ethical AI Tool Suite</h3>
-      <p>Based on your digital relating score, a curated set of AI tools with ethics built in — matched to your actual needs. <a href="https://soleilmerroir.com">Explore the toolkit →</a></p>
-    </div>
+      <h3 style="color:#0D7A70">Ethical AI Tool Suite<\/h3>
+      <p>Based on your digital relating score, a curated set of AI tools with ethics built in — matched to your actual needs. <a href="https://soleilmerroir.com">Explore the toolkit →<\/a><\/p>
+    <\/div>
     <div class="pathway-box" style="border-color:rgba(255,45,120,0.3);background:rgba(255,45,120,0.04)">
-      <h3 style="color:#C04878">Human Relating & Engagement Plan</h3>
-      <p>A graduated plan for rebuilding human relational capacity — online and AFK — starting where you actually are. <a href="https://soleilmerroir.com">Get the workbook →</a></p>
-    </div>`;
+      <h3 style="color:#C04878">Human Relating & Engagement Plan<\/h3>
+      <p>A graduated plan for rebuilding human relational capacity — online and AFK — starting where you actually are. <a href="https://soleilmerroir.com">Get the workbook →<\/a><\/p>
+    <\/div>`;
 
   showScreen('results');
   window.scrollTo(0,0);
@@ -525,7 +598,7 @@ function submitEmail(){
     workbook_url:'https://soleilmerroir.com/workbook',
     timestamp:new Date().toISOString()
   };
-  const WEBHOOK_URL='https://hook.us1.make.com/YOUR_WEBHOOK_ID_HERE';
+  const WEBHOOK_URL='https://hook.us2.make.com/6xrwfh7vvdqw329wm5u0mhe7l7v39kx9';
   fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
   showScreen('thankyou');
   window.scrollTo(0,0);
