@@ -448,7 +448,9 @@ function renderSection(){
   document.getElementById('btn-next').textContent=currentSection===SECTIONS.length-1?'See my results →':'Next →';
   let html=`<div class="section-header" style="border-left-color:${sec.color};background:${sec.accent}"><h2 style="color:${sec.color}">${sec.label}<\/h2><p>${sec.desc}<\/p><\/div>`;
   if(sec.intro) html+=`<p class="sub" style="margin-bottom:24px;font-style:italic">${sec.intro}<\/p>`;
-  if(sec.safety){var sn=document.createElement('div');sn.className='safety-notice';sn.innerHTML='If you\'re experiencing suicidal ideation, please reach out. '+'<a href="https://www.mysafetyplan.org/" target="_blank" onclick="event.stopPropagation()">Safety planning →<'+'/a>'+'  |  Crisis line: <strong>988<'+'/'+'strong>  |  Text HOME to 741741';document.getElementById('section-content').appendChild(sn);}
+  if(sec.safety){
+    html += `<div class="safety-notice">If you're experiencing suicidal ideation, please reach out. <a href="https://www.mysafetyplan.org/" target="_blank">Safety planning →</a>  |  Crisis line: <strong>988</strong>  |  Text HOME to 741741</div>`;
+  }
   sec.questions.forEach(q=>{
     const val=answers[q.n]!==undefined?answers[q.n]:null;
     html+=`<div class="question"><div class="q-label"><strong>Q${q.n}<\/strong>${q.text}<\/div><div class="scale">${[0,1,2,3,4,5].map(v=>`<div class="scale-opt ${val===v?'selected':''}" onclick="selectAnswer(${q.n},${v},this)" data-q="${q.n}" data-v="${v}">${v}</div>`).join('')}<\/div><div class="scale-labels"><span>0 — ${q.lo}<\/span><span>${q.hi} — 5<\/span><\/div><\/div>`;
