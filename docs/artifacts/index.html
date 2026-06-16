@@ -16,7 +16,7 @@
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--ink);font-family:'DM Mono',monospace;font-size:14px;line-height:1.6;min-height:100vh}
   .screen{display:none}.screen.active{display:block}
-  .container{max-width:720px;margin:0 auto;padding:48px 24px 80px}
+  .container{max-width:720px;margin:0 auto;padding:48px 20px 80px;overflow-x:hidden}
   .serif{font-family:'Cormorant Garamond',serif}
   h1{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,5vw,42px);font-weight:300;font-style:italic;line-height:1.15;margin-bottom:16px}
   h2{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;font-style:italic;margin-bottom:12px}
@@ -36,8 +36,8 @@
   .question{margin-bottom:40px;padding-bottom:8px}
   .q-label{font-size:14px;line-height:1.78;margin-bottom:18px;color:var(--ink)}
   .q-label strong{font-weight:500;color:var(--accent);font-size:12px;letter-spacing:.05em;display:block;margin-bottom:8px}
-  .scale{display:flex;gap:0;background:rgba(26,20,16,.04);border-radius:4px;overflow:hidden;border:1px solid var(--line)}
-  .scale-opt{flex:1;text-align:center;padding:12px 4px;cursor:pointer;font-size:13px;font-weight:500;color:rgba(26,20,16,0.65);transition:all .15s;border-right:1px solid var(--line);user-select:none}
+  .scale{display:flex;gap:0;background:rgba(26,20,16,.04);border-radius:4px;overflow:hidden;border:1px solid var(--line);width:100%;min-width:0}
+  .scale-opt{flex:1;text-align:center;padding:12px 2px;cursor:pointer;font-size:12px;font-weight:500;color:rgba(26,20,16,0.65);min-width:0;overflow:hidden;transition:all .15s;border-right:1px solid var(--line);user-select:none}
   .scale-opt:last-child{border-right:none}
   .scale-opt:hover{background:rgba(26,20,16,.07);color:var(--ink)}
   .scale-opt.selected{background:var(--ink);color:var(--bg)}
@@ -56,18 +56,26 @@
   .result-tier p{font-size:12px;line-height:1.75;color:var(--muted)}
   .dim-card{background:rgba(26,20,16,.03);border:1px solid var(--line);border-radius:3px;padding:16px;position:relative;overflow:hidden}
   .dim-card-accent{position:absolute;top:0;left:0;width:3px;height:100%}
-  .dim-card-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px}
+  .dim-card-label{font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;word-wrap:break-word;white-space:normal}
   .dim-card-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:400;margin-bottom:8px;line-height:1.2}
   .dim-card-bar{height:6px;background:rgba(26,20,16,.08);border-radius:3px;margin-bottom:6px;overflow:hidden}
   .dim-card-fill{height:100%;border-radius:3px}
   .dim-card-score{font-size:12px;color:rgba(26,20,16,0.6)}
-  .dim-card-interp{font-size:11px;color:var(--muted);line-height:1.65;margin-top:8px;font-style:italic;border-top:1px solid var(--line);padding-top:8px}
+  .dim-card-interp{font-size:11.5px;color:rgba(26,20,16,0.65);line-height:1.7;margin-top:8px;font-style:italic;border-top:1px solid var(--line);padding-top:8px;word-wrap:break-word;overflow-wrap:break-word}
   .email-panel{background:rgba(13,122,112,.05);border:1px solid rgba(13,122,112,.25);border-radius:3px;padding:24px 28px;margin-top:32px}
   .email-panel h2{color:var(--teal);margin-bottom:8px}
   .email-row{display:flex;gap:10px;flex-wrap:wrap}
   .email-input{flex:1;min-width:200px;padding:12px 14px;border:1px solid rgba(13,122,112,.3);border-radius:2px;font-family:'DM Mono',monospace;font-size:12px;background:white;color:var(--ink);outline:none}
   .email-input:focus{border-color:var(--teal)}
   .name-input{width:100%;padding:12px 14px;margin-bottom:10px;border:1px solid rgba(13,122,112,.3);border-radius:2px;font-family:'DM Mono',monospace;font-size:12px;background:white;color:var(--ink);outline:none}
+  @media(max-width:580px){
+    .container{padding:28px 14px 60px}
+    .scale-opt{font-size:11px;padding:10px 1px}
+    .scale-labels span{font-size:9.5px}
+    .q-label{font-size:13px}
+    .results-grid{grid-template-columns:1fr}
+    .dim-card-name{font-size:14px}
+  }
   .email-note{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.7}
   .thankyou{text-align:center;padding:48px 24px}
   .thankyou h1{margin-bottom:16px}
@@ -96,7 +104,7 @@
       <!-- SLOT 1: Who this is for — the felt experience, not demographics.
            Who is the person who needs this? What are they trying to figure out?
            Write 2-3 sentences. -->
-      [Your language here — who this is for and what they're working on]
+      This quiz is a starting point for people who've felt unseen, excluded from mainstream sexuality and dating, impeded by mental health, defeated by systems reinforcing normative brains and bodies, that don't understand how you exist or relate. You are wanted and desirable exactly as you are, and ready to find others who celebrate that.
     </p>
 
     <p class="sub" style="margin-bottom:20px" id="intro-what-it-does">
@@ -104,14 +112,14 @@
            Map not verdict. Starting point for conversation.
            Can be used alone, with a therapist, with a partner, with someone new.
            Write 2-3 sentences. -->
-      [Your language here — what this is and how to use it]
+      This is not a matching game, a horoscope, an archetype or a love language. Instead of a narrow categorical definition, it's a comprehensive picture of facets of you — displayed visually with easy pathways for digging deeper. Each dimension and score is constantly changing based on your needs and experiences, so it provides conversation starters and areas to explore before building connections which center our sensitivities and identities with care.
     </p>
 
     <p class="sub" style="margin-bottom:12px" id="intro-what-it-is-not">
       <!-- SLOT 3: What this explicitly is NOT.
            Not a matching algorithm. Not a diagnosis. Not a ranking.
            Brief — 1-2 sentences. -->
-      [Your language here — what this is not]
+      Love is magical and beautiful, but the barriers to safety, care and compatibility are real and worth understanding. This quiz, the results and the community ecosystem are rooted in shame-free, non-pathologizing vulnerability, anti-oppression, acceptance and curiosity for what could be in human and non-human relating. A note on AI: we use AI for infrastructure and data analysis only — all generative, creative and support reflections are human made.
     </p>
     <div class="safety-notice" style="margin-bottom:20px">
       <strong>Content notice:</strong> This quiz includes questions about mental health, sexuality, trauma, neurodivergence, suicidal ideation, and substance use. Take breaks as needed. Skip any question that doesn't feel safe right now.<br><br>
@@ -166,7 +174,21 @@
     </div>
     <div class="results-grid" id="results-cards"></div>
     <div id="pathways-section" style="margin-top:28px"></div>
-    <div class="email-panel">
+    
+  <!-- RELATIONSHIP ECOSYSTEM VISUALIZATION -->
+  <div style="margin:36px 0 28px">
+    <div class="eyebrow" style="margin-bottom:6px">Your relationship ecosystem</div>
+    <p class="sub" style="margin-bottom:18px">Where you currently invest relational energy — and what a more intentional distribution might look like based on your scores.</p>
+    <svg id="ecosystemSvg" viewBox="0 0 560 320" width="100%" style="max-width:560px;display:block;margin:0 auto"></svg>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;max-width:560px;margin-left:auto;margin-right:auto">
+      <div id="ecosystemNote1" style="background:rgba(26,20,16,.04);border-radius:3px;padding:10px 14px;font-size:11px;color:rgba(26,20,16,0.65);line-height:1.65;border-left:3px solid #C04878"></div>
+      <div id="ecosystemNote2" style="background:rgba(26,20,16,.04);border-radius:3px;padding:10px 14px;font-size:11px;color:rgba(26,20,16,0.65);line-height:1.65;border-left:3px solid #107870"></div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <div class="email-panel">
       <h2>Receive your results</h2>
       <p class="sub" style="margin-bottom:16px">Enter your name and email to receive your visualization plus a guide to exploring your results with people in your life.</p>
       <input class="name-input" id="result-name" type="text" placeholder="Your first name"/>
@@ -175,7 +197,7 @@
         <button class="btn btn-teal" onclick="submitEmail()">Send my results</button>
       </div>
       <p class="email-note">
-        Your data is private and used only to send your results. No spam.<br>
+        Your data is private and used only to send your results. No spam. By submitting you agree to our <a href="https://soleilmerroir-stack.github.io/DigitalRelating/terms.html" style="color:var(--teal)">Terms of Use</a>.<br>
         Want to explore this with a partner or therapist? Share the quiz link — then compare your visualizations.<br>
         <strong>Partner quiz:</strong> both complete for $12 · <strong>Therapist referral:</strong> ask your clinician for a discount code.
       </p>
@@ -196,7 +218,12 @@
       <p class="sub" style="margin-bottom:24px">
         Want to go deeper? Explore how your profile overlaps with someone else's using the full relationship ecosystem mapper — or book a session to walk through your results.
       </p>
-      <a href="https://soleilmerroir-stack.github.io/DigitalRelating/" class="btn">Back to site</a>
+      <a href="https://soleilmerroir.com" class="btn">Back to site</a>
+      <div style="margin-top:24px;font-size:10px;color:var(--muted)">
+        <a href="terms.html" style="color:var(--muted)">Terms of Use</a> ·
+        <a href="solidarity.html" style="color:var(--muted)">Community Solidarity Agreement</a> ·
+        <a href="https://cyborgdreamz.substack.com" style="color:var(--muted)">Substack</a>
+      </div>
     </div>
   </div>
 </div>
@@ -225,13 +252,12 @@ const SECTIONS = [
       {n:7, text:"How strong / frequent are your intrusive thoughts?", lo:"rare", hi:"constant"},
       {n:8, text:"How strong / frequent is your hypervigilance / elevated nervous system?", lo:"rare", hi:"constant"},
       {n:9, text:"How strong / frequent are your dissociation / shutdown responses?", lo:"rare", hi:"frequent"},
-      {n:12, text:"How important / present is substance use in your daily life right now?", lo:"not present", hi:"significant"},
+      {n:12, text:"How much does substance use currently affect your relationships, capacity, or emotional regulation?", lo:"not at all", hi:"significantly"},
       {n:13, text:"How frequent / intense is your suicidal ideation lately?", lo:"none", hi:"frequent", safety:true},
       {n:14, text:"How intense / impactful are your depression symptoms currently?", lo:"minimal", hi:"intense"},
       {n:15, text:"How intense / impactful are your anxiety symptoms currently?", lo:"minimal", hi:"intense"},
       {n:16, text:"How intense / impactful are your OCD symptoms currently?", lo:"minimal", hi:"intense"},
       {n:17, text:"How intense / impactful are your psychotic symptoms currently?", lo:"none", hi:"significant"},
-      {n:67, text:"How much does shame influence what you're willing to share or explore erotically?", lo:"minimal", hi:"significantly"},
     ]
   },
   {
@@ -241,44 +267,42 @@ const SECTIONS = [
     questions:[
       {n:10, text:"How intense is your identity-related trauma (dysphoria, race, gender, body image, etc)?", lo:"minimal", hi:"intense"},
       {n:11, text:"How intense is your religious or culturally-impacted trauma?", lo:"minimal", hi:"intense"},
-      {n:40, text:"How connected are you to your somatic / body awareness (pain, movement, shutdown)?", lo:"disconnected", hi:"very connected"},
-      {n:41, text:"How connected are you to your breath and its capacity to regulate / enhance pleasure?", lo:"disconnected", hi:"very connected"},
       {n:42, text:"Are there physical health or other disabilities which impact play / relationships?", lo:"none", hi:"significant impact"},
-      {n:43, text:"How expansive is your gender / gender identity? (cis = 0, expansive = 5)", lo:"cis", hi:"expansive"},
+      {n:43, text:"How much does your gender identity require active navigation, accommodation, or explanation in your relationships?", lo:"minimal navigation", hi:"significant ongoing navigation"},
     ]
   },
   {
-    id:"erotic", label:"Erotic & Sensual Importance", color:"#8040A8",
+    id:"erotic", label:"Erotic & Kink", color:"#8040A8",
     desc:"Desire, kink, power, sensuality, frequency",
     accent:"rgba(128,64,168,0.08)",
     questions:[
+      {n:30, text:"How comfortable are you with sexual / sensual / kink exploration with yourself?", lo:"not comfortable", hi:"very comfortable"},
+      {n:31, text:"How comfortable are you with sexual / sensual / kink exploration with others?", lo:"not comfortable", hi:"very comfortable"},
       {n:18, text:"How important is the presence of power and control dynamics for your play / relationships?", lo:"not important", hi:"essential"},
       {n:19, text:"How important is being the initiator / giver / top for your play / relationships?", lo:"not important", hi:"essential"},
       {n:20, text:"How important is the use of pain for your play / relationships?", lo:"not important", hi:"essential"},
-      {n:21, text:"How important are kink dynamics, experiences, and frameworks for your play / relationships?", lo:"not important", hi:"essential"},
-      {n:22, text:"How important is intensity in kink (pain / power / edge play) for your play / relationships?", lo:"not important", hi:"essential"},
-      {n:23, text:"How important is fetish exploration for your play / relationships?", lo:"not important", hi:"essential"},
-      {n:30, text:"How comfortable are you with sexual / sensual / kink exploration with yourself?", lo:"not comfortable", hi:"very comfortable"},
-      {n:31, text:"How comfortable are you with sexual / sensual / kink exploration with others?", lo:"not comfortable", hi:"very comfortable"},
+      {n:21, text:"How important or intense are kink or fetish experiences for your play?", lo:"not important", hi:"essential"},
       {n:32, text:"How important is sensual touch and exploration for your play?", lo:"not important", hi:"essential"},
       {n:34, text:"At what frequency do you prefer sex?", lo:"rarely", hi:"daily or more"},
       {n:35, text:"How important is variety and exploring taboos in your play?", lo:"not important", hi:"essential"},
-      {n:36, text:"How important is erotic exploration for your play?", lo:"not important", hi:"essential"},
-      {n:68, text:"How confident are you communicating consent and limits in real time during erotic encounters?", lo:"very confident", hi:"not confident", invert:true},
+      {n:36, text:"How important is erotic / sexual exploration for your play?", lo:"not important", hi:"essential"},
+      {n:67, text:"How much does shame influence what you're willing to share or explore erotically?", lo:"minimal", hi:"significantly"},
     ]
   },
   {
-    id:"relational", label:"Relational Style Flexibility", color:"#C04878",
+    id:"relational", label:"Relational Architecture & Vision", color:"#C04878",
     desc:"Openness to entanglement, multiple connections, commitment style",
     accent:"rgba(192,72,120,0.07)",
     questions:[
       {n:24, text:"How strong is your need for play to happen only in a committed / long-term relationship?", lo:"no need", hi:"strong need", invert:true},
       {n:25, text:"How open are you to new play situations and experiences, or play with strangers who may become friends?", lo:"not open", hi:"very open"},
       {n:26, text:"How open are you to play at parties or festivals?", lo:"not open", hi:"very open"},
-      {n:29, text:"How important is escalating / intertwining your lives in your relationships?", lo:"not important", hi:"very important"},
       {n:37, text:"How important is the gender identity of a possible partner when deciding to play?", lo:"not important", hi:"very important", invert:true},
       {n:38, text:"How open are you to multiple partners in any format (threesomes, play at parties, multiple longer-term connections)?", lo:"not open", hi:"very open"},
       {n:39, text:"How important are romantic experiences for your play / relationships?", lo:"not important", hi:"very important"},
+      {n:69, text:"How strongly do you envision your future involving collective living, chosen family structures, or shared household arrangements beyond a single romantic partnership?", lo:"strongly prefer dyadic", hi:"strongly prefer collective"},
+      {n:70, text:"How much do you want your social and community bonds to carry equal weight and investment as your romantic partnerships?", lo:"romantic partnership is primary", hi:"community holds equal or primary weight"},
+      {n:71, text:"How central are cultural traditions, ancestral practices, or community obligations to how you structure your relationships and living arrangements?", lo:"built my own framework independently", hi:"cultural practice and community are primary guides"},
     ]
   },
   {
@@ -288,6 +312,9 @@ const SECTIONS = [
     questions:[
       {n:27, text:"How important is emotional nurturance and processing for your kink / sexual relationships?", lo:"not important", hi:"essential"},
       {n:28, text:"How important are calming / co-regulation experiences for your kink / sexual relationships?", lo:"not important", hi:"essential"},
+      {n:29, text:"How important is deep life intertwining — shared futures, shared logistics, building lives together — in your relationships?", lo:"not important", hi:"very important"},
+      {n:72, text:"How important is being emotionally witnessed — seen and understood — in your intimate and sexual relationships?", lo:"not important", hi:"essential"},
+      {n:73, text:"How much do you need verbal and emotional check-in during and after physical or sexual intimacy?", lo:"rarely needed", hi:"always needed"},
     ]
   },
   {
@@ -320,7 +347,7 @@ const SECTIONS = [
       {n:55, text:"Stimming (auditory, tactile, vocal, visual, vestibular, proprioceptive, olfactory stims)", lo:"rarely", hi:"frequently"},
       {n:56, text:"Time perception differences (variability, speeding up, slowing down, cyclical vs linear time)", lo:"rarely", hi:"frequently"},
       {n:57, text:"Visual imagination differences (aphantasia, partial aphantasia, hyperphantasia)", lo:"rarely", hi:"frequently"},
-      {n:58, text:"Voice hearing (internal monologue, intrusive thoughts, external or internal voices)", lo:"rarely", hi:"frequently"},
+      {n:58, text:"How present are voices, sounds, or experiences that others don't seem to share or validate?", lo:"rarely", hi:"frequently"},
       {n:59, text:"Differences in processing or expressing information", lo:"rarely", hi:"frequently"},
     ]
   },
@@ -386,7 +413,7 @@ const RESULT_TIERS = {
     color:"#B85020",
     bg:"rgba(184,80,32,0.07)",
     tagline:"The gap between digital and human is wide. Support is available.",
-    text:"Your patterns suggest significant load across multiple dimensions — and digital spaces may be carrying more relational weight than is sustainable. This is not a verdict and it is not your fault. It is worth bringing to a licensed clinician. If you don't have one, this site offers sessions.",
+    text:"Your patterns suggest significant load across multiple dimensions — and digital spaces may be carrying more relational weight than is sustainable. This is not a verdict and it is not your fault. It is worth bringing to a licensed clinician. If you don't have one, soleilmerroir.com offers sessions.",
     url:"problem"
   }
 };
@@ -448,9 +475,7 @@ function renderSection(){
   document.getElementById('btn-next').textContent=currentSection===SECTIONS.length-1?'See my results →':'Next →';
   let html=`<div class="section-header" style="border-left-color:${sec.color};background:${sec.accent}"><h2 style="color:${sec.color}">${sec.label}<\/h2><p>${sec.desc}<\/p><\/div>`;
   if(sec.intro) html+=`<p class="sub" style="margin-bottom:24px;font-style:italic">${sec.intro}<\/p>`;
-  if(sec.safety){
-    html += `<div class="safety-notice">If you're experiencing suicidal ideation, please reach out. <a href="https://www.mysafetyplan.org/" target="_blank" rel="noopener noreferrer">Safety planning →</a>  |  Crisis line: <strong>988</strong>  |  Text HOME to 741741</div>`;
-  }
+  if(sec.safety){var sn=document.createElement('div');sn.className='safety-notice';sn.innerHTML='If you\'re experiencing suicidal ideation, please reach out. '+'<a href="https://www.mysafetyplan.org/" target="_blank" onclick="event.stopPropagation()">Safety planning →<'+'/a>'+'  |  Crisis line: <strong>988<'+'/'+'strong>  |  Text HOME to 741741';document.getElementById('section-content').appendChild(sn);}
   sec.questions.forEach(q=>{
     const val=answers[q.n]!==undefined?answers[q.n]:null;
     html+=`<div class="question"><div class="q-label"><strong>Q${q.n}<\/strong>${q.text}<\/div><div class="scale">${[0,1,2,3,4,5].map(v=>`<div class="scale-opt ${val===v?'selected':''}" onclick="selectAnswer(${q.n},${v},this)" data-q="${q.n}" data-v="${v}">${v}</div>`).join('')}<\/div><div class="scale-labels"><span>0 — ${q.lo}<\/span><span>${q.hi} — 5<\/span><\/div><\/div>`;
@@ -522,6 +547,101 @@ function buildQuickChartURL(){
   return 'https://quickchart.io/chart?width=400&height=400&c='+encodeURIComponent(JSON.stringify(chartConfig));
 }
 
+function buildEcosystemViz(){
+  var svg=document.getElementById('ecosystemSvg');
+  var W=560,H=320,cx=160,cy=160,r=130;
+  // Zone scores from quiz dimensions
+  var dig=scores.digital||0;       // digital relating
+  var rel=scores.relational||0;    // relational flexibility
+  var emo=scores.emotional||0;     // emotional nurturance
+  var erotic=scores.erotic||0;     // erotic/sensual
+  var nd=scores.neurodivergence||0;
+  var mh=scores.mentalhealth||0;
+
+  // Current distribution (based on scores)
+  var aiZone=Math.min(0.95,dig*1.1);
+  var digitalHuman=Math.min(0.95,(dig*0.6)+(mh*0.3));
+  var inPersonComm=Math.max(0.05,1-dig-rel*0.3);
+  var inPersonPart=Math.min(0.9,(rel*0.4)+(emo*0.4));
+
+  // Normalise to sum roughly to 1
+  var total=aiZone+digitalHuman+inPersonComm+inPersonPart+0.001;
+  aiZone/=total; digitalHuman/=total; inPersonComm/=total; inPersonPart/=total;
+
+  // Ideal distribution nudge (reduce digital, increase human)
+  var idealAI=Math.max(0.08,aiZone-0.15);
+  var idealDH=Math.max(0.1,digitalHuman-0.1);
+  var idealComm=Math.min(0.45,inPersonComm+0.15);
+  var idealPart=Math.min(0.45,inPersonPart+0.1);
+  var it=idealAI+idealDH+idealComm+idealPart;
+  idealAI/=it; idealDH/=it; idealComm/=it; idealPart/=it;
+
+  // Draw pie charts side by side
+  function arc(cx,cy,r,start,end,color,opacity){
+    var sa=start*Math.PI*2-Math.PI/2;
+    var ea=end*Math.PI*2-Math.PI/2;
+    var large=end-start>0.5?1:0;
+    var x1=cx+Math.cos(sa)*r; var y1=cy+Math.sin(sa)*r;
+    var x2=cx+Math.cos(ea)*r; var y2=cy+Math.sin(ea)*r;
+    return '<path d="M'+cx+','+cy+' L'+x1.toFixed(1)+','+y1.toFixed(1)+' A'+r+','+r+' 0 '+large+',1 '+x2.toFixed(1)+','+y2.toFixed(1)+' Z" fill="'+color+'" opacity="'+opacity+'"\/>';
+  }
+
+  var zones=[
+    {label:'AI / Parasocial',color:'#2A4A8A',now:aiZone,ideal:idealAI},
+    {label:'Digital Human',color:'#107870',now:digitalHuman,ideal:idealDH},
+    {label:'In-Person Community',color:'#906010',now:inPersonComm,ideal:idealComm},
+    {label:'Partnered / Intimate',color:'#C04878',now:inPersonPart,ideal:idealPart},
+  ];
+
+  var html='';
+
+  // LEFT: Current
+  var cumNow=0;
+  zones.forEach(function(z){
+    html+=arc(cx,cy,r,cumNow,cumNow+z.now,z.color,0.75);
+    cumNow+=z.now;
+  });
+  html+='<circle cx="'+cx+'" cy="'+cy+'" r="38" fill="#F5F0E8"\/>';
+  html+='<text x="'+cx+'" y="'+(cy-8)+'" text-anchor="middle" font-size="9" fill="rgba(26,20,16,0.5)" font-family="DM Mono,monospace">NOW<\/text>';
+  html+='<text x="'+cx+'" y="'+(cy+8)+'" text-anchor="middle" font-size="8" fill="rgba(26,20,16,0.35)" font-family="DM Mono,monospace">current<\/text>';
+
+  // RIGHT: Ideal
+  var rx=390;
+  var cumIdeal=0;
+  zones.forEach(function(z){
+    html+=arc(rx,cy,r,cumIdeal,cumIdeal+z.ideal,z.color,0.45);
+    cumIdeal+=z.ideal;
+  });
+  html+='<circle cx="'+rx+'" cy="'+cy+'" r="38" fill="#F5F0E8"\/>';
+  html+='<text x="'+rx+'" y="'+(cy-8)+'" text-anchor="middle" font-size="9" fill="rgba(26,20,16,0.5)" font-family="DM Mono,monospace">IDEAL<\/text>';
+  html+='<text x="'+rx+'" y="'+(cy+8)+'" text-anchor="middle" font-size="8" fill="rgba(26,20,16,0.35)" font-family="DM Mono,monospace">direction<\/text>';
+
+  // Legend
+  var lx=20,ly=300;
+  zones.forEach(function(z,i){
+    var lxpos=lx+(i*130);
+    html+='<rect x="'+lxpos+'" y="'+(ly-8)+'" width="9" height="9" rx="2" fill="'+z.color+'" opacity="0.7"\/>';
+    html+='<text x="'+(lxpos+13)+'" y="'+ly+'" font-size="8" fill="rgba(26,20,16,0.5)" font-family="DM Mono,monospace">'+z.label+'<\/text>';
+  });
+
+  // Arrow between charts
+  html+='<text x="275" y="166" text-anchor="middle" font-size="18" fill="rgba(26,20,16,0.2)">→<\/text>';
+
+  svg.innerHTML=html;
+
+  // Notes
+  var note1=document.getElementById('ecosystemNote1');
+  var note2=document.getElementById('ecosystemNote2');
+
+  var biggestNow=zones.reduce(function(a,b){return b.now>a.now?b:a});
+  note1.innerHTML='<strong>Right now</strong> — most of your relational energy goes to <strong>'+biggestNow.label+'</strong>. '+
+    (dig>0.5?'Your digital relating score suggests AI and online spaces are carrying significant relational weight.':'Your relational energy is relatively distributed.');
+  
+  var biggestShift=zones.reduce(function(a,b){return (b.ideal-b.now)>(a.ideal-a.now)?b:a});
+  note2.innerHTML='<strong>Direction</strong> — the biggest shift that would serve you is more investment in <strong>'+biggestShift.label+'</strong>. '+
+    (rel>0.5?'Your relational flexibility suggests openness to multiple forms — use that.':'Starting small with structured, low-stakes human contact is the right entry point.');
+}
+
 function showResults(){
   // Result tier box
   const tier=RESULT_TIERS[resultTier];
@@ -574,13 +694,14 @@ function showResults(){
     <div style="margin-bottom:12px"><div class="eyebrow">Recommended next steps<\/div><\/div>
     <div class="pathway-box" style="border-color:rgba(0,229,255,0.3);background:rgba(0,229,255,0.04)">
       <h3 style="color:#0D7A70">Ethical AI Tool Suite<\/h3>
-      <p>Based on your digital relating score, a curated set of AI tools with ethics built in — matched to your actual needs. <a href="https://soleilmerroir-stack.github.io/DigitalRelating/">Explore the toolkit →</a></p>
+      <p>Based on your digital relating score, a curated set of AI tools with ethics built in — matched to your actual needs. <a href="https://cyborgdreamz.substack.com">cyborgdreamz Substack →<\/a><\/p>
     <\/div>
     <div class="pathway-box" style="border-color:rgba(255,45,120,0.3);background:rgba(255,45,120,0.04)">
       <h3 style="color:#C04878">Human Relating & Engagement Plan<\/h3>
-      <p>A graduated plan for rebuilding human relational capacity — online and AFK — starting where you actually are. <a href="https://soleilmerroir-stack.github.io/DigitalRelating/">Get the workbook →<\/a><\/p>
+      <p>A graduated plan for rebuilding human relational capacity — online and AFK — starting where you actually are. <a href="https://buy.stripe.com/4gM6oJfmQaMcafmgtQ57W00">Get the workbook ($20) →<\/a><\/p>
     <\/div>`;
 
+  buildEcosystemViz();
   showScreen('results');
   window.scrollTo(0,0);
 }
@@ -595,9 +716,20 @@ function submitEmail(){
     name:name||'friend', email, result_tier:resultTier,
     result_label:tier.label, result_tagline:tier.tagline,
     scores:scoresSummary, raw_scores:scores,
+    needs_score:+((scores.needs||0)*5).toFixed(1),
+    mentalhealth_score:+((scores.mentalhealth||0)*5).toFixed(1),
+    identity_score:+((scores.identity||0)*5).toFixed(1),
+    erotic_score:+((scores.erotic||0)*5).toFixed(1),
+    relational_score:+((scores.relational||0)*5).toFixed(1),
+    emotional_score:+((scores.emotional||0)*5).toFixed(1),
+    somatic_score:+((scores.somatic||0)*5).toFixed(1),
+    neurodivergence_score:+((scores.neurodivergence||0)*5).toFixed(1),
+    digital_score:+((scores.digital||0)*5).toFixed(1),
+    referral_code:referralCode||null,
+    referral_tier:referralTier||null,
     quickchart_url:buildQuickChartURL(),
     skill_deck_url:'https://soleilmerroir.com/skill-deck',
-    workbook_url:'https://soleilmerroir.com/workbook',
+    workbook_url:'https://buy.stripe.com/4gM6oJfmQaMcafmgtQ57W00',
     timestamp:new Date().toISOString()
   };
   const WEBHOOK_URL='https://hook.us2.make.com/6xrwfh7vvdqw329wm5u0mhe7l7v39kx9';
@@ -610,4 +742,51 @@ function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classL
 function retakeQuiz(){answers={};scores={};currentSection=0;showScreen('quiz');renderSection();}
 </script>
 </body>
-</html>
+</html>// INTERPRETATIONS — Soleil Merroir · written + audio voice
+const INTERPS={
+  needs:[
+    [0,.3,"Your unmet needs are relatively low right now — but monitor when stressors shift. Survival stress impacts our relationship to time, energy and presence with ourselves and others. We were never wired to do this alone, and a stable base makes space for everything else."],
+    [.3,.6,"Your unmet needs are likely impacting how you show up in relationship spaces. Financial and well-being stress limits time, capacity to connect, and the ability to relax into pleasure. The relational difficulty isn't pathology — it's the system. Consider what needs could get met through community exchange rather than alone."],
+    [.6,1,"Your unmet needs are significantly impacting how you relate. Poverty and capitalist exploitation isn't your fault, but the cultural shame can make us feel like it is. Belonging and love don't require financial stability — and leaning into community support as a resource, not a deficit, is the move."],
+  ],
+  mentalhealth:[
+    [0,.3,"Your mental health needs are relatively low — but monitor when activation or dysregulation starts impacting daily life. As a more regulated person, you are a vital community anchor for others. That capacity matters and is worth protecting."],
+    [.3,.6,"Your mental health needs are elevated. These are reactions to stressors, trauma, and cultural rejection — your nervous system adapting to survive. Getting support to understand your activation patterns isn't about fixing you. It's about reducing distress so you have more capacity for connection, pleasure and belonging."],
+    [.6,1,"Your mental health needs are high, and it's important to seek human support. Your symptoms are your nervous system's adaptations to a world that is genuinely traumatizing — not a sign of deficit within you. Check our resource section, reach out to community, and know you are not alone in this."],
+  ],
+  identity:[
+    [0,.3,"Your identity awareness and relationship to your body remain strong. Consider how your identities and strengths provide capacity to care for others — while staying curious about the impact of identity-based power and privilege in your dynamics."],
+    [.3,.6,"There are core aspects of yourself in conflict that need support. The distress comes from biased and hateful cultural systems, not from anything wrong with who you are. Your identities and body are magical sites of possibility when held with care. What aspects can you show more self-compassion?"],
+    [.6,1,"You're experiencing high distress related to identity and body. What's wrong isn't you — it's the world you came into and how it treats people like you. This trauma affects every part of life and relationships, especially when those patterns are replicated in social dynamics. You get to be included in conversations about who you are from day one."],
+  ],
+  erotic:[
+    [0,.3,"Eroticism and sensuality are of low importance to you right now, and that's okay. Everyone relates to sexuality and pleasure differently, particularly those on the Ace / Grey scale. You can still create meaningful, pleasurable connection — with yourself, in fantasy, or with others — entirely on your own terms."],
+    [.3,.6,"Eroticism and sensuality matter to you and can be cultivated in endless forms — individually, with partners, digitally, in community, or in fantasy. Give yourself permission to explore what that looks like in each context, separately. Consent-based practice opens doors shame keeps closed."],
+    [.6,1,"Erotic and sensual expression are key to your well-being — your relational dynamics should make space for this, or create pathways to seek expression elsewhere. High desire isn't pathology, but it requires more communication and creativity to navigate ethically. You deserve access to all of yourself."],
+  ],
+  relational:[
+    [0,.3,"You're more monogamously oriented — seeking depth and commitment in a partner-centered world. A reminder: you are a whole person, not needing another to complete you. Your own secure attachment base, with community as foundation, is the long-term infrastructure for your well-being."],
+    [.3,.6,"You're relationally flexible — either on the journey to a new relationship ecosystem, or curious about what's possible if you break some boxes. What structures of relating, care, and community best suit your specific needs? What would it look like to disperse your needs across your relational ecosystem with consent and clarity?"],
+    [.6,1,"You're collectively wired and seeking interconnectedness — not just a partner, but an ecosystem. We're not defaulting to polyamory here. We're defaulting to dispersing your needs across the relational ecosystem with consent and clarity. Building communication and conflict skills will be the infrastructure that makes it work."],
+  ],
+  emotional:[
+    [0,.3,"You've identified low need for emotional nurturance — this often correlates with ND traits or socialization away from vulnerability and care. If you're comfortable here, how might you communicate early about dynamics with low emotional intertwinement? And what does aftercare look like for you even when emotional depth isn't central?"],
+    [.3,.6,"Emotional nurturance accentuates your ability to feel close and connected. Feeling emotionally held might precede your ability to experience arousal or safety with another. It's key to communicate these needs early and often — including what support you need after intimate experiences."],
+    [.6,1,"Emotional nurturance is central to how you relate and a pathway to your sexual openness. You want to feel seen and held in your full emotional expansiveness. This requires high self-knowledge and the ability to teach your partners and community what it actually feels like to hold you well."],
+  ],
+  somatic:[
+    [0,.3,"Somatic grounding and spiritual exploration aren't required for your well-being, but they remain parts of you — and of others. Is there an opening to finding more connection with your body and its cues as a pathway to more pleasure and presence?"],
+    [.3,.6,"Spirituality and somatic awareness are tools in your toolbox for well-being and relating. Explore connections that celebrate these aspects and give you space to play, ground and create ritual. Are you able to connect with your breath to enhance pleasure? If not, these are rich areas to grow into."],
+    [.6,1,"Your spiritual and somatic self are anchors to your well-being. Your body guides your intuition and rootedness — to ancestry, to nature, to other dimensions of being. These aren't separate from your sexuality; they are part of it. Continue to cultivate and enhance them in community."],
+  ],
+  neurodivergence:[
+    [0,.3,"Your ND-related traits are relatively low — but you've likely been or will be in connections with folks who have neurospicy brains and systems. Understanding how different brains and bodies work makes you a more attuned community member and partner."],
+    [.3,.6,"You're experiencing ND-related traits that are likely impacting your daily well-being and relationships. The more specifically you can name your experiences, patterns and sensitivities, the more you can create relational dynamics that actually suit you. These aren't deficits — they are places of adaptation, understanding, and enhanced communication."],
+    [.6,1,"You're experiencing a high level of neurodivergence, which impacts every facet of how you relate. Map your traits, sensitivities and needs — and lead with them in relational conversations. It is not too much to ask people to make accommodations to communicate and understand you. You're not broken — you're a uniquely sexy rubix cube seeking to unlock your own patterns."],
+  ],
+  digital:[
+    [0,.3,"Digital relationships aren't a significant part of your ecosystem right now — but consider how digital communities might enhance your well-being and access to parts of yourself that are harder to reach in person. There's no shame in starting there."],
+    [.3,.6,"Digital relationships are already in your ecosystem. How integrated is the you who exists online compared to IRL / away from keyboard? Digital connections nourish us best the more values-aligned and integrated our expression is — are you bringing yourself fully into your digital spaces?"],
+    [.6,1,"Your digital relationships are doing significant relational work, which can be both a resource and a challenge. Does your vulnerability have safe places to exist online? How balanced are those connections with away-from-keyboard human contact? These questions aren't judgment — they're a gentle cue toward embodied, human relating."],
+  ],
+};
