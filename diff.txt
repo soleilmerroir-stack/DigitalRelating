@@ -1,0 +1,745 @@
+Comparando archivos DOCS\index.html y DOCS\ARTIFACTS\INDEX.HTML
+***** DOCS\index.html
+  196:  <!-- SCREEN 2 ÔÇö RESULTS -->
+  197:  <div id="screen-results" class="screen">
+  198:    <div class="container">
+  199:      <div class="eyebrow">Your profile</div>
+  200:      <h1>Your Visualization</h1>
+  201:      <p class="sub" style="margin-bottom:8px">Each dimension reflects a cluster of your responses. There is no ideal shape ÔÇö t
+  202:  his is a map, not a verdict.</p>
+  203:      <div class="rule"></div>
+  204:      <div id="result-tier-box"></div>
+  205:      <div class="radar-wrap" style="margin-bottom:32px">
+  206:        <svg class="radar" id="radar-svg" viewBox="0 0 460 460" width="100%" style="max-width:460px"></svg>
+  207:      </div>
+  208:      <div class="results-grid" id="results-cards"></div>
+  209:      <div id="pathways-section" style="margin-top:28px"></div>
+  210:      
+  211:    <!-- RELATIONSHIP ECOSYSTEM VISUALIZATION -->
+  212:    <div style="margin:36px 0 28px">
+  213:      <div class="eyebrow" style="margin-bottom:6px">Your relationship ecosystem</div>
+  214:      <p class="sub" style="margin-bottom:18px">Where you currently invest relational energy ÔÇö and what a more intentional dist
+  215:  ribution might look like based on your scores.</p>
+  216:      <svg id="ecosystemSvg" viewBox="0 0 560 320" width="100%" style="max-width:560px;display:block;margin:0 auto"></svg>
+  217:      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;max-width:560px;margin-left:auto;margin-rig
+  218:  ht:auto">
+  219:        <div id="ecosystemNote1" style="background:rgba(26,20,16,.04);border-radius:3px;padding:10px 14px;font-size:11px;color:rg
+  220:  ba(26,20,16,0.65);line-height:1.65;border-left:3px solid #C04878"></div>
+  221:        <div id="ecosystemNote2" style="background:rgba(26,20,16,.04);border-radius:3px;padding:10px 14px;font-size:11px;color:rg
+  222:  ba(26,20,16,0.65);line-height:1.65;border-left:3px solid #107870"></div>
+  223:      </div>
+***** DOCS\ARTIFACTS\INDEX.HTML
+  196:  <!-- SCREEN 2 ÔÇö RESULTS -->
+  197:  <div id="screen-email" class="screen">
+  198:    <div class="container">
+  199:      <div class="eyebrow">Almost there</div>
+  200:      <h1 style="font-size:28px;margin-bottom:12px">Get your visualization</h1>
+  201:      <p class="sub" style="margin-bottom:24px">Enter your name and email to unlock your 9-dimension radar and results.</p>
+  202:      <div style="max-width:460px">
+  203:        <input id="gate-name" type="text" placeholder="Your first name"
+  204:          style="width:100%;padding:12px 14px;margin-bottom:10px;border:1px solid var(--line);border-radius:3px;font-family:'DM M
+  205:  ono',monospace;font-size:13px;background:rgba(26,20,16,.04);color:var(--ink);outline:none">
+  206:        <div style="display:flex;gap:10px;margin-bottom:12px">
+  207:          <input id="gate-email" type="email" placeholder="your@email.com"
+  208:            style="flex:1;padding:12px 14px;border:1px solid var(--line);border-radius:3px;font-family:'DM Mono',monospace;font-s
+  209:  ize:13px;background:rgba(26,20,16,.04);color:var(--ink);outline:none">
+  210:          <button class="btn btn-teal" onclick="gateSubmit()">See my results ÔåÆ</button>
+  211:        </div>
+  212:        <p style="font-size:10px;color:var(--muted);line-height:1.7">
+  213:          Your data is private ÔÇö used only to send your results. No spam.<br>
+  214:          By submitting you agree to our <a href="terms.html" style="color:var(--teal)">Terms of Use</a>.<br>
+  215:          <strong>Referral code?</strong>
+  216:          <input type="text" id="accessCode" placeholder="Enter code" oninput="checkCode(this.value)"
+  217:            style="margin-left:6px;padding:4px 8px;border:1px solid var(--line);border-radius:3px;font-family:'DM Mono',monospace
+  218:  ;font-size:11px;background:rgba(26,20,16,.04);color:var(--ink);outline:none;width:110px">
+  219:          <span id="codeStatus" style="display:none;margin-left:6px;font-size:10px;padding:3px 8px;border-radius:3px"></span>
+  220:        </p>
+  221:      </div>
+*****
+
+***** DOCS\index.html
+  224:    </div>
+  225:  
+  226:    <div class="rule"></div>
+  227:  
+  228:    <div class="email-panel">
+  229:        <h2>Receive your results</h2>
+  230:        <p class="sub" style="margin-bottom:16px">Enter your name and email to receive your visualization plus a guide to explori
+  231:  ng your results with people in your life.</p>
+  232:        <input class="name-input" id="result-name" type="text" placeholder="Your first name"/>
+  233:        <div class="email-row">
+  234:          <input class="email-input" id="result-email" type="email" placeholder="your@email.com"/>
+  235:          <button class="btn btn-teal" onclick="submitEmail()">Send my results</button>
+  236:        </div>
+  237:        <p class="email-note">
+  238:          Your data is private and used only to send your results. No spam. By submitting you agree to our <a href="https://solei
+  239:  lmerroir-stack.github.io/DigitalRelating/terms.html" style="color:var(--teal)">Terms of Use</a>.<br>
+  240:          Want to explore this with a partner or therapist? Share the quiz link ÔÇö then compare your visualizations.<br>
+  241:          <strong>Partner quiz:</strong> both complete for $12 -À <strong>Therapist referral:</strong> ask your clinician for a d
+  242:  iscount code.
+  243:        </p>
+  244:      </div>
+  245:      <div class="rule"></div>
+  246:      <button class="btn btn-outline" onclick="retakeQuiz()" style="font-size:10px">Start over</button>
+  247:    </div>
+  248:  </div>
+***** DOCS\ARTIFACTS\INDEX.HTML
+  222:    </div>
+  223:  </div>
+*****
+
+***** DOCS\index.html
+  249:  
+  250:  <!-- SCREEN 3 ÔÇö THANK YOU -->
+  251:  <div id="screen-thankyou" class="screen">
+  252:    <div class="container">
+  253:      <div class="thankyou">
+  254:        <div class="eyebrow">Thank you</div>
+  255:        <h1>On its way to you</h1>
+  256:        <p class="sub">Your visualization is being prepared and will arrive in your inbox shortly. Check spam if you don't see it
+  257:   within a few minutes.</p>
+  258:        <div class="rule"></div>
+  259:        <p class="sub" style="margin-bottom:24px">
+  260:          Want to go deeper? Explore how your profile overlaps with someone else's using the full relationship ecosystem mapper Ô
+  261:  Çö or book a session to walk through your results.
+  262:        </p>
+  263:        <a href="https://soleilmerroir.com" class="btn">Back to site</a>
+  264:        <div style="margin-top:24px;font-size:10px;color:var(--muted)">
+  265:          <a href="terms.html" style="color:var(--muted)">Terms of Use</a> -À
+  266:          <a href="solidarity.html" style="color:var(--muted)">Community Solidarity Agreement</a> -À
+  267:          <a href="https://cyborgdreamz.substack.com" style="color:var(--muted)">Substack</a>
+  268:        </div>
+  269:      </div>
+***** DOCS\ARTIFACTS\INDEX.HTML
+  224:  
+  225:  <div id="screen-results" class="screen">
+  226:    <div class="container">
+  227:      <div class="eyebrow">Your profile</div>
+  228:      <h1>Your Visualization</h1>
+  229:      <p class="sub" style="margin-bottom:8px">Each dimension reflects a cluster of your responses. There is no ideal shape ÔÇö t
+  230:  his is a map, not a verdict.</p>
+  231:      <div class="rule"></div>
+  232:      <div id="result-tier-box"></div>
+  233:      <div class="radar-wrap" style="margin-bottom:32px">
+  234:        <svg class="radar" id="radar-svg" viewBox="0 0 460 460" width="100%" style="max-width:460px"></svg>
+  235:      </div>
+  236:      <div class="results-grid" id="results-cards"></div>
+  237:      <div id="pathways-section" style="margin-top:28px"></div>
+  238:      
+  239:    <!-- RELATIONSHIP ECOSYSTEM VISUALIZATION -->
+  240:    <div style="margin:36px 0 28px">
+  241:      <div class="eyebrow" style="margin-bottom:6px">Your relationship ecosystem</div>
+  242:      <p class="sub" style="margin-bottom:18px">Where you currently invest relational energy ÔÇö and what a more intentional dist
+  243:  ribution might look like based on your scores.</p>
+  244:      <svg id="ecosystemSvg" viewBox="0 0 560 320" width="100%" style="max-width:560px;display:block;margin:0 auto"></svg>
+  245:      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;max-width:560px;margin-left:auto;margin-rig
+  246:  ht:auto">
+  247:        <div id="ecosystemNote1" style="background:rgba(26,20,16,.04);border-radius:3px;padding:10px 14px;font-size:11px;color:rg
+  248:  ba(26,20,16,0.65);line-height:1.65;border-left:3px solid #C04878"></div>
+  249:        <div id="ecosystemNote2" style="background:rgba(26,20,16,.04);border-radius:3px;padding:10px 14px;font-size:11px;color:rg
+  250:  ba(26,20,16,0.65);line-height:1.65;border-left:3px solid #107870"></div>
+  251:      </div>
+*****
+
+***** DOCS\index.html
+  270:    </div>
+  271:  </div>
+***** DOCS\ARTIFACTS\INDEX.HTML
+  252:    </div>
+  253:  
+  254:    <div class="rule"></div>
+  255:  
+  256:    <div class="email-panel">
+  257:        <h2>Receive your results</h2>
+  258:        <p class="sub" style="margin-bottom:16px">Enter your name and email to receive your visualization plus a guide to explori
+  259:  ng your results with people in your life.</p>
+  260:        <input class="name-input" id="result-name" type="text" placeholder="Your first name"/>
+  261:        <div class="email-row">
+  262:          <input class="email-input" id="result-email" type="email" placeholder="your@email.com"/>
+  263:          <button class="btn btn-teal" onclick="submitEmail()">Send my results</button>
+  264:        </div>
+  265:        <p class="email-note">
+  266:          Your data is private and used only to send your results. No spam.<br>
+  267:          Want to explore this with a partner or therapist? Share the quiz link ÔÇö then compare your visualizations.<br>
+  268:          <strong>Partner quiz:</strong> both complete for $12 -À <strong>Therapist referral:</strong> ask your clinician for a d
+  269:  iscount code.
+  270:        </p>
+  271:      </div>
+  272:      <div class="rule"></div>
+  273:      <button class="btn btn-outline" onclick="retakeQuiz()" style="font-size:10px">Start over</button>
+  274:    </div>
+  275:  </div>
+*****
+
+***** DOCS\index.html
+  272:  
+  273:  <script>
+***** DOCS\ARTIFACTS\INDEX.HTML
+  276:  
+  277:  <!-- SCREEN 3 ÔÇö THANK YOU -->
+  278:  <div id="screen-thankyou" class="screen">
+  279:    <div class="container">
+  280:      <div class="thankyou">
+  281:        <div class="eyebrow">Thank you</div>
+  282:        <h1>On its way to you</h1>
+  283:        <p class="sub">Your visualization is being prepared and will arrive in your inbox shortly. Check spam if you don't see it
+  284:   within a few minutes.</p>
+  285:        <div class="rule"></div>
+  286:        <p class="sub" style="margin-bottom:24px">
+  287:          Want to go deeper? Explore how your profile overlaps with someone else's using the full relationship ecosystem mapper Ô
+  288:  Çö or book a session to walk through your results.
+  289:        </p>
+  290:        <a href="https://soleilmerroir.com" class="btn">Back to site</a>
+  291:      </div>
+  292:    </div>
+  293:  </div>
+  294:  
+  295:  <script>
+*****
+
+***** DOCS\index.html
+  279:      questions:[
+  280:        {n:1, text:"How big is your need / gaps in community access and support?", lo:"no gaps", hi:"significant gaps"},
+  281:        {n:2, text:"How difficult is self-regulation for you currently?", lo:"very easy", hi:"very difficult"},
+***** DOCS\ARTIFACTS\INDEX.HTML
+  301:      questions:[
+  302:        {n:1, text:"How big is your need / gaps in care support, friendship and community integration?", lo:"no gaps", hi:"signif
+  303:  icant gaps"},
+  304:        {n:2, text:"How difficult is self-regulation for you currently?", lo:"very easy", hi:"very difficult"},
+*****
+
+***** DOCS\index.html
+  284:  hi:"significant need"},
+  285:        {n:5, text:"How difficult is it for you to set boundaries?", lo:"easy", hi:"very difficult"},
+  286:        {n:6, text:"How strong are your avoidance patterns (in conflict, relationships, processing)?", lo:"minimal", hi:"strong"}
+  287:  ,
+  288:        {n:66, text:"How comfortable are you naming emotional needs to a partner before they become urgent?", lo:"very comfortabl
+  289:  e", hi:"very uncomfortable", invert:true},
+  290:      ]
+***** DOCS\ARTIFACTS\INDEX.HTML
+  307:  hi:"significant need"},
+  308:        {n:5, text:"How confident are you communicating consent and limits in real time during erotic encounters?", lo:"very conf
+  309:  ident", hi:"not confident", flag:true},
+  310:        {n:6, text:"When someone says no or pulls back, how much do you turn inward in shame or self-criticism?", lo:"rarely", hi
+  311:  :"significantly", flag:true},
+  312:        {n:7, text:"When someone says no or hesitates, how likely are you to ask again, persuade, or look for ways around it?", l
+  313:  o:"rarely", hi:"very likely", flag:true},
+  314:        {n:8, text:"How strong are your avoidance patterns and communication difficulties (in conflict, relationships, processing
+  315:  )?", lo:"minimal", hi:"strong"},
+  316:        {n:9, text:"How comfortable are you naming and processing emotions?", lo:"very comfortable", hi:"very uncomfortable"},
+  317:      ]
+*****
+
+***** DOCS\index.html
+  296:      questions:[
+  297:        {n:7, text:"How strong / frequent are your intrusive thoughts?", lo:"rare", hi:"constant"},
+  298:        {n:8, text:"How strong / frequent is your hypervigilance / elevated nervous system?", lo:"rare", hi:"constant"},
+  299:        {n:9, text:"How strong / frequent are your dissociation / shutdown responses?", lo:"rare", hi:"frequent"},
+  300:        {n:12, text:"How much does substance use currently affect your relationships, capacity, or emotional regulation?", lo:"no
+  301:  t at all", hi:"significantly"},
+  302:        {n:13, text:"How frequent / intense is your suicidal ideation lately?", lo:"none", hi:"frequent", safety:true},
+  303:        {n:14, text:"How intense / impactful are your depression symptoms currently?", lo:"minimal", hi:"intense"},
+  304:        {n:15, text:"How intense / impactful are your anxiety symptoms currently?", lo:"minimal", hi:"intense"},
+  305:        {n:16, text:"How intense / impactful are your OCD symptoms currently?", lo:"minimal", hi:"intense"},
+  306:        {n:17, text:"How intense / impactful are your psychotic symptoms currently?", lo:"none", hi:"significant"},
+  307:      ]
+***** DOCS\ARTIFACTS\INDEX.HTML
+  323:      questions:[
+  324:        {n:10, text:"How strong / frequent are your intrusive thoughts?", lo:"rare", hi:"constant"},
+  325:        {n:11, text:"How strong / frequent is your hypervigilance / elevated nervous system?", lo:"rare", hi:"constant"},
+  326:        {n:12, text:"How strong / frequent are your dissociation / shutdown responses?", lo:"rare", hi:"frequent"},
+  327:        {n:13, text:"How much weight does substance use play in your daily functioning?", lo:"not at all", hi:"significantly"},
+  328:        {n:14, text:"How frequent / intense is your suicidal ideation lately?", lo:"none", hi:"frequent", safety:true},
+  329:        {n:15, text:"How intense / impactful are your depression symptoms currently?", lo:"minimal", hi:"intense"},
+  330:        {n:16, text:"How intense / impactful are your anxiety symptoms currently?", lo:"minimal", hi:"intense"},
+  331:        {n:17, text:"How intense / impactful are your OCD symptoms currently?", lo:"minimal", hi:"intense"},
+  332:        {n:18, text:"How intense / impactful are your psychotic symptoms currently?", lo:"none", hi:"significant"},
+  333:      ]
+*****
+
+***** DOCS\index.html
+  313:      questions:[
+  314:        {n:10, text:"How intense is your identity-related trauma (dysphoria, race, gender, body image, etc)?", lo:"minimal", hi:"
+  315:  intense"},
+  316:        {n:11, text:"How intense is your religious or culturally-impacted trauma?", lo:"minimal", hi:"intense"},
+  317:        {n:42, text:"Are there physical health or other disabilities which impact play / relationships?", lo:"none", hi:"signific
+  318:  ant impact"},
+  319:        {n:43, text:"How much does your gender identity require active navigation, accommodation, or explanation in your relation
+  320:  ships?", lo:"minimal navigation", hi:"significant ongoing navigation"},
+  321:      ]
+***** DOCS\ARTIFACTS\INDEX.HTML
+  339:      questions:[
+  340:        {n:19, text:"How intense is your identity-related trauma (dysphoria, race, gender, body image, etc)?", lo:"minimal", hi:"
+  341:  intense"},
+  342:        {n:20, text:"How intense is your religious or culturally-impacted trauma?", lo:"minimal", hi:"intense"},
+  343:        {n:21, text:"Are there physical health or other disabilities which impact play / relationships?", lo:"none", hi:"signific
+  344:  ant impact"},
+  345:        {n:22, text:"How much does your gender identity and expression, and the stigma associated, impact your daily well-being?"
+  346:  , lo:"minimal impact", hi:"significant daily impact"},
+  347:        {n:66, text:"How difficult is your relationship with your body?", lo:"accepting", hi:"hate or destruction"},
+  348:      ]
+*****
+
+***** DOCS\index.html
+  324:      id:"erotic", label:"Erotic & Kink", color:"#8040A8",
+  325:      desc:"Desire, kink, power, sensuality, frequency",
+  326:      accent:"rgba(128,64,168,0.08)",
+  327:      questions:[
+  328:        {n:30, text:"How comfortable are you with sexual / sensual / kink exploration with yourself?", lo:"not comfortable", hi:"
+  329:  very comfortable"},
+  330:        {n:31, text:"How comfortable are you with sexual / sensual / kink exploration with others?", lo:"not comfortable", hi:"ve
+  331:  ry comfortable"},
+  332:        {n:18, text:"How important is the presence of power and control dynamics for your play / relationships?", lo:"not importa
+  333:  nt", hi:"essential"},
+  334:        {n:19, text:"How important is being the initiator / giver / top for your play / relationships?", lo:"not important", hi:"
+  335:  essential"},
+  336:        {n:20, text:"How important is the use of pain for your play / relationships?", lo:"not important", hi:"essential"},
+  337:        {n:21, text:"How important or intense are kink or fetish experiences for your play?", lo:"not important", hi:"essential"}
+  338:  ,
+  339:        {n:32, text:"How important is sensual touch and exploration for your play?", lo:"not important", hi:"essential"},
+  340:        {n:34, text:"At what frequency do you prefer sex?", lo:"rarely", hi:"daily or more"},
+  341:        {n:35, text:"How important is variety and exploring taboos in your play?", lo:"not important", hi:"essential"},
+  342:        {n:36, text:"How important is erotic / sexual exploration for your play?", lo:"not important", hi:"essential"},
+  343:        {n:67, text:"How much does shame influence what you're willing to share or explore erotically?", lo:"minimal", hi:"signif
+  344:  icantly"},
+***** DOCS\ARTIFACTS\INDEX.HTML
+  351:      id:"erotic", label:"Erotic & Kink", color:"#8040A8",
+  352:      desc:"Desire, kink, power dynamics, erotic self-knowledge, shame",
+  353:      accent:"rgba(128,64,168,0.08)",
+  354:      intro:"Sex is not penetration or climax, and all bodies are sexy bodies worthy of pleasure and expression. Sexuality is the
+  355:   umbrella concept under which an infinite myriad of experiences can exist, both on our own and with others, digitally or AFK (a
+  356:  way from keyboard). A few common expressions of sexuality include kink (BDSM, fetish, power, bondage, pain, etc), sensation / s
+  357:  ensual play (any type of consensual touch, which may or may not include genital engagement), eroticism (explicit acts involving
+  358:   genitals or erotic language), and fetish experiences (a specific erotic experience or element). For example, you could identif
+  359:  y as Ace but still engage in sensual and kink dynamics while preferring no erotic energy directed toward you. Or you could be a
+  360:   kinkster who requires romance and eroticism, and only play in private. We don't include relational or partner dynamics here be
+  361:  cause it's important to assess your sexual and sensual self in your wholeness, distinct from other partner dynamics in your lif
+  362:  e.",
+  363:      questions:[
+  364:        {n:23, text:"How comfortable are you with sexual, sensual or kink exploration with yourself?", lo:"not comfortable", hi:"
+  365:  very comfortable"},
+  366:        {n:24, text:"How comfortable are you with sexual, sensual or kink exploration with others?", lo:"not comfortable", hi:"ve
+  367:  ry comfortable"},
+  368:        {n:25, text:"How important are power dynamics, kink experiences, and frameworks for your play / relationships?", lo:"not 
+  369:  important", hi:"essential"},
+  370:        {n:26, text:"How important is intensity in kink (pain / power / edge play) for your play / relationships?", lo:"not impor
+  371:  tant", hi:"essential"},
+  372:        {n:27, text:"How important is being the initiator / giver / top for your play / relationships?", lo:"not important", hi:"
+  373:  essential"},
+  374:        {n:28, text:"How important is the use of pain for your play / relationships?", lo:"not important", hi:"essential"},
+  375:        {n:29, text:"How important is fetish exploration for your play / relationships?", lo:"not important", hi:"essential"},
+  376:        {n:30, text:"How important is non-sexual sensual touch and exploration for your play?", lo:"not important", hi:"essential
+  377:  "},
+  378:        {n:31, text:"At what frequency do you prefer sex?", lo:"rarely", hi:"daily or more"},
+  379:        {n:32, text:"How important is variety and exploring taboos in your play?", lo:"not important", hi:"essential"},
+  380:        {n:33, text:"How much does shame influence what you're willing to share or explore erotically?", lo:"minimal", hi:"signif
+  381:  icantly"},
+*****
+
+***** DOCS\index.html
+  347:    {
+  348:      id:"relational", label:"Relational Architecture & Vision", color:"#C04878",
+  349:      desc:"Openness to entanglement, multiple connections, commitment style",
+  350:      accent:"rgba(192,72,120,0.07)",
+***** DOCS\ARTIFACTS\INDEX.HTML
+  384:    {
+  385:      id:"emotional", label:"Emotional Nurturance", color:"#2878A0",
+  386:      desc:"Need for co-regulation, emotional processing, calming",
+  387:      accent:"rgba(40,120,160,0.07)",
+  388:      questions:[
+  389:        {n:34, text:"How strong is your need for play to happen only in an emotionally deep, committed / long-term relationship?"
+  390:  , lo:"no need", hi:"strong need"},
+  391:        {n:35, text:"When you think of your deepest emotional connections in your life, how often were they with (healthy) sexual
+  392:   partners?", lo:"rarely or never", hi:"almost always"},
+  393:        {n:36, text:"To what intensity do you need emotional nurturance, witnessing, and processing for your kink / sensual / sex
+  394:  ual relationships?", lo:"not important", hi:"essential"},
+  395:        {n:37, text:"How important are calming / co-regulation experiences for your kink / sexual relationships?", lo:"not import
+  396:  ant", hi:"essential"},
+  397:        {n:38, text:"How much do you need verbal and emotional check-ins during sexual / sensual or kink experiences?", lo:"rarel
+  398:  y needed", hi:"always needed"},
+  399:      ]
+  400:    },
+  401:    {
+  402:      id:"relational", label:"Relational Architecture & Vision", color:"#C04878",
+  403:      desc:"Relational structure vision, collective vs dyadic, cultural integration, relationship design",
+  404:      accent:"rgba(192,72,120,0.07)",
+*****
+
+***** DOCS\index.html
+  351:      questions:[
+  352:        {n:24, text:"How strong is your need for play to happen only in a committed / long-term relationship?", lo:"no need", hi:
+  353:  "strong need", invert:true},
+  354:        {n:25, text:"How open are you to new play situations and experiences, or play with strangers who may become friends?", lo
+  355:  :"not open", hi:"very open"},
+  356:        {n:26, text:"How open are you to play at parties or festivals?", lo:"not open", hi:"very open"},
+  357:        {n:37, text:"How important is the gender identity of a possible partner when deciding to play?", lo:"not important", hi:"
+  358:  very important", invert:true},
+  359:        {n:38, text:"How open are you to multiple partners in any format (threesomes, play at parties, multiple longer-term conne
+  360:  ctions)?", lo:"not open", hi:"very open"},
+  361:        {n:39, text:"How important are romantic experiences for your play / relationships?", lo:"not important", hi:"very importa
+  362:  nt"},
+  363:        {n:69, text:"How strongly do you envision your future involving collective living, chosen family structures, or shared ho
+  364:  usehold arrangements beyond a single romantic partnership?", lo:"strongly prefer dyadic", hi:"strongly prefer collective"},
+  365:        {n:70, text:"How much do you want your social and community bonds to carry equal weight and investment as your romantic p
+  366:  artnerships?", lo:"romantic partnership is primary", hi:"community holds equal or primary weight"},
+  367:        {n:71, text:"How central are cultural traditions, ancestral practices, or community obligations to how you structure your
+  368:   relationships and living arrangements?", lo:"built my own framework independently", hi:"cultural practice and community are pr
+***** DOCS\ARTIFACTS\INDEX.HTML
+  405:      questions:[
+  406:        {n:39, text:"How important is deep life intertwining ÔÇö shared futures, shared logistics, building lives together ÔÇö in
+  407:   your relationships?", lo:"not important", hi:"very important"},
+  408:        {n:40, text:"How open are you to having multiple partners or integrated connections in any format (romantic only, cohabit
+  409:  ating life partners and shared households and groups, co-parenting partners, digital-only loves, kink partners, etc)?", lo:"not
+  410:   open", hi:"very open"},
+  411:        {n:41, text:"How much do you want your social and community bonds to carry equal weight and investment as your romantic p
+  412:  artnerships?", lo:"romantic partnership is primary", hi:"community holds equal or primary weight"},
+  413:        {n:42, text:"How central are cultural traditions, ancestral practices, or community obligations to how you structure your
+  414:   relationships and living arrangements?", lo:"built my own framework independently", hi:"cultural practice and community are pr
+*****
+
+***** DOCS\index.html
+  372:    {
+  373:      id:"emotional", label:"Emotional Nurturance", color:"#2878A0",
+  374:      desc:"Need for co-regulation, emotional processing, calming",
+  375:      accent:"rgba(40,120,160,0.07)",
+  376:      questions:[
+  377:        {n:27, text:"How important is emotional nurturance and processing for your kink / sexual relationships?", lo:"not importa
+  378:  nt", hi:"essential"},
+  379:        {n:28, text:"How important are calming / co-regulation experiences for your kink / sexual relationships?", lo:"not import
+  380:  ant", hi:"essential"},
+  381:        {n:29, text:"How important is deep life intertwining ÔÇö shared futures, shared logistics, building lives together ÔÇö in
+  382:   your relationships?", lo:"not important", hi:"very important"},
+  383:        {n:72, text:"How important is being emotionally witnessed ÔÇö seen and understood ÔÇö in your intimate and sexual relatio
+  384:  nships?", lo:"not important", hi:"essential"},
+  385:        {n:73, text:"How much do you need verbal and emotional check-in during and after physical or sexual intimacy?", lo:"rarel
+  386:  y needed", hi:"always needed"},
+  387:      ]
+***** DOCS\ARTIFACTS\INDEX.HTML
+  418:    {
+  419:      id:"somatic", label:"Somatic & Spiritual Importance", color:"#5830A0",
+  420:      desc:"Spirituality, breathwork, body-based awareness in play",
+  421:      accent:"rgba(88,48,160,0.07)",
+  422:      questions:[
+  423:        {n:43, text:"How important is spirituality / sacredness and ritual for your play or your daily life?", lo:"not important"
+  424:  , hi:"essential"},
+  425:        {n:44, text:"How connected are you to your somatic / body awareness in play and relationships?", lo:"disconnected", hi:"d
+  426:  eeply connected"},
+  427:        {n:45, text:"How connected are you to your breath and its capacity to regulate / enhance pleasure and well-being?", lo:"d
+  428:  isconnected", hi:"deeply connected"},
+  429:      ]
+*****
+
+***** DOCS\index.html
+  389:    {
+  390:      id:"somatic", label:"Somatic & Spiritual Importance", color:"#5830A0",
+  391:      desc:"Spirituality, breathwork, body-based awareness in play",
+  392:      accent:"rgba(88,48,160,0.07)",
+  393:      questions:[
+  394:        {n:33, text:"How important is spirituality / sacredness and ritual for your play?", lo:"not important", hi:"essential"},
+  395:        {n:40, text:"How connected are you to your somatic / body awareness in play and relationships?", lo:"disconnected", hi:"d
+  396:  eeply connected"},
+  397:        {n:41, text:"How connected are you to your breath and its capacity to regulate / enhance pleasure?", lo:"disconnected", h
+  398:  i:"deeply connected"},
+  399:      ]
+  400:    },
+  401:    {
+  402:      id:"neurodivergence", label:"Neurodivergence", color:"#3A7030",
+***** DOCS\ARTIFACTS\INDEX.HTML
+  431:    {
+  432:      id:"neurodivergence", label:"Neurodivergence", color:"#3A7030",
+*****
+
+***** DOCS\index.html
+  406:      questions:[
+  407:        {n:44, text:"Altered states (lucid dreaming, daydreaming, hallucinations, visions, mania, psychosis, dissociation)", lo:"
+  408:  rarely", hi:"frequently"},
+  409:        {n:45, text:"Differences in attention (regulating attention, monotropism, flow state, hyperfocusing)", lo:"rarely", hi:"f
+  410:  requently"},
+  411:        {n:46, text:"Communication differences (non-spoken communication, echolalia, differences in tone, pace, eye contact)", lo
+  412:  :"rarely", hi:"frequently"},
+  413:        {n:47, text:"Eating differences or challenges", lo:"rarely", hi:"frequently"},
+  414:        {n:48, text:"Emotional processing differences (differences in intensity, duration, naming, describing emotions)", lo:"rar
+  415:  ely", hi:"frequently"},
+  416:        {n:49, text:"Empathy differences (cognitive, emotional, somatic, mirror, aesthetic empathy)", lo:"rarely", hi:"frequently
+  417:  "},
+  418:        {n:50, text:"Memory differences (working memory, semantic, prospective, episodic, procedural memory)", lo:"rarely", hi:"f
+  419:  requently"},
+  420:        {n:51, text:"Motor functioning differences (motor control, fine motor, gross motor, motor tics)", lo:"rarely", hi:"freque
+  421:  ntly"},
+  422:        {n:52, text:"Plurality (multiplicity, distinct multiple selves, inner child, multiple inner dialogues, parts)", lo:"rarel
+  423:  y", hi:"frequently"},
+  424:        {n:53, text:"Sensory differences (sensory seeking, avoiding, hypersensitivity, hyposensitivity, synesthesia)", lo:"rarely
+  425:  ", hi:"frequently"},
+  426:        {n:54, text:"Sleep differences or problems", lo:"rarely", hi:"frequently"},
+  427:        {n:55, text:"Stimming (auditory, tactile, vocal, visual, vestibular, proprioceptive, olfactory stims)", lo:"rarely", hi:"
+  428:  frequently"},
+  429:        {n:56, text:"Time perception differences (variability, speeding up, slowing down, cyclical vs linear time)", lo:"rarely",
+  430:   hi:"frequently"},
+  431:        {n:57, text:"Visual imagination differences (aphantasia, partial aphantasia, hyperphantasia)", lo:"rarely", hi:"frequentl
+  432:  y"},
+  433:        {n:58, text:"How present are voices, sounds, or experiences that others don't seem to share or validate?", lo:"rarely", h
+  434:  i:"frequently"},
+  435:        {n:59, text:"Differences in processing or expressing information", lo:"rarely", hi:"frequently"},
+  436:      ]
+***** DOCS\ARTIFACTS\INDEX.HTML
+  436:      questions:[
+  437:        {n:46, text:"Altered states (lucid dreaming, daydreaming, hallucinations, visions, mania, psychosis, dissociation)", lo:"
+  438:  rarely", hi:"frequently"},
+  439:        {n:47, text:"Differences in attention (regulating attention, monotropism, flow state, hyperfocusing)", lo:"rarely", hi:"f
+  440:  requently"},
+  441:        {n:48, text:"Communication differences (non-spoken communication, echolalia, differences in tone, pace, eye contact)", lo
+  442:  :"rarely", hi:"frequently"},
+  443:        {n:49, text:"Eating differences or challenges", lo:"rarely", hi:"frequently"},
+  444:        {n:50, text:"Emotional processing differences (differences in intensity, duration, naming, describing emotions)", lo:"rar
+  445:  ely", hi:"frequently"},
+  446:        {n:51, text:"Empathy differences (cognitive, emotional, somatic, mirror, aesthetic empathy)", lo:"rarely", hi:"frequently
+  447:  "},
+  448:        {n:52, text:"Memory differences (working memory, semantic, prospective, episodic, procedural memory)", lo:"rarely", hi:"f
+  449:  requently"},
+  450:        {n:53, text:"Motor functioning differences (motor control, fine motor, gross motor, motor tics)", lo:"rarely", hi:"freque
+  451:  ntly"},
+  452:        {n:54, text:"Plurality (multiplicity, distinct multiple selves, inner child, multiple inner dialogues, parts)", lo:"rarel
+  453:  y", hi:"frequently"},
+  454:        {n:55, text:"Sensory differences (sensory seeking, avoiding, hypersensitivity, hyposensitivity, synesthesia)", lo:"rarely
+  455:  ", hi:"frequently"},
+  456:        {n:56, text:"Sleep differences or problems", lo:"rarely", hi:"frequently"},
+  457:        {n:57, text:"Stimming (auditory, tactile, vocal, visual, vestibular, proprioceptive, olfactory stims)", lo:"rarely", hi:"
+  458:  frequently"},
+  459:        {n:58, text:"Time perception differences (variability, speeding up, slowing down, cyclical vs linear time)", lo:"rarely",
+  460:   hi:"frequently"},
+  461:        {n:59, text:"Visual imagination differences (aphantasia, partial aphantasia, hyperphantasia)", lo:"rarely", hi:"frequentl
+  462:  y"},
+  463:        {n:60, text:"Voice hearing (internal monologue, intrusive thoughts, external or internal voices)", lo:"rarely", hi:"frequ
+  464:  ently"},
+  465:        {n:61, text:"Differences in processing or expressing information", lo:"rarely", hi:"frequently"},
+  466:      ]
+*****
+
+***** DOCS\index.html
+  444:      questions:[
+  445:        {n:60, text:"How much do you rely on AI, parasocial content, or online personas for emotional connection?", lo:"rarely", 
+  446:  hi:"primarily"},
+  447:        {n:61, text:"How easy is it to be as vulnerable with humans as you are in digital spaces?", lo:"equally easy", hi:"much h
+  448:  arder with humans", invert:true},
+  449:        {n:62, text:"How often does digital connection substitute for in-person or embodied human contact?", lo:"rarely", hi:"fre
+  450:  quently"},
+  451:        {n:63, text:"How much does online approval (likes, responses, follows) affect your sense of self?", lo:"minimal impact", 
+  452:  hi:"significant impact"},
+  453:        {n:64, text:"How significant is AI in your erotic or intimate life currently?", lo:"not present", hi:"significant"},
+  454:        {n:65, text:"How difficult is it to tolerate waiting for a human response vs. AI's immediacy?", lo:"easy", hi:"very diffi
+  455:  cult"},
+  456:      ]
+***** DOCS\ARTIFACTS\INDEX.HTML
+  474:      questions:[
+  475:        {n:62, text:"To what frequency do you engage with AI? Low is occasional once a week use, high is constant daily use.", lo
+  476:  :"occasionally, once a week", hi:"constant daily use"},
+  477:        {n:63, text:"How frequently do you engage with parasocial or online personality relationships as an escape and/or social,
+  478:   emotional or sexual outlet?", lo:"rarely", hi:"frequently, core part of my life"},
+  479:        {n:64, text:"Of the people you are most vulnerable with, what percentage of them are digital or online?", lo:"mostly in-p
+  480:  erson connections", hi:"mostly digital or online"},
+  481:        {n:65, text:"In this space, how integrated is your digital or online self with your physical life? Low means you're a dif
+  482:  ferent person in your online spaces and the two never meet.", lo:"completely separate ÔÇö different person online", hi:"fully i
+  483:  ntegrated everywhere"},
+  484:      ]
+*****
+
+***** DOCS\index.html
+  625:    if(currentSection<SECTIONS.length-1){currentSection++;renderSection();}
+  626:    else{computeScores();showResults();}
+  627:  }
+***** DOCS\ARTIFACTS\INDEX.HTML
+  653:    if(currentSection<SECTIONS.length-1){currentSection++;renderSection();}
+  654:    else{computeScores();showScreen('email');window.scrollTo(0,0);}
+  655:  }
+*****
+
+***** DOCS\index.html
+  633:    SECTIONS.forEach(sec=>{
+  634:      const vals=sec.questions.map(q=>{let v=(answers[q.n]||0)/5;if(q.invert)v=1-v;return v;});
+  635:      scores[sec.id]=vals.reduce((a,b)=>a+b,0)/vals.length;
+  636:    });
+***** DOCS\ARTIFACTS\INDEX.HTML
+  661:    SECTIONS.forEach(sec=>{
+  662:      // Flagged questions (SGBV/consent screening items) are displayed and sent to the
+  663:      // webhook, but excluded from the dimension average ÔÇö they're clinical flags, not
+  664:      // traits to be averaged into a wellbeing score.
+  665:      const scored=sec.questions.filter(q=>!q.flag);
+  666:      const vals=scored.map(q=>{let v=(answers[q.n]||0)/5;if(q.invert)v=1-v;return v;});
+  667:      scores[sec.id]=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;
+  668:    });
+*****
+
+***** DOCS\index.html
+  638:    const mh=scores.mentalhealth||0, needs=scores.needs||0, digital=scores.digital||0;
+  639:    const si=(answers[13]||0)/5;
+  640:    const composite=(mh*0.4)+(needs*0.35)+(digital*0.25);
+***** DOCS\ARTIFACTS\INDEX.HTML
+  670:    const mh=scores.mentalhealth||0, needs=scores.needs||0, digital=scores.digital||0;
+  671:    // Find the suicidal-ideation question dynamically via its safety flag, rather than a
+  672:    // hardcoded question number, so renumbering the quiz never silently breaks crisis routing.
+  673:    let siQ=null;
+  674:    for(const sec of SECTIONS){ const f=sec.questions.find(q=>q.safety); if(f){siQ=f;break;} }
+  675:    const si=siQ?(answers[siQ.n]||0)/5:0;
+  676:    const composite=(mh*0.4)+(needs*0.35)+(digital*0.25);
+*****
+
+***** DOCS\index.html
+  811:      const short=words.length>2?words[0]+' '+words[1]:words[0];
+  812:      const anchor=Math.cos(angles[i])>.2?'start':Math.cos(angles[i])<-.2?'end':'middle';
+  813:      svgHtml+=`<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="5" fill="${sec.color}"/>`;
+***** DOCS\ARTIFACTS\INDEX.HTML
+  847:      const short=words.length>2?words[0]+' '+words[1]:words[0];
+  848:      const anchor=Math.cos(angles[i])>.2?'end':Math.cos(angles[i])<-.2?'start':'middle';
+  849:      svgHtml+=`<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="5" fill="${sec.color}"/>`;
+*****
+
+***** DOCS\index.html
+  853:  
+  854:  function submitEmail(){
+***** DOCS\ARTIFACTS\INDEX.HTML
+  889:  
+  890:  
+  891:  function gateSubmit(){
+  892:    var name = document.getElementById('gate-name').value.trim();
+  893:    var email = document.getElementById('gate-email').value.trim();
+  894:    if(!name || !email){ alert('Please enter your name and email to see your results.'); return; }
+  895:    // Populate the original name/email fields for submitEmail
+  896:    document.getElementById('result-name').value = name;
+  897:    document.getElementById('result-email').value = email;
+  898:    submitEmail();
+  899:  }
+  900:  
+  901:  function submitEmail(){
+*****
+
+***** DOCS\index.html
+  873:      digital_score:+((scores.digital||0)*5).toFixed(1),
+  874:      referral_code:referralCode||null,
+***** DOCS\ARTIFACTS\INDEX.HTML
+  920:      digital_score:+((scores.digital||0)*5).toFixed(1),
+  921:      consent_difficulty:+(answers[5]||0),
+  922:      shame_on_rejection:+(answers[6]||0),
+  923:      pushback_on_rejection:+(answers[7]||0),
+  924:      referral_code:referralCode||null,
+*****
+
+***** DOCS\index.html
+  882:    fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
+  883:    showScreen('thankyou');
+  884:    window.scrollTo(0,0);
+  885:  }
+***** DOCS\ARTIFACTS\INDEX.HTML
+  932:    fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
+  933:    showResults();showScreen('results');window.scrollTo(0,0);
+  934:  }
+*****
+
+Error al volver a sincronizar. Los archivos son demasiado diferentes
+***** DOCS\index.html
+  889:  function retakeQuiz(){answers={};scores={};currentSection=0;showScreen('quiz');renderSection();}
+  890:  </script>
+  891:  </body>
+  892:  </html>// 
+***** DOCS\ARTIFACTS\INDEX.HTML
+  938:  function retakeQuiz(){answers={};scores={};currentSection=0;showScreen('quiz');renderSection();}
+  939:  
+  940:  // INTERPRETATIONS ÔÇö Soleil Merroir
+  941:  const INTERPS={
+  942:    needs:[
+  943:      [0,.3,"Your unmet needs are relatively low right now ÔÇö but monitor when stressors shift. Survival stress impacts our rela
+  944:  tionship to time, energy and presence with ourselves and others. We were never wired to do this alone."],
+  945:      [.3,.6,"Your unmet needs are likely impacting how you show up in relationship spaces. Financial and well-being stress limit
+  946:  s time, capacity to connect, and the ability to relax into pleasure. The relational difficulty isn't pathology ÔÇö it's the sys
+  947:  tem."],
+  948:      [.6,1,"Your unmet needs are significantly impacting how you relate. Poverty and capitalist exploitation isn't your fault, b
+  949:  ut the cultural shame can make us feel like it is. Belonging and love don't require financial stability ÔÇö leaning into commun
+  950:  ity support as a resource, not a deficit, is the move."],
+  951:    ],
+  952:    mentalhealth:[
+  953:      [0,.3,"Your mental health needs are relatively low ÔÇö but monitor when activation or dysregulation starts impacting daily 
+  954:  life. As a more regulated person, you are a vital community anchor for others. That capacity matters and is worth protecting."]
+  955:  ,
+  956:      [.3,.6,"Your mental health needs are elevated. These are reactions to stressors, trauma, and cultural rejection ÔÇö your ne
+  957:  rvous system adapting to survive. Getting support to understand your activation patterns isn't about fixing you. It's about red
+  958:  ucing distress so you have more capacity for connection, pleasure and belonging."],
+  959:      [.6,1,"Your mental health needs are high, and it's important to seek human support. Your symptoms are your nervous system's
+  960:   adaptations to a world that is genuinely traumatizing ÔÇö not a sign of deficit within you. Check our resource section, reach 
+  961:  out to community, and know you are not alone in this."],
+  962:    ],
+  963:    identity:[
+  964:      [0,.3,"Your identity awareness and relationship to your body remain strong. Consider how your identities and strengths prov
+  965:  ide capacity to care for others ÔÇö while staying curious about the impact of identity-based power and privilege in your dynami
+  966:  cs."],
+  967:      [.3,.6,"There are core aspects of yourself in conflict that need support. The distress comes from biased and hateful cultur
+  968:  al systems, not from anything wrong with who you are. Your identities and body are magical sites of possibility when held with 
+  969:  care. What aspects can you show more self-compassion?"],
+  970:      [.6,1,"You're experiencing high distress related to identity and body. What's wrong isn't you ÔÇö it's the world you came i
+  971:  nto and how it treats people like you. This trauma affects every part of life and relationships, especially when those patterns
+  972:   are replicated in social dynamics. You get to be included in conversations about who you are from day one."],
+  973:    ],
+  974:    erotic:[
+  975:      [0,.3,"Eroticism and sensuality are of low importance to you right now, and that's okay. Everyone relates to sexuality and 
+  976:  pleasure differently, particularly those on the Ace / Grey scale. You can still create meaningful, pleasurable connection ÔÇö w
+  977:  ith yourself, in fantasy, or with others ÔÇö entirely on your own terms."],
+  978:      [.3,.6,"Eroticism and sensuality matter to you and can be cultivated in endless forms ÔÇö individually, with partners, digi
+  979:  tally, in community, or in fantasy. Give yourself permission to explore what that looks like in each context, separately. Conse
+  980:  nt-based practice opens doors shame keeps closed."],
+  981:      [.6,1,"Erotic and sensual expression are key to your well-being ÔÇö your relational dynamics should make space for this, or
+  982:   create pathways to seek expression elsewhere. High desire isn't pathology, but it requires more communication and creativity t
+  983:  o navigate ethically. You deserve access to all of yourself."],
+  984:    ],
+  985:    relational:[
+  986:      [0,.3,"You're more monogamously oriented ÔÇö seeking depth and commitment in a partner-centered world. A reminder: you are 
+  987:  a whole person, not needing another to complete you. Your own secure attachment base, with community as foundation, is the long
+  988:  -term infrastructure for your well-being."],
+  989:      [.3,.6,"You're relationally flexible ÔÇö either on the journey to a new relationship ecosystem, or curious about what's pos
+  990:  sible if you break some boxes. What would it look like to disperse your needs across your relational ecosystem with consent and
+  991:   clarity?"],
+  992:      [.6,1,"You're collectively wired and seeking interconnectedness ÔÇö not just a partner, but an ecosystem. We're not default
+  993:  ing to polyamory here. We're defaulting to dispersing your needs across the relational ecosystem with consent and clarity. Buil
+  994:  ding communication and conflict skills will be the infrastructure that makes it work."],
+  995:    ],
+  996:    emotional:[
+  997:      [0,.3,"You've identified low need for emotional nurturance. This often correlates with ND traits or socialization away from
+  998:   vulnerability. If you're comfortable here, how might you communicate early about dynamics with low emotional intertwinement? A
+  999:  nd what does aftercare look like for you?"],
+ 1000:      [.3,.6,"Emotional nurturance accentuates your ability to feel close and connected. Feeling emotionally held might precede y
+ 1001:  our ability to experience arousal or safety with another. It's key to communicate these needs early and often ÔÇö including wha
+ 1002:  t support you need after intimate experiences."],
+ 1003:      [.6,1,"Emotional nurturance is central to how you relate and a pathway to your sexual openness. You want to feel seen and h
+ 1004:  eld in your full emotional expansiveness. This requires high self-knowledge and the ability to teach your partners and communit
+ 1005:  y what it actually feels like to hold you well."],
+ 1006:    ],
+ 1007:    somatic:[
+ 1008:      [0,.3,"Somatic grounding and spiritual exploration aren't required for your well-being, but they remain parts of you and of
+ 1009:   others. Is there an opening to finding more connection with your body and its cues as a pathway to more pleasure and presence?
+ 1010:  "],
+ 1011:      [.3,.6,"Spirituality and somatic awareness are tools in your toolbox for well-being and relating. Explore connections that 
+ 1012:  celebrate these aspects and give you space to play, ground and create ritual around pleasure and connection."],
+ 1013:      [.6,1,"Your spiritual and somatic self are anchors to your well-being. Your body guides your intuition and rootedness ÔÇö t
+ 1014:  o ancestry, to nature, to other dimensions of being. These aren't separate from your sexuality; they are part of it."],
+ 1015:    ],
+ 1016:    neurodivergence:[
+ 1017:      [0,.3,"Your ND-related traits are relatively low ÔÇö but you've likely been or will be in connections with folks who have n
+ 1018:  eurospicy brains and systems. Understanding how different brains and bodies work makes you a more attuned community member and 
+ 1019:  partner."],
+ 1020:      [.3,.6,"You're experiencing ND-related traits that are likely impacting your daily well-being and relationships. The more s
+ 1021:  pecifically you can name your experiences, patterns and sensitivities, the more you can create relational dynamics that actuall
+ 1022:  y suit you. These aren't deficits ÔÇö they are places of adaptation and enhanced communication."],
+ 1023:      [.6,1,"You're experiencing a high level of neurodivergence, which impacts every facet of how you relate. Map your traits, s
+ 1024:  ensitivities and needs ÔÇö and lead with them in relational conversations. It is not too much to ask people to make accommodati
+ 1025:  ons to communicate and understand you. You're not broken ÔÇö you're a uniquely sexy rubix cube seeking to unlock your own patte
+ 1026:  rns."],
+ 1027:    ],
+ 1028:    digital:[
+ 1029:      [0,.3,"Digital relationships aren't a significant part of your ecosystem right now ÔÇö but consider how digital communities
+ 1030:   might enhance your well-being and access to parts of yourself that are harder to reach in person. There's no shame in starting
+ 1031:   there."],
+ 1032:      [.3,.6,"Digital relationships are already in your ecosystem. How integrated is the you who exists online compared to IRL? D
+ 1033:  igital connections nourish us best the more values-aligned and integrated our expression is ÔÇö are you bringing yourself fully
+ 1034:   into your digital spaces?"],
+ 1035:      [.6,1,"Your digital relationships are doing significant relational work, which can be both a resource and a challenge. Does
+ 1036:   your vulnerability have safe places to exist online? How balanced are those connections with away-from-keyboard human contact?
+ 1037:   These questions aren't judgment ÔÇö they're a gentle cue toward embodied, human relating."],
+*****
+
