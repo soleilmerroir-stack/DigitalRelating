@@ -162,6 +162,31 @@
 </div>
 
 <!-- SCREEN 2 — RESULTS -->
+<div id="screen-email" class="screen">
+  <div class="container">
+    <div class="eyebrow">Almost there</div>
+    <h1 style="font-size:28px;margin-bottom:12px">Get your visualization</h1>
+    <p class="sub" style="margin-bottom:24px">Enter your name and email to unlock your 9-dimension radar and results.</p>
+    <div style="max-width:460px">
+      <input id="gate-name" type="text" placeholder="Your first name"
+        style="width:100%;padding:12px 14px;margin-bottom:10px;border:1px solid var(--line);border-radius:3px;font-family:'DM Mono',monospace;font-size:13px;background:rgba(26,20,16,.04);color:var(--ink);outline:none">
+      <div style="display:flex;gap:10px;margin-bottom:12px">
+        <input id="gate-email" type="email" placeholder="your@email.com"
+          style="flex:1;padding:12px 14px;border:1px solid var(--line);border-radius:3px;font-family:'DM Mono',monospace;font-size:13px;background:rgba(26,20,16,.04);color:var(--ink);outline:none">
+        <button class="btn btn-teal" onclick="gateSubmit()">See my results →</button>
+      </div>
+      <p style="font-size:10px;color:var(--muted);line-height:1.7">
+        Your data is private — used only to send your results. No spam.<br>
+        By submitting you agree to our <a href="terms.html" style="color:var(--teal)">Terms of Use</a>.<br>
+        <strong>Referral code?</strong>
+        <input type="text" id="accessCode" placeholder="Enter code" oninput="checkCode(this.value)"
+          style="margin-left:6px;padding:4px 8px;border:1px solid var(--line);border-radius:3px;font-family:'DM Mono',monospace;font-size:11px;background:rgba(26,20,16,.04);color:var(--ink);outline:none;width:110px">
+        <span id="codeStatus" style="display:none;margin-left:6px;font-size:10px;padding:3px 8px;border-radius:3px"></span>
+      </p>
+    </div>
+  </div>
+</div>
+
 <div id="screen-results" class="screen">
   <div class="container">
     <div class="eyebrow">Your profile</div>
@@ -197,7 +222,7 @@
         <button class="btn btn-teal" onclick="submitEmail()">Send my results</button>
       </div>
       <p class="email-note">
-        Your data is private and used only to send your results. No spam. By submitting you agree to our <a href="https://soleilmerroir-stack.github.io/DigitalRelating/terms.html" style="color:var(--teal)">Terms of Use</a>.<br>
+        Your data is private and used only to send your results. No spam.<br>
         Want to explore this with a partner or therapist? Share the quiz link — then compare your visualizations.<br>
         <strong>Partner quiz:</strong> both complete for $12 · <strong>Therapist referral:</strong> ask your clinician for a discount code.
       </p>
@@ -219,11 +244,6 @@
         Want to go deeper? Explore how your profile overlaps with someone else's using the full relationship ecosystem mapper — or book a session to walk through your results.
       </p>
       <a href="https://soleilmerroir.com" class="btn">Back to site</a>
-      <div style="margin-top:24px;font-size:10px;color:var(--muted)">
-        <a href="terms.html" style="color:var(--muted)">Terms of Use</a> ·
-        <a href="solidarity.html" style="color:var(--muted)">Community Solidarity Agreement</a> ·
-        <a href="https://cyborgdreamz.substack.com" style="color:var(--muted)">Substack</a>
-      </div>
     </div>
   </div>
 </div>
@@ -235,13 +255,15 @@ const SECTIONS = [
     desc:"Community, self-regulation, basic needs, education",
     accent:"rgba(16,120,112,0.12)",
     questions:[
-      {n:1, text:"How big is your need / gaps in community access and support?", lo:"no gaps", hi:"significant gaps"},
+      {n:1, text:"How big is your need / gaps in care support, friendship and community integration?", lo:"no gaps", hi:"significant gaps"},
       {n:2, text:"How difficult is self-regulation for you currently?", lo:"very easy", hi:"very difficult"},
       {n:3, text:"How big are your gaps in basic needs (food, housing, etc)?", lo:"needs met", hi:"significant gaps"},
       {n:4, text:"How big is your need for more sex and relationship education / increased sexual self-awareness?", lo:"none", hi:"significant need"},
-      {n:5, text:"How difficult is it for you to set boundaries?", lo:"easy", hi:"very difficult"},
-      {n:6, text:"How strong are your avoidance patterns (in conflict, relationships, processing)?", lo:"minimal", hi:"strong"},
-      {n:66, text:"How comfortable are you naming emotional needs to a partner before they become urgent?", lo:"very comfortable", hi:"very uncomfortable", invert:true},
+      {n:5, text:"How confident are you communicating consent and limits in real time during erotic encounters?", lo:"very confident", hi:"not confident", flag:true},
+      {n:6, text:"When someone says no or pulls back, how much do you turn inward in shame or self-criticism?", lo:"rarely", hi:"significantly", flag:true},
+      {n:7, text:"When someone says no or hesitates, how likely are you to ask again, persuade, or look for ways around it?", lo:"rarely", hi:"very likely", flag:true},
+      {n:8, text:"How strong are your avoidance patterns and communication difficulties (in conflict, relationships, processing)?", lo:"minimal", hi:"strong"},
+      {n:9, text:"How comfortable are you naming and processing emotions?", lo:"very comfortable", hi:"very uncomfortable"},
     ]
   },
   {
@@ -249,15 +271,15 @@ const SECTIONS = [
     desc:"Current intensity of anxiety, depression, dissociation, and other symptoms",
     accent:"rgba(144,96,16,0.1)", safety:true,
     questions:[
-      {n:7, text:"How strong / frequent are your intrusive thoughts?", lo:"rare", hi:"constant"},
-      {n:8, text:"How strong / frequent is your hypervigilance / elevated nervous system?", lo:"rare", hi:"constant"},
-      {n:9, text:"How strong / frequent are your dissociation / shutdown responses?", lo:"rare", hi:"frequent"},
-      {n:12, text:"How much does substance use currently affect your relationships, capacity, or emotional regulation?", lo:"not at all", hi:"significantly"},
-      {n:13, text:"How frequent / intense is your suicidal ideation lately?", lo:"none", hi:"frequent", safety:true},
-      {n:14, text:"How intense / impactful are your depression symptoms currently?", lo:"minimal", hi:"intense"},
-      {n:15, text:"How intense / impactful are your anxiety symptoms currently?", lo:"minimal", hi:"intense"},
-      {n:16, text:"How intense / impactful are your OCD symptoms currently?", lo:"minimal", hi:"intense"},
-      {n:17, text:"How intense / impactful are your psychotic symptoms currently?", lo:"none", hi:"significant"},
+      {n:10, text:"How strong / frequent are your intrusive thoughts?", lo:"rare", hi:"constant"},
+      {n:11, text:"How strong / frequent is your hypervigilance / elevated nervous system?", lo:"rare", hi:"constant"},
+      {n:12, text:"How strong / frequent are your dissociation / shutdown responses?", lo:"rare", hi:"frequent"},
+      {n:13, text:"How much weight does substance use play in your daily functioning?", lo:"not at all", hi:"significantly"},
+      {n:14, text:"How frequent / intense is your suicidal ideation lately?", lo:"none", hi:"frequent", safety:true},
+      {n:15, text:"How intense / impactful are your depression symptoms currently?", lo:"minimal", hi:"intense"},
+      {n:16, text:"How intense / impactful are your anxiety symptoms currently?", lo:"minimal", hi:"intense"},
+      {n:17, text:"How intense / impactful are your OCD symptoms currently?", lo:"minimal", hi:"intense"},
+      {n:18, text:"How intense / impactful are your psychotic symptoms currently?", lo:"none", hi:"significant"},
     ]
   },
   {
@@ -265,44 +287,30 @@ const SECTIONS = [
     desc:"Gender, trauma, somatic awareness, disabilities",
     accent:"rgba(184,80,32,0.08)",
     questions:[
-      {n:10, text:"How intense is your identity-related trauma (dysphoria, race, gender, body image, etc)?", lo:"minimal", hi:"intense"},
-      {n:11, text:"How intense is your religious or culturally-impacted trauma?", lo:"minimal", hi:"intense"},
-      {n:42, text:"Are there physical health or other disabilities which impact play / relationships?", lo:"none", hi:"significant impact"},
-      {n:43, text:"How much does your gender identity require active navigation, accommodation, or explanation in your relationships?", lo:"minimal navigation", hi:"significant ongoing navigation"},
+      {n:19, text:"How intense is your identity-related trauma (dysphoria, race, gender, body image, etc)?", lo:"minimal", hi:"intense"},
+      {n:20, text:"How intense is your religious or culturally-impacted trauma?", lo:"minimal", hi:"intense"},
+      {n:21, text:"Are there physical health or other disabilities which impact play / relationships?", lo:"none", hi:"significant impact"},
+      {n:22, text:"How much does your gender identity and expression, and the stigma associated, impact your daily well-being?", lo:"minimal impact", hi:"significant daily impact"},
+      {n:66, text:"How difficult is your relationship with your body?", lo:"accepting", hi:"hate or destruction"},
     ]
   },
   {
     id:"erotic", label:"Erotic & Kink", color:"#8040A8",
-    desc:"Desire, kink, power, sensuality, frequency",
+    desc:"Desire, kink, power dynamics, erotic self-knowledge, shame",
     accent:"rgba(128,64,168,0.08)",
+    intro:"Sex is not penetration or climax, and all bodies are sexy bodies worthy of pleasure and expression. Sexuality is the umbrella concept under which an infinite myriad of experiences can exist, both on our own and with others, digitally or AFK (away from keyboard). A few common expressions of sexuality include kink (BDSM, fetish, power, bondage, pain, etc), sensation / sensual play (any type of consensual touch, which may or may not include genital engagement), eroticism (explicit acts involving genitals or erotic language), and fetish experiences (a specific erotic experience or element). For example, you could identify as Ace but still engage in sensual and kink dynamics while preferring no erotic energy directed toward you. Or you could be a kinkster who requires romance and eroticism, and only play in private. We don't include relational or partner dynamics here because it's important to assess your sexual and sensual self in your wholeness, distinct from other partner dynamics in your life.",
     questions:[
-      {n:30, text:"How comfortable are you with sexual / sensual / kink exploration with yourself?", lo:"not comfortable", hi:"very comfortable"},
-      {n:31, text:"How comfortable are you with sexual / sensual / kink exploration with others?", lo:"not comfortable", hi:"very comfortable"},
-      {n:18, text:"How important is the presence of power and control dynamics for your play / relationships?", lo:"not important", hi:"essential"},
-      {n:19, text:"How important is being the initiator / giver / top for your play / relationships?", lo:"not important", hi:"essential"},
-      {n:20, text:"How important is the use of pain for your play / relationships?", lo:"not important", hi:"essential"},
-      {n:21, text:"How important or intense are kink or fetish experiences for your play?", lo:"not important", hi:"essential"},
-      {n:32, text:"How important is sensual touch and exploration for your play?", lo:"not important", hi:"essential"},
-      {n:34, text:"At what frequency do you prefer sex?", lo:"rarely", hi:"daily or more"},
-      {n:35, text:"How important is variety and exploring taboos in your play?", lo:"not important", hi:"essential"},
-      {n:36, text:"How important is erotic / sexual exploration for your play?", lo:"not important", hi:"essential"},
-      {n:67, text:"How much does shame influence what you're willing to share or explore erotically?", lo:"minimal", hi:"significantly"},
-    ]
-  },
-  {
-    id:"relational", label:"Relational Architecture & Vision", color:"#C04878",
-    desc:"Openness to entanglement, multiple connections, commitment style",
-    accent:"rgba(192,72,120,0.07)",
-    questions:[
-      {n:24, text:"How strong is your need for play to happen only in a committed / long-term relationship?", lo:"no need", hi:"strong need", invert:true},
-      {n:25, text:"How open are you to new play situations and experiences, or play with strangers who may become friends?", lo:"not open", hi:"very open"},
-      {n:26, text:"How open are you to play at parties or festivals?", lo:"not open", hi:"very open"},
-      {n:37, text:"How important is the gender identity of a possible partner when deciding to play?", lo:"not important", hi:"very important", invert:true},
-      {n:38, text:"How open are you to multiple partners in any format (threesomes, play at parties, multiple longer-term connections)?", lo:"not open", hi:"very open"},
-      {n:39, text:"How important are romantic experiences for your play / relationships?", lo:"not important", hi:"very important"},
-      {n:69, text:"How strongly do you envision your future involving collective living, chosen family structures, or shared household arrangements beyond a single romantic partnership?", lo:"strongly prefer dyadic", hi:"strongly prefer collective"},
-      {n:70, text:"How much do you want your social and community bonds to carry equal weight and investment as your romantic partnerships?", lo:"romantic partnership is primary", hi:"community holds equal or primary weight"},
-      {n:71, text:"How central are cultural traditions, ancestral practices, or community obligations to how you structure your relationships and living arrangements?", lo:"built my own framework independently", hi:"cultural practice and community are primary guides"},
+      {n:23, text:"How comfortable are you with sexual, sensual or kink exploration with yourself?", lo:"not comfortable", hi:"very comfortable"},
+      {n:24, text:"How comfortable are you with sexual, sensual or kink exploration with others?", lo:"not comfortable", hi:"very comfortable"},
+      {n:25, text:"How important are power dynamics, kink experiences, and frameworks for your play / relationships?", lo:"not important", hi:"essential"},
+      {n:26, text:"How important is intensity in kink (pain / power / edge play) for your play / relationships?", lo:"not important", hi:"essential"},
+      {n:27, text:"How important is being the initiator / giver / top for your play / relationships?", lo:"not important", hi:"essential"},
+      {n:28, text:"How important is the use of pain for your play / relationships?", lo:"not important", hi:"essential"},
+      {n:29, text:"How important is fetish exploration for your play / relationships?", lo:"not important", hi:"essential"},
+      {n:30, text:"How important is non-sexual sensual touch and exploration for your play?", lo:"not important", hi:"essential"},
+      {n:31, text:"At what frequency do you prefer sex?", lo:"rarely", hi:"daily or more"},
+      {n:32, text:"How important is variety and exploring taboos in your play?", lo:"not important", hi:"essential"},
+      {n:33, text:"How much does shame influence what you're willing to share or explore erotically?", lo:"minimal", hi:"significantly"},
     ]
   },
   {
@@ -310,11 +318,22 @@ const SECTIONS = [
     desc:"Need for co-regulation, emotional processing, calming",
     accent:"rgba(40,120,160,0.07)",
     questions:[
-      {n:27, text:"How important is emotional nurturance and processing for your kink / sexual relationships?", lo:"not important", hi:"essential"},
-      {n:28, text:"How important are calming / co-regulation experiences for your kink / sexual relationships?", lo:"not important", hi:"essential"},
-      {n:29, text:"How important is deep life intertwining — shared futures, shared logistics, building lives together — in your relationships?", lo:"not important", hi:"very important"},
-      {n:72, text:"How important is being emotionally witnessed — seen and understood — in your intimate and sexual relationships?", lo:"not important", hi:"essential"},
-      {n:73, text:"How much do you need verbal and emotional check-in during and after physical or sexual intimacy?", lo:"rarely needed", hi:"always needed"},
+      {n:34, text:"How strong is your need for play to happen only in an emotionally deep, committed / long-term relationship?", lo:"no need", hi:"strong need"},
+      {n:35, text:"When you think of your deepest emotional connections in your life, how often were they with (healthy) sexual partners?", lo:"rarely or never", hi:"almost always"},
+      {n:36, text:"To what intensity do you need emotional nurturance, witnessing, and processing for your kink / sensual / sexual relationships?", lo:"not important", hi:"essential"},
+      {n:37, text:"How important are calming / co-regulation experiences for your kink / sexual relationships?", lo:"not important", hi:"essential"},
+      {n:38, text:"How much do you need verbal and emotional check-ins during sexual / sensual or kink experiences?", lo:"rarely needed", hi:"always needed"},
+    ]
+  },
+  {
+    id:"relational", label:"Relational Architecture & Vision", color:"#C04878",
+    desc:"Relational structure vision, collective vs dyadic, cultural integration, relationship design",
+    accent:"rgba(192,72,120,0.07)",
+    questions:[
+      {n:39, text:"How important is deep life intertwining — shared futures, shared logistics, building lives together — in your relationships?", lo:"not important", hi:"very important"},
+      {n:40, text:"How open are you to having multiple partners or integrated connections in any format (romantic only, cohabitating life partners and shared households and groups, co-parenting partners, digital-only loves, kink partners, etc)?", lo:"not open", hi:"very open"},
+      {n:41, text:"How much do you want your social and community bonds to carry equal weight and investment as your romantic partnerships?", lo:"romantic partnership is primary", hi:"community holds equal or primary weight"},
+      {n:42, text:"How central are cultural traditions, ancestral practices, or community obligations to how you structure your relationships and living arrangements?", lo:"built my own framework independently", hi:"cultural practice and community are primary guides"},
     ]
   },
   {
@@ -322,9 +341,9 @@ const SECTIONS = [
     desc:"Spirituality, breathwork, body-based awareness in play",
     accent:"rgba(88,48,160,0.07)",
     questions:[
-      {n:33, text:"How important is spirituality / sacredness and ritual for your play?", lo:"not important", hi:"essential"},
-      {n:40, text:"How connected are you to your somatic / body awareness in play and relationships?", lo:"disconnected", hi:"deeply connected"},
-      {n:41, text:"How connected are you to your breath and its capacity to regulate / enhance pleasure?", lo:"disconnected", hi:"deeply connected"},
+      {n:43, text:"How important is spirituality / sacredness and ritual for your play or your daily life?", lo:"not important", hi:"essential"},
+      {n:44, text:"How connected are you to your somatic / body awareness in play and relationships?", lo:"disconnected", hi:"deeply connected"},
+      {n:45, text:"How connected are you to your breath and its capacity to regulate / enhance pleasure and well-being?", lo:"disconnected", hi:"deeply connected"},
     ]
   },
   {
@@ -333,22 +352,22 @@ const SECTIONS = [
     accent:"rgba(58,112,48,0.07)",
     intro:"These questions are about traits you may experience — not deficits. There is no wrong shape here.",
     questions:[
-      {n:44, text:"Altered states (lucid dreaming, daydreaming, hallucinations, visions, mania, psychosis, dissociation)", lo:"rarely", hi:"frequently"},
-      {n:45, text:"Differences in attention (regulating attention, monotropism, flow state, hyperfocusing)", lo:"rarely", hi:"frequently"},
-      {n:46, text:"Communication differences (non-spoken communication, echolalia, differences in tone, pace, eye contact)", lo:"rarely", hi:"frequently"},
-      {n:47, text:"Eating differences or challenges", lo:"rarely", hi:"frequently"},
-      {n:48, text:"Emotional processing differences (differences in intensity, duration, naming, describing emotions)", lo:"rarely", hi:"frequently"},
-      {n:49, text:"Empathy differences (cognitive, emotional, somatic, mirror, aesthetic empathy)", lo:"rarely", hi:"frequently"},
-      {n:50, text:"Memory differences (working memory, semantic, prospective, episodic, procedural memory)", lo:"rarely", hi:"frequently"},
-      {n:51, text:"Motor functioning differences (motor control, fine motor, gross motor, motor tics)", lo:"rarely", hi:"frequently"},
-      {n:52, text:"Plurality (multiplicity, distinct multiple selves, inner child, multiple inner dialogues, parts)", lo:"rarely", hi:"frequently"},
-      {n:53, text:"Sensory differences (sensory seeking, avoiding, hypersensitivity, hyposensitivity, synesthesia)", lo:"rarely", hi:"frequently"},
-      {n:54, text:"Sleep differences or problems", lo:"rarely", hi:"frequently"},
-      {n:55, text:"Stimming (auditory, tactile, vocal, visual, vestibular, proprioceptive, olfactory stims)", lo:"rarely", hi:"frequently"},
-      {n:56, text:"Time perception differences (variability, speeding up, slowing down, cyclical vs linear time)", lo:"rarely", hi:"frequently"},
-      {n:57, text:"Visual imagination differences (aphantasia, partial aphantasia, hyperphantasia)", lo:"rarely", hi:"frequently"},
-      {n:58, text:"How present are voices, sounds, or experiences that others don't seem to share or validate?", lo:"rarely", hi:"frequently"},
-      {n:59, text:"Differences in processing or expressing information", lo:"rarely", hi:"frequently"},
+      {n:46, text:"Altered states (lucid dreaming, daydreaming, hallucinations, visions, mania, psychosis, dissociation)", lo:"rarely", hi:"frequently"},
+      {n:47, text:"Differences in attention (regulating attention, monotropism, flow state, hyperfocusing)", lo:"rarely", hi:"frequently"},
+      {n:48, text:"Communication differences (non-spoken communication, echolalia, differences in tone, pace, eye contact)", lo:"rarely", hi:"frequently"},
+      {n:49, text:"Eating differences or challenges", lo:"rarely", hi:"frequently"},
+      {n:50, text:"Emotional processing differences (differences in intensity, duration, naming, describing emotions)", lo:"rarely", hi:"frequently"},
+      {n:51, text:"Empathy differences (cognitive, emotional, somatic, mirror, aesthetic empathy)", lo:"rarely", hi:"frequently"},
+      {n:52, text:"Memory differences (working memory, semantic, prospective, episodic, procedural memory)", lo:"rarely", hi:"frequently"},
+      {n:53, text:"Motor functioning differences (motor control, fine motor, gross motor, motor tics)", lo:"rarely", hi:"frequently"},
+      {n:54, text:"Plurality (multiplicity, distinct multiple selves, inner child, multiple inner dialogues, parts)", lo:"rarely", hi:"frequently"},
+      {n:55, text:"Sensory differences (sensory seeking, avoiding, hypersensitivity, hyposensitivity, synesthesia)", lo:"rarely", hi:"frequently"},
+      {n:56, text:"Sleep differences or problems", lo:"rarely", hi:"frequently"},
+      {n:57, text:"Stimming (auditory, tactile, vocal, visual, vestibular, proprioceptive, olfactory stims)", lo:"rarely", hi:"frequently"},
+      {n:58, text:"Time perception differences (variability, speeding up, slowing down, cyclical vs linear time)", lo:"rarely", hi:"frequently"},
+      {n:59, text:"Visual imagination differences (aphantasia, partial aphantasia, hyperphantasia)", lo:"rarely", hi:"frequently"},
+      {n:60, text:"Voice hearing (internal monologue, intrusive thoughts, external or internal voices)", lo:"rarely", hi:"frequently"},
+      {n:61, text:"Differences in processing or expressing information", lo:"rarely", hi:"frequently"},
     ]
   },
   {
@@ -357,12 +376,10 @@ const SECTIONS = [
     accent:"rgba(42,74,138,0.08)",
     intro:"These questions are about how digital and AI spaces function in your relational and emotional life. There is no judgment here — only information.",
     questions:[
-      {n:60, text:"How much do you rely on AI, parasocial content, or online personas for emotional connection?", lo:"rarely", hi:"primarily"},
-      {n:61, text:"How easy is it to be as vulnerable with humans as you are in digital spaces?", lo:"equally easy", hi:"much harder with humans", invert:true},
-      {n:62, text:"How often does digital connection substitute for in-person or embodied human contact?", lo:"rarely", hi:"frequently"},
-      {n:63, text:"How much does online approval (likes, responses, follows) affect your sense of self?", lo:"minimal impact", hi:"significant impact"},
-      {n:64, text:"How significant is AI in your erotic or intimate life currently?", lo:"not present", hi:"significant"},
-      {n:65, text:"How difficult is it to tolerate waiting for a human response vs. AI's immediacy?", lo:"easy", hi:"very difficult"},
+      {n:62, text:"To what frequency do you engage with AI? Low is occasional once a week use, high is constant daily use.", lo:"occasionally, once a week", hi:"constant daily use"},
+      {n:63, text:"How frequently do you engage with parasocial or online personality relationships as an escape and/or social, emotional or sexual outlet?", lo:"rarely", hi:"frequently, core part of my life"},
+      {n:64, text:"Of the people you are most vulnerable with, what percentage of them are digital or online?", lo:"mostly in-person connections", hi:"mostly digital or online"},
+      {n:65, text:"In this space, how integrated is your digital or online self with your physical life? Low means you're a different person in your online spaces and the two never meet.", lo:"completely separate — different person online", hi:"fully integrated everywhere"},
     ]
   }
 ];
@@ -498,7 +515,7 @@ function nextSection(){
     return;
   }
   if(currentSection<SECTIONS.length-1){currentSection++;renderSection();}
-  else{computeScores();showResults();}
+  else{computeScores();showScreen('email');window.scrollTo(0,0);}
 }
 
 function prevSection(){if(currentSection>0){currentSection--;renderSection();}}
@@ -506,12 +523,20 @@ function prevSection(){if(currentSection>0){currentSection--;renderSection();}}
 function computeScores(){
   scores={};
   SECTIONS.forEach(sec=>{
-    const vals=sec.questions.map(q=>{let v=(answers[q.n]||0)/5;if(q.invert)v=1-v;return v;});
-    scores[sec.id]=vals.reduce((a,b)=>a+b,0)/vals.length;
+    // Flagged questions (SGBV/consent screening items) are displayed and sent to the
+    // webhook, but excluded from the dimension average — they're clinical flags, not
+    // traits to be averaged into a wellbeing score.
+    const scored=sec.questions.filter(q=>!q.flag);
+    const vals=scored.map(q=>{let v=(answers[q.n]||0)/5;if(q.invert)v=1-v;return v;});
+    scores[sec.id]=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;
   });
   // Compute result tier
   const mh=scores.mentalhealth||0, needs=scores.needs||0, digital=scores.digital||0;
-  const si=(answers[13]||0)/5;
+  // Find the suicidal-ideation question dynamically via its safety flag, rather than a
+  // hardcoded question number, so renumbering the quiz never silently breaks crisis routing.
+  let siQ=null;
+  for(const sec of SECTIONS){ const f=sec.questions.find(q=>q.safety); if(f){siQ=f;break;} }
+  const si=siQ?(answers[siQ.n]||0)/5:0;
   const composite=(mh*0.4)+(needs*0.35)+(digital*0.25);
   if(si>=0.6||composite>=0.62) resultTier='problem';
   else if(composite>=0.35) resultTier='concern';
@@ -671,7 +696,7 @@ function showResults(){
     const lp=getPoint(angles[i],1.26);
     const words=sec.label.split(' ');
     const short=words.length>2?words[0]+' '+words[1]:words[0];
-    const anchor=Math.cos(angles[i])>.2?'start':Math.cos(angles[i])<-.2?'end':'middle';
+    const anchor=Math.cos(angles[i])>.2?'end':Math.cos(angles[i])<-.2?'start':'middle';
     svgHtml+=`<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="5" fill="${sec.color}"/>`;
     svgHtml+=`<text x="${lp.x.toFixed(1)}" y="${lp.y.toFixed(1)}" text-anchor="${anchor}" dominant-baseline="middle" font-size="9" fill="${sec.color}">${short}<\/text>`;
   });
@@ -706,6 +731,17 @@ function showResults(){
   window.scrollTo(0,0);
 }
 
+
+function gateSubmit(){
+  var name = document.getElementById('gate-name').value.trim();
+  var email = document.getElementById('gate-email').value.trim();
+  if(!name || !email){ alert('Please enter your name and email to see your results.'); return; }
+  // Populate the original name/email fields for submitEmail
+  document.getElementById('result-name').value = name;
+  document.getElementById('result-email').value = email;
+  submitEmail();
+}
+
 function submitEmail(){
   const email=document.getElementById('result-email').value.trim();
   const name=document.getElementById('result-name').value.trim();
@@ -725,6 +761,9 @@ function submitEmail(){
     somatic_score:+((scores.somatic||0)*5).toFixed(1),
     neurodivergence_score:+((scores.neurodivergence||0)*5).toFixed(1),
     digital_score:+((scores.digital||0)*5).toFixed(1),
+    consent_difficulty:+(answers[5]||0),
+    shame_on_rejection:+(answers[6]||0),
+    pushback_on_rejection:+(answers[7]||0),
     referral_code:referralCode||null,
     referral_tier:referralTier||null,
     quickchart_url:buildQuickChartURL(),
@@ -734,12 +773,60 @@ function submitEmail(){
   };
   const WEBHOOK_URL='https://hook.us2.make.com/6xrwfh7vvdqw329wm5u0mhe7l7v39kx9';
   fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
-  showScreen('thankyou');
-  window.scrollTo(0,0);
+  showResults();showScreen('results');window.scrollTo(0,0);
 }
 
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');}
 function retakeQuiz(){answers={};scores={};currentSection=0;showScreen('quiz');renderSection();}
+
+// INTERPRETATIONS — Soleil Merroir
+const INTERPS={
+  needs:[
+    [0,.3,"Your unmet needs are relatively low right now — but monitor when stressors shift. Survival stress impacts our relationship to time, energy and presence with ourselves and others. We were never wired to do this alone."],
+    [.3,.6,"Your unmet needs are likely impacting how you show up in relationship spaces. Financial and well-being stress limits time, capacity to connect, and the ability to relax into pleasure. The relational difficulty isn't pathology — it's the system."],
+    [.6,1,"Your unmet needs are significantly impacting how you relate. Poverty and capitalist exploitation isn't your fault, but the cultural shame can make us feel like it is. Belonging and love don't require financial stability — leaning into community support as a resource, not a deficit, is the move."],
+  ],
+  mentalhealth:[
+    [0,.3,"Your mental health needs are relatively low — but monitor when activation or dysregulation starts impacting daily life. As a more regulated person, you are a vital community anchor for others. That capacity matters and is worth protecting."],
+    [.3,.6,"Your mental health needs are elevated. These are reactions to stressors, trauma, and cultural rejection — your nervous system adapting to survive. Getting support to understand your activation patterns isn't about fixing you. It's about reducing distress so you have more capacity for connection, pleasure and belonging."],
+    [.6,1,"Your mental health needs are high, and it's important to seek human support. Your symptoms are your nervous system's adaptations to a world that is genuinely traumatizing — not a sign of deficit within you. Check our resource section, reach out to community, and know you are not alone in this."],
+  ],
+  identity:[
+    [0,.3,"Your identity awareness and relationship to your body remain strong. Consider how your identities and strengths provide capacity to care for others — while staying curious about the impact of identity-based power and privilege in your dynamics."],
+    [.3,.6,"There are core aspects of yourself in conflict that need support. The distress comes from biased and hateful cultural systems, not from anything wrong with who you are. Your identities and body are magical sites of possibility when held with care. What aspects can you show more self-compassion?"],
+    [.6,1,"You're experiencing high distress related to identity and body. What's wrong isn't you — it's the world you came into and how it treats people like you. This trauma affects every part of life and relationships, especially when those patterns are replicated in social dynamics. You get to be included in conversations about who you are from day one."],
+  ],
+  erotic:[
+    [0,.3,"Eroticism and sensuality are of low importance to you right now, and that's okay. Everyone relates to sexuality and pleasure differently, particularly those on the Ace / Grey scale. You can still create meaningful, pleasurable connection — with yourself, in fantasy, or with others — entirely on your own terms."],
+    [.3,.6,"Eroticism and sensuality matter to you and can be cultivated in endless forms — individually, with partners, digitally, in community, or in fantasy. Give yourself permission to explore what that looks like in each context, separately. Consent-based practice opens doors shame keeps closed."],
+    [.6,1,"Erotic and sensual expression are key to your well-being — your relational dynamics should make space for this, or create pathways to seek expression elsewhere. High desire isn't pathology, but it requires more communication and creativity to navigate ethically. You deserve access to all of yourself."],
+  ],
+  relational:[
+    [0,.3,"You're more monogamously oriented — seeking depth and commitment in a partner-centered world. A reminder: you are a whole person, not needing another to complete you. Your own secure attachment base, with community as foundation, is the long-term infrastructure for your well-being."],
+    [.3,.6,"You're relationally flexible — either on the journey to a new relationship ecosystem, or curious about what's possible if you break some boxes. What would it look like to disperse your needs across your relational ecosystem with consent and clarity?"],
+    [.6,1,"You're collectively wired and seeking interconnectedness — not just a partner, but an ecosystem. We're not defaulting to polyamory here. We're defaulting to dispersing your needs across the relational ecosystem with consent and clarity. Building communication and conflict skills will be the infrastructure that makes it work."],
+  ],
+  emotional:[
+    [0,.3,"You've identified low need for emotional nurturance. This often correlates with ND traits or socialization away from vulnerability. If you're comfortable here, how might you communicate early about dynamics with low emotional intertwinement? And what does aftercare look like for you?"],
+    [.3,.6,"Emotional nurturance accentuates your ability to feel close and connected. Feeling emotionally held might precede your ability to experience arousal or safety with another. It's key to communicate these needs early and often — including what support you need after intimate experiences."],
+    [.6,1,"Emotional nurturance is central to how you relate and a pathway to your sexual openness. You want to feel seen and held in your full emotional expansiveness. This requires high self-knowledge and the ability to teach your partners and community what it actually feels like to hold you well."],
+  ],
+  somatic:[
+    [0,.3,"Somatic grounding and spiritual exploration aren't required for your well-being, but they remain parts of you and of others. Is there an opening to finding more connection with your body and its cues as a pathway to more pleasure and presence?"],
+    [.3,.6,"Spirituality and somatic awareness are tools in your toolbox for well-being and relating. Explore connections that celebrate these aspects and give you space to play, ground and create ritual around pleasure and connection."],
+    [.6,1,"Your spiritual and somatic self are anchors to your well-being. Your body guides your intuition and rootedness — to ancestry, to nature, to other dimensions of being. These aren't separate from your sexuality; they are part of it."],
+  ],
+  neurodivergence:[
+    [0,.3,"Your ND-related traits are relatively low — but you've likely been or will be in connections with folks who have neurospicy brains and systems. Understanding how different brains and bodies work makes you a more attuned community member and partner."],
+    [.3,.6,"You're experiencing ND-related traits that are likely impacting your daily well-being and relationships. The more specifically you can name your experiences, patterns and sensitivities, the more you can create relational dynamics that actually suit you. These aren't deficits — they are places of adaptation and enhanced communication."],
+    [.6,1,"You're experiencing a high level of neurodivergence, which impacts every facet of how you relate. Map your traits, sensitivities and needs — and lead with them in relational conversations. It is not too much to ask people to make accommodations to communicate and understand you. You're not broken — you're a uniquely sexy rubix cube seeking to unlock your own patterns."],
+  ],
+  digital:[
+    [0,.3,"Digital relationships aren't a significant part of your ecosystem right now — but consider how digital communities might enhance your well-being and access to parts of yourself that are harder to reach in person. There's no shame in starting there."],
+    [.3,.6,"Digital relationships are already in your ecosystem. How integrated is the you who exists online compared to IRL? Digital connections nourish us best the more values-aligned and integrated our expression is — are you bringing yourself fully into your digital spaces?"],
+    [.6,1,"Your digital relationships are doing significant relational work, which can be both a resource and a challenge. Does your vulnerability have safe places to exist online? How balanced are those connections with away-from-keyboard human contact? These questions aren't judgment — they're a gentle cue toward embodied, human relating."],
+  ],
+};
 </script>
 </body>
-</html>// 
+</html>
