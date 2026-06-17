@@ -144,6 +144,12 @@
       </div>
     </div>
     <button class="btn" onclick="startQuiz()">Begin →</button>
+    <p class="sub" style="margin-top:14px;font-size:11px;opacity:.85">
+      Paid via Stripe? Use this direct access link: <a href="?prepaid=1" style="color:var(--teal);text-decoration:none">Start your quiz</a>.
+    </p>
+    <div id="prepaidNotice" class="safety-notice" style="display:none;margin-top:16px">
+      Thanks for purchasing access. Your quiz has been unlocked and will start automatically. If it doesn't, <a href="#" onclick="startQuiz();return false;">click here</a>.
+    </div>
   </div>
 </div>
 
@@ -435,6 +441,8 @@ const RESULT_TIERS = {
   }
 };
 
+const URL_PARAMS = new URLSearchParams(window.location.search);
+const PREPAID_ACCESS = URL_PARAMS.get('prepaid') === '1';
 let currentSection = 0, answers = {}, scores = {}, resultTier = 'healthy';
 
 // Referral codes — add/change as needed
@@ -778,6 +786,16 @@ function submitEmail(){
 
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');}
 function retakeQuiz(){answers={};scores={};currentSection=0;showScreen('quiz');renderSection();}
+
+function initPage(){
+  if(PREPAID_ACCESS){
+    const notice=document.getElementById('prepaidNotice');
+    if(notice) notice.style.display='block';
+    startQuiz();
+  }
+}
+
+initPage();
 
 // INTERPRETATIONS — Soleil Merroir
 const INTERPS={
