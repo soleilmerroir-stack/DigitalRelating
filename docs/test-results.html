@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TEST — Full Results Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;font-size:12px;line-height:1.6}
+.test-banner{background:#C4933A;color:#1A1D2E;padding:10px 20px;font-size:11px;font-weight:bold;letter-spacing:.1em;text-align:center;position:sticky;top:0;z-index:100}
+.container{max-width:900px;margin:0 auto;padding:32px 20px 80px}
+.panel{background:#242740;border:1px solid #363A55;border-radius:6px;padding:18px 22px;margin-bottom:16px}
+.label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#C4933A;margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:14px}
+.score-row{display:flex;align-items:center;gap:8px}
+.score-row label{font-size:10px;color:#8A8EAA;width:180px;flex-shrink:0}
+.score-row input[type=range]{flex:1}
+.score-val{font-size:10px;color:#C4933A;width:28px;text-align:right}
+.btn{display:inline-block;background:#C4933A;color:#1A1D2E;border:none;font-family:'DM Mono',monospace;font-size:10px;font-weight:bold;letter-spacing:.1em;padding:10px 24px;border-radius:3px;cursor:pointer;text-transform:uppercase}
+.btn-outline{background:transparent;border:1px solid #C4933A;color:#C4933A}
+input[type=text],input[type=email],select{background:#1A1D2E;border:1px solid #363A55;border-radius:3px;color:#F2EDE4;font-family:'DM Mono',monospace;font-size:11px;padding:7px 10px;width:100%;outline:none}
+input[type=text]:focus,input[type=email]:focus{border-color:#C4933A}
+.tier-select{display:flex;gap:8px;margin-bottom:4px}
+.tier-btn{padding:5px 14px;border-radius:3px;border:1px solid #363A55;background:transparent;color:#8A8EAA;font-family:'DM Mono',monospace;font-size:10px;cursor:pointer}
+.tier-btn.active{border-color:#C4933A;color:#C4933A;background:rgba(196,147,58,0.1)}
+#output{display:none}
+.result-section{margin-bottom:20px}
+.rs-title{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#C4933A;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid #363A55}
+/* dim cards */
+.dim-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:16px}
+.dim-card{background:#1A1D2E;border:1px solid #363A55;border-radius:5px;padding:12px 14px;border-left:3px solid}
+.dim-bar{height:5px;background:rgba(255,255,255,0.06);border-radius:3px;margin:6px 0 4px;overflow:hidden}
+.dim-fill{height:100%;border-radius:3px}
+/* radar */
+svg.radar text{font-family:'DM Mono',monospace}
+/* link box */
+.link-box{background:#1A1D2E;border:1px solid #363A55;border-radius:3px;padding:10px 12px;font-size:10px;color:#8A8EAA;word-break:break-all;margin:10px 0}
+.link-box span{color:#C4933A}
+/* paid preview */
+.paid-section{background:rgba(196,147,58,0.06);border:1px solid rgba(196,147,58,0.25);border-radius:6px;padding:16px 20px;margin-bottom:14px}
+.paid-section h3{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;font-weight:300;color:#C4933A;margin-bottom:8px}
+.paid-section p{font-size:11px;color:#8A8EAA;line-height:1.7}
+/* skill pills */
+.skill-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.skill-pill{font-size:9px;padding:3px 10px;border-radius:20px;letter-spacing:.04em}
+</style>
+</head>
+<body>
+
+<div class="test-banner">⚠ TEST MODE — Full results preview — not for sharing publicly</div>
+
+<div class="container">
+
+  <div style="margin-bottom:20px">
+    <div style="font-size:9px;color:#8A8EAA;letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px">cyborgdreamz · test dashboard</div>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;font-weight:300">Full Results Preview</h1>
+    <p style="font-size:11px;color:#8A8EAA;margin-top:6px">Set scores, pick a tier, generate the full output. Also generates the shareable results URL for testing email links.</p>
+  </div>
+
+  <!-- SCORE INPUTS -->
+  <div class="panel">
+    <div class="label">Step 1 — Set dimension scores (0–5)</div>
+    <div id="sliders"></div>
+  </div>
+
+  <!-- METADATA -->
+  <div class="panel">
+    <div class="label">Step 2 — Test metadata</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
+      <div>
+        <div style="font-size:9px;color:#8A8EAA;margin-bottom:4px">Name</div>
+        <input type="text" id="testName" value="Soleil" placeholder="Test name">
+      </div>
+      <div>
+        <div style="font-size:9px;color:#8A8EAA;margin-bottom:4px">Email</div>
+        <input type="email" id="testEmail" value="hello@soleilmerroir.com" placeholder="Test email">
+      </div>
+      <div>
+        <div style="font-size:9px;color:#8A8EAA;margin-bottom:4px">Result Tier</div>
+        <div class="tier-select" id="tierBtns">
+          <button class="tier-btn" onclick="setTier('healthy',this)">Centrado/a</button>
+          <button class="tier-btn active" onclick="setTier('concern',this)">A la Deriva</button>
+          <button class="tier-btn" onclick="setTier('problem',this)">Deriva Profunda</button>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div style="font-size:9px;color:#8A8EAA">Quick presets:</div>
+      <button class="btn btn-outline" style="padding:4px 12px;font-size:9px" onclick="preset('high-digital')">High Digital</button>
+      <button class="btn btn-outline" style="padding:4px 12px;font-size:9px" onclick="preset('high-erotic')">High Erotic</button>
+      <button class="btn btn-outline" style="padding:4px 12px;font-size:9px" onclick="preset('balanced')">Balanced</button>
+      <button class="btn btn-outline" style="padding:4px 12px;font-size:9px" onclick="preset('high-nd')">High ND</button>
+    </div>
+  </div>
+
+  <!-- GENERATE -->
+  <div style="display:flex;gap:10px;margin-bottom:24px">
+    <button class="btn" onclick="generate()">Generate Full Preview →</button>
+    <button class="btn btn-outline" onclick="generateURL()">Generate Results URL Only</button>
+  </div>
+
+  <!-- GENERATED URL -->
+  <div id="urlBox" style="display:none" class="panel">
+    <div class="label">Results page URL (paste into browser or email)</div>
+    <div class="link-box" id="urlDisplay"></div>
+    <button class="btn btn-outline" style="padding:5px 14px;font-size:9px;margin-top:6px" onclick="copyURL()">Copy URL</button>
+    <div style="font-size:9px;color:#8A8EAA;margin-top:8px">
+      This is the URL Make.com builds from quiz scores and sends in the results email.
+      Test it by pasting into a browser — it should load the results page with these exact scores.
+    </div>
+  </div>
+
+  <!-- FULL OUTPUT -->
+  <div id="output">
+
+    <!-- RADAR -->
+    <div class="result-section">
+      <div class="rs-title">9-Dimension Radar</div>
+      <svg class="radar" id="radarSvg" viewBox="0 0 400 400" width="100%" style="max-width:400px;display:block;margin:0 auto"></svg>
+    </div>
+
+    <!-- DIMENSION CARDS -->
+    <div class="result-section">
+      <div class="rs-title">Dimension Cards — free tier (client sees this immediately)</div>
+      <div class="dim-grid" id="dimCards"></div>
+    </div>
+
+    <!-- PAID CONTENT PREVIEW -->
+    <div class="result-section">
+      <div class="rs-title">Paid content — unlocked after $20 purchase (in-depth email)</div>
+
+      <div class="paid-section">
+        <h3>Areas of Concern — deeper look</h3>
+        <div id="concernsContent"></div>
+      </div>
+
+      <div class="paid-section">
+        <h3>Priority Skill Cards</h3>
+        <p style="margin-bottom:8px">Based on top 3 dimensions:</p>
+        <div class="skill-pills" id="skillPillsOutput"></div>
+      </div>
+
+      <div class="paid-section">
+        <h3>Relationship Type Recommendations</h3>
+        <div id="relRecs"></div>
+      </div>
+
+      <div class="paid-section">
+        <h3>Strategies for Progress</h3>
+        <div id="strategies"></div>
+      </div>
+    </div>
+
+    <!-- ECOSYSTEM VIZ -->
+    <div class="result-section">
+      <div class="rs-title">Relationship Ecosystem Map</div>
+      <svg id="ecoSvg" viewBox="0 0 480 280" width="100%" style="max-width:480px;display:block;margin:0 auto"></svg>
+    </div>
+
+    <!-- EMAIL PREVIEW LINK -->
+    <div class="result-section">
+      <div class="rs-title">QuickChart radar URL (what goes in the email)</div>
+      <div class="link-box" id="chartUrl"></div>
+      <div style="margin-top:10px">
+        <img id="chartPreview" style="max-width:300px;border:1px solid #363A55;border-radius:4px" alt="Radar chart preview">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const DIMS=[
+  {id:'needs',    label:'Necesidades Básicas',    color:'#3A8A80'},
+  {id:'mentalhealth', label:'Carga Mental',       color:'#C4933A'},
+  {id:'identity', label:'Identidad y Cuerpo',     color:'#C4607A'},
+  {id:'erotic',   label:'Erótico y Kink',         color:'#6A4A9A'},
+  {id:'relational',label:'Arquitectura Relacional',color:'#C4607A'},
+  {id:'emotional',label:'Nutrición Emocional',    color:'#3A8A80'},
+  {id:'somatic',  label:'Somático y Espiritual',  color:'#6A4A9A'},
+  {id:'neurodivergence',label:'Neurodivergencia', color:'#C4933A'},
+  {id:'digital',  label:'Relación Digital',       color:'#2A6A8A'},
+];
+
+const SKILL_MAP={
+  needs:[{n:'ARTICULATOR',c:'#3A8A80'},{n:'CONNECTOR',c:'#C4933A'},{n:'REGULATOR',c:'#2A6A8A'}],
+  mentalhealth:[{n:'REGULATOR',c:'#2A6A8A'},{n:'THE SEER',c:'#3A8A80'},{n:'SHAME SHIFTER',c:'#C4933A'}],
+  identity:[{n:'THE BRAVE',c:'#C4607A'},{n:'SHAME SHIFTER',c:'#C4933A'},{n:'THE SOMATIC',c:'#6A4A9A'}],
+  erotic:[{n:'EROS',c:'#C4607A'},{n:'SAFETY KEEPER',c:'#8A2A3A'},{n:'SOVEREIGN',c:'#6A4A9A'}],
+  relational:[{n:'EMPATH',c:'#C4607A'},{n:'CONNECTOR',c:'#C4933A'},{n:'SOVEREIGN',c:'#6A4A9A'}],
+  emotional:[{n:'WITNESS',c:'#2A6A8A'},{n:'EMPATH',c:'#C4607A'},{n:'THE MENDER',c:'#C4933A'}],
+  somatic:[{n:'THE SOMATIC',c:'#6A4A9A'},{n:'THE CURIOUS',c:'#2A6A8A'},{n:'REGULATOR',c:'#3A8A80'}],
+  neurodivergence:[{n:'REGULATOR',c:'#3A8A80'},{n:'WITNESS',c:'#2A6A8A'},{n:'ARTICULATOR',c:'#3A8A80'}],
+  digital:[{n:'THE BRAVE',c:'#C4607A'},{n:'SHAME SHIFTER',c:'#C4933A'},{n:'CONNECTOR',c:'#C4933A'}],
+};
+
+let currentTier='concern';
+let scores={};
+
+// Build sliders
+const sliderContainer=document.getElementById('sliders');
+DIMS.forEach(d=>{
+  const row=document.createElement('div');
+  row.className='score-row';
+  row.style.marginBottom='8px';
+  row.innerHTML='<label style="font-size:10px;color:#8A8EAA;width:190px;flex-shrink:0">'+d.label+'</label>'
+    +'<input type="range" min="0" max="5" step="0.1" value="2.5" id="sl_'+d.id+'" oninput="updateVal(\''+d.id+'\',this.value)">'
+    +'<span class="score-val" id="sv_'+d.id+'">2.5</span>';
+  sliderContainer.appendChild(row);
+  scores[d.id]=2.5;
+});
+
+function updateVal(id,val){
+  scores[id]=parseFloat(val);
+  document.getElementById('sv_'+id).textContent=parseFloat(val).toFixed(1);
+}
+
+function setTier(tier,btn){
+  currentTier=tier;
+  document.querySelectorAll('.tier-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function preset(type){
+  const presets={
+    'high-digital': {needs:2,mentalhealth:2.5,identity:2,erotic:3,relational:3,emotional:2,somatic:1.5,neurodivergence:2,digital:4.5},
+    'high-erotic':  {needs:2,mentalhealth:2,identity:3,erotic:4.5,relational:4,emotional:2.5,somatic:3,neurodivergence:2,digital:2},
+    'balanced':     {needs:2.5,mentalhealth:2.5,identity:2.5,erotic:2.5,relational:2.5,emotional:2.5,somatic:2.5,neurodivergence:2.5,digital:2.5},
+    'high-nd':      {needs:3,mentalhealth:3.5,identity:3,erotic:2,relational:2.5,emotional:3,somatic:2,neurodivergence:4.5,digital:3},
+  };
+  const p=presets[type];
+  if(!p)return;
+  DIMS.forEach(d=>{
+    const val=p[d.id]||2.5;
+    scores[d.id]=val;
+    document.getElementById('sl_'+d.id).value=val;
+    document.getElementById('sv_'+d.id).textContent=val.toFixed(1);
+  });
+}
+
+function buildURL(){
+  const name=encodeURIComponent(document.getElementById('testName').value||'Soleil');
+  const tier=currentTier;
+  let url=window.location.origin+'/results.html?name='+name+'&tier='+tier;
+  DIMS.forEach(d=>{url+='&'+d.id+'='+scores[d.id].toFixed(1);});
+  return url;
+}
+
+function buildQuickChartURL(){
+  const labels=DIMS.map(d=>d.label.split(' ').slice(0,2).join(' '));
+  const data=DIMS.map(d=>parseFloat(scores[d.id]||0).toFixed(1));
+  const cfg={type:'radar',data:{labels:labels,datasets:[{data:data,borderColor:'rgb(196,147,58)',backgroundColor:'rgba(196,147,58,0.12)',borderWidth:2,pointBackgroundColor:'rgb(196,147,58)',pointRadius:4}]},options:{scale:{ticks:{min:0,max:5,stepSize:1,display:false},pointLabels:{fontSize:9}},legend:{display:false}}};
+  return 'https://quickchart.io/chart?width=400&height=400&c='+encodeURIComponent(JSON.stringify(cfg));
+}
+
+function generateURL(){
+  const url=buildURL();
+  document.getElementById('urlBox').style.display='block';
+  document.getElementById('urlDisplay').innerHTML='<span>'+url+'</span>';
+  window.scrollTo({top:document.getElementById('urlBox').offsetTop-60,behavior:'smooth'});
+}
+
+function copyURL(){
+  const text=document.getElementById('urlDisplay').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=event.target;
+    btn.textContent='Copied!';
+    setTimeout(()=>btn.textContent='Copy URL',2000);
+  });
+}
+
+function buildRadar(){
+  const svg=document.getElementById('radarSvg');
+  const cx=200,cy=200,r=150,n=DIMS.length;
+  const angles=DIMS.map((_,i)=>(i/n)*Math.PI*2-Math.PI/2);
+  const pt=(a,v)=>({x:cx+Math.cos(a)*r*v,y:cy+Math.sin(a)*r*v});
+  let html='';
+  [.25,.5,.75,1].forEach(lv=>{
+    const pts=angles.map(a=>pt(a,lv));
+    html+='<path d="'+pts.map((p,i)=>(i===0?'M':'L')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ')+' Z" fill="none" stroke="rgba(196,147,58,0.1)" stroke-width="1"\/>';
+  });
+  angles.forEach((a,i)=>{const e=pt(a,1);html+='<line x1="'+cx+'" y1="'+cy+'" x2="'+e.x.toFixed(1)+'" y2="'+e.y.toFixed(1)+'" stroke="rgba(196,147,58,0.1)" stroke-width="1"\/>';});
+  const dp=DIMS.map((d,i)=>pt(angles[i],(scores[d.id]||0)/5));
+  html+='<path d="'+dp.map((p,i)=>(i===0?'M':'L')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ')+' Z" fill="rgba(196,147,58,0.12)" stroke="#C4933A" stroke-width="2"\\/>';
+  DIMS.forEach((d,i)=>{
+    const v=(scores[d.id]||0)/5;
+    const p=pt(angles[i],v);
+    const lp=pt(angles[i],1.22);
+    const anchor=Math.cos(angles[i])>.2?'start':Math.cos(angles[i])<-.2?'end':'middle';
+    html+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="4" fill="'+d.color+'"\/>';
+    html+='<text x="'+lp.x.toFixed(1)+'" y="'+lp.y.toFixed(1)+'" text-anchor="'+anchor+'" dominant-baseline="middle" font-size="8.5" fill="'+d.color+'">'+d.label.split(' ')[0]+'<\/text>';
+  });
+  svg.innerHTML=html;
+}
+
+function buildDimCards(){
+  const container=document.getElementById('dimCards');
+  container.innerHTML='';
+  DIMS.forEach(d=>{
+    const score=scores[d.id]||0;
+    const pct=Math.round((score/5)*100);
+    const div=document.createElement('div');
+    div.className='dim-card';
+    div.style.borderLeftColor=d.color;
+    div.innerHTML='<div style="font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:'+d.color+';margin-bottom:4px">'+d.label+'<\/div>'
+      +'<div class="dim-bar"><div class="dim-fill" style="width:'+pct+'%;background:'+d.color+';opacity:0.7"><\/div><\/div>'
+      +'<div style="font-size:10px;color:#8A8EAA;margin-bottom:6px">'+parseFloat(score).toFixed(1)+' / 5<\/div>'
+      +'<div style="font-size:10px;color:#8A8EAA;font-style:italic;border-top:1px solid #363A55;padding-top:6px;line-height:1.6">[Your interpretation text for '+d.label+' at this score]<\/div>';
+    container.appendChild(div);
+  });
+}
+
+function buildSkillPills(){
+  const sorted=[...DIMS].sort((a,b)=>(scores[b.id]||0)-(scores[a.id]||0)).slice(0,3);
+  const allSkills=[];
+  sorted.forEach(d=>{(SKILL_MAP[d.id]||[]).forEach(s=>{if(!allSkills.find(x=>x.n===s.n))allSkills.push(s);});});
+  const container=document.getElementById('skillPillsOutput');
+  container.innerHTML='';
+  allSkills.slice(0,8).forEach(s=>{
+    const pill=document.createElement('span');
+    pill.className='skill-pill';
+    pill.style.background=s.c+'33';
+    pill.style.border='1px solid '+s.c+'55';
+    pill.style.color=s.c;
+    pill.textContent=s.n;
+    container.appendChild(pill);
+  });
+}
+
+function buildConcerns(){
+  const container=document.getElementById('concernsContent');
+  const sorted=[...DIMS].sort((a,b)=>(scores[b.id]||0)-(scores[a.id]||0)).slice(0,3);
+  container.innerHTML=sorted.map(d=>{
+    const score=scores[d.id]||0;
+    return '<div style="margin-bottom:10px;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:3px;border-left:2px solid '+d.color+'">'
+      +'<div style="font-size:10px;font-weight:bold;color:'+d.color+';margin-bottom:4px">'+d.label+' — '+parseFloat(score).toFixed(1)+'/5<\/div>'
+      +'<div style="font-size:10px;color:#8A8EAA;line-height:1.6">[Soleil writes: deeper analysis of '+d.label+' at this score level]<\/div>'
+      +'<\/div>';
+  }).join('');
+}
+
+function buildRelRecs(){
+  const container=document.getElementById('relRecs');
+  const rel=scores.relational||0;
+  const erotic=scores.erotic||0;
+  const nd=scores.neurodivergence||0;
+  const digital=scores.digital||0;
+  let recs=[];
+  if(rel>3)recs.push({title:'Ethical Non-Monogamy / Relationship Anarchy',color:'#6A4A9A',note:'Relational Architecture score > 3 — openness to multiple structures'});
+  if(erotic>3)recs.push({title:'Kink-Aware & Sex-Positive Community',color:'#C4607A',note:'Erotic & Kink score > 3'});
+  if(erotic>3.5)recs.push({title:'Professional Erotic & Somatic Services',color:'#C4933A',note:'Erotic > 3.5 — surrogate partners, somatic sex educators, sex workers'});
+  if(nd>3)recs.push({title:'Neuroaffirmative Relating',color:'#3A8A80',note:'Neurodivergencia score > 3'});
+  if(digital>3)recs.push({title:'Ethical AI Tool Suite',color:'#2A6A8A',note:'Digital Relating score > 3 — intentional tech use'});
+  if(recs.length===0)recs=[{title:'Intentional Relating Practice',color:'#C4933A',note:'Balanced profile — focused skill-building'}];
+  container.innerHTML=recs.map(r=>'<div style="margin-bottom:8px;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:3px;border-left:2px solid '+r.color+'">'
+    +'<div style="font-size:10px;font-weight:bold;color:'+r.color+';margin-bottom:2px">'+r.title+'<\/div>'
+    +'<div style="font-size:9.5px;color:#8A8EAA">Triggered by: '+r.note+'<\/div>'
+    +'<\/div>').join('');
+}
+
+function buildStrategies(){
+  const container=document.getElementById('strategies');
+  const top=DIMS.sort((a,b)=>(scores[b.id]||0)-(scores[a.id]||0)).slice(0,3);
+  container.innerHTML=['This week: Complete the Vulnerability Wheel. Note where AI sits vs your humans.',
+    'This month: One true thing shared with your safest human instead of AI.',
+    'Next 90 days: CFT six-step tool for each significant digital relationship.',
+    'When ready: Bring this analysis to a session. soleilmerroir.com',
+    'For erotic growth: EROS card first — know what you want before bringing it to another person.',
+  ].map((s,i)=>'<div style="display:flex;gap:8px;margin-bottom:8px;align-items:flex-start">'
+    +'<span style="font-family:DM Mono,monospace;font-size:9px;color:#C4933A;flex-shrink:0;margin-top:2px">0'+(i+1)+'<\/span>'
+    +'<span style="font-size:10px;color:#8A8EAA;line-height:1.6">'+s+'<\/span><\/div>').join('');
+}
+
+function buildEco(){
+  const svg=document.getElementById('ecoSvg');
+  const dig=(scores.digital||0)/5;
+  const rel=(scores.relational||0)/5;
+  const mh=(scores.mentalhealth||0)/5;
+  const zones=[
+    {label:'IA / Parasocial',color:'#2A4A8A',now:Math.min(0.9,dig*1.1)},
+    {label:'Humano Digital',color:'#107870',now:Math.min(0.9,dig*0.5+mh*0.2)},
+    {label:'Comunidad Presencial',color:'#906010',now:Math.max(0.05,1-dig-rel*0.25)},
+    {label:'En Pareja',color:'#C04878',now:Math.min(0.8,rel*0.35+0.1)},
+  ];
+  const tot=zones.reduce((a,z)=>a+z.now,0);
+  zones.forEach(z=>z.now/=tot);
+  let html='';
+  const cx=130,cy=130,r=110;
+  let cum=0;
+  function arc(cx,cy,r,s,e,col){
+    const sa=s*Math.PI*2-Math.PI/2,ea=e*Math.PI*2-Math.PI/2;
+    const lg=e-s>0.5?1:0;
+    const x1=cx+Math.cos(sa)*r,y1=cy+Math.sin(sa)*r;
+    const x2=cx+Math.cos(ea)*r,y2=cy+Math.sin(ea)*r;
+    return '<path d="M'+cx+','+cy+' L'+x1.toFixed(1)+','+y1.toFixed(1)+' A'+r+','+r+' 0 '+lg+',1 '+x2.toFixed(1)+','+y2.toFixed(1)+' Z" fill="'+col+'" opacity="0.75"\/>';
+  }
+  zones.forEach(z=>{html+=arc(cx,cy,r,cum,cum+z.now,z.color);cum+=z.now;});
+  html+='<circle cx="'+cx+'" cy="'+cy+'" r="32" fill="#1A1D2E"\/>';
+  html+='<text x="'+cx+'" y="'+(cy-5)+'" text-anchor="middle" font-size="8" fill="#C4933A" font-family="DM Mono,monospace">AHORA<\/text>';
+  let ly=16;
+  zones.forEach(z=>{
+    html+='<rect x="280" y="'+(ly-8)+'" width="9" height="9" rx="2" fill="'+z.color+'" opacity="0.8"\/>';
+    html+='<text x="294" y="'+ly+'" font-size="9" fill="#8A8EAA" font-family="DM Mono,monospace">'+z.label+' ('+Math.round(z.now*100)+'%)<\/text>';
+    ly+=18;
+  });
+  svg.innerHTML=html;
+}
+
+function generate(){
+  buildRadar();
+  buildDimCards();
+  buildSkillPills();
+  buildConcerns();
+  buildRelRecs();
+  buildStrategies();
+  buildEco();
+  const chartUrl=buildQuickChartURL();
+  document.getElementById('chartUrl').innerHTML='<span>'+chartUrl+'<\/span>';
+  document.getElementById('chartPreview').src=chartUrl;
+  generateURL();
+  document.getElementById('output').style.display='block';
+  setTimeout(()=>document.getElementById('output').scrollIntoView({behavior:'smooth'}),100);
+}
+</script>
+</body>
+</html>

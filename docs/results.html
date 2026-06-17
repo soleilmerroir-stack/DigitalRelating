@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Relationship Ecosystem Results — cyborgdreamz</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden}
+.container{max-width:900px;margin:0 auto;padding:40px 24px 80px}
+.eyebrow{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:#C4933A;margin-bottom:10px}
+.gold-rule{height:1px;background:linear-gradient(90deg,transparent,#C4933A,transparent);margin:24px 0;position:relative}
+.gold-rule::after{content:'◆';position:absolute;left:50%;top:-7px;transform:translateX(-50%);font-size:10px;color:#C4933A;background:#1A1D2E;padding:0 6px}
+.sub{font-size:12px;color:#8A8EAA;line-height:1.75}
+.card{background:#242740;border:1px solid #363A55;border-radius:6px;padding:16px 20px;margin-bottom:12px}
+.card-accent{border-left:3px solid}
+.tier-box{border-radius:6px;padding:20px 24px;margin-bottom:24px}
+.dim-bar-track{height:6px;background:rgba(255,255,255,0.07);border-radius:3px;margin:8px 0 4px;overflow:hidden}
+.dim-bar-fill{height:100%;border-radius:3px;transition:width 1s ease}
+.dim-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:20px 0}
+.locked{position:relative;overflow:hidden}
+.locked-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(26,29,46,0.95) 70%);display:flex;align-items:flex-end;padding-bottom:20px;justify-content:center}
+.locked-msg{text-align:center}
+.skill-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.skill-pill{font-size:9px;padding:3px 10px;border-radius:20px;letter-spacing:.04em}
+.cta-card{padding:18px 22px;border-radius:6px;border:1px solid;text-decoration:none;display:block;margin-bottom:12px}
+.flag-box{border-radius:6px;padding:14px 18px;margin-bottom:14px;border:1px solid}
+.rel-rec{padding:14px 18px;border-radius:6px;margin-bottom:10px;border:1px solid rgba(255,255,255,0.07)}
+.rel-rec-title{font-size:11px;font-weight:bold;margin-bottom:4px}
+.rel-rec-body{font-size:10.5px;color:#8A8EAA;line-height:1.65}
+/* Deco */
+.deco-top{height:4px;background:linear-gradient(90deg,#C4933A,#E8C068,#C4933A)}
+.diamond-row{display:flex;justify-content:center;gap:16px;padding:8px 0}
+.diamond{width:8px;height:8px;background:#C4933A;transform:rotate(45deg)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .5s ease both}
+.crisis-box{background:rgba(196,96,122,0.12);border:1px solid rgba(196,96,122,0.4);border-radius:6px;padding:16px 20px;margin-bottom:16px}
+</style>
+</head>
+<body>
+<div class="deco-top"></div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="fade-up" style="margin-bottom:28px">
+    <div class="eyebrow">cyborgdreamz · relationship ecosystem quiz</div>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,5vw,42px);font-weight:300;font-style:italic;line-height:1.15;margin-bottom:8px">
+      Your Ecosystem, <span id="nameDisplay" style="color:#C4933A">friend</span>
+    </h1>
+    <p class="sub">9 dimensions · a map, not a verdict · there is no ideal shape</p>
+  </div>
+
+  <!-- CRISIS FLAG — shown only if needed -->
+  <div id="crisisBox" class="crisis-box fade-up" style="display:none">
+    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#C4607A;margin-bottom:8px;font-weight:bold">
+      Before you continue — please read this
+    </div>
+    <p class="sub" style="color:#F2EDE4;margin-bottom:10px" id="crisisText"></p>
+    <p style="font-size:11px;color:#C4607A">
+      988 Suicide & Crisis Lifeline: call or text <strong style="color:#F2EDE4">988</strong> · 
+      Crisis Text Line: text <strong style="color:#F2EDE4">HOME to 741741</strong> · 
+      RAINN: <strong style="color:#F2EDE4">1-800-656-4673</strong>
+    </p>
+  </div>
+
+  <!-- TIER BOX -->
+  <div class="tier-box fade-up" id="tierBox">
+    <div class="eyebrow" id="tierLabel">Your result</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;font-weight:300;margin-bottom:8px" id="tierTagline"></h2>
+    <p class="sub" id="tierText"></p>
+  </div>
+
+  <!-- RADAR -->
+  <div class="fade-up" style="display:flex;flex-direction:column;align-items:center;margin-bottom:28px">
+    <div class="diamond-row"><div class="diamond"></div><div class="diamond"></div><div class="diamond"></div></div>
+    <p class="eyebrow" style="margin-bottom:12px">your 9-dimension profile</p>
+    <svg id="radarSvg" viewBox="0 0 480 480" width="100%" style="max-width:460px"></svg>
+    <p style="font-size:9px;color:#8A8EAA;margin-top:8px;font-style:italic">Further from center = higher score in that dimension</p>
+  </div>
+
+  <!-- DIMENSION CARDS — FREE -->
+  <div class="gold-rule"></div>
+  <div class="eyebrow" style="margin-bottom:8px">Your 9 dimensions</div>
+  <p class="sub" style="margin-bottom:16px">Each bar shows your score. The interpretation below each is your free overview.</p>
+  <div class="dim-grid fade-up" id="dimGrid"></div>
+
+  <!-- LOCKED — PAID SECTION TEASER -->
+  <div class="gold-rule"></div>
+  <div class="eyebrow" style="margin-bottom:8px">In-depth analysis — included with the workbook</div>
+
+  <div class="locked fade-up" style="margin-bottom:24px">
+    <div id="paidPreview" style="opacity:0.35;pointer-events:none">
+      <div class="card card-accent" style="border-color:#C4933A;margin-bottom:10px">
+        <div style="font-size:10px;letter-spacing:2px;color:#C4933A;text-transform:uppercase;margin-bottom:8px">Areas of concern — deeper look</div>
+        <p class="sub">Your highest-scoring dimensions are telling you something important. This section breaks down what each elevated score actually means clinically, what it typically looks like in daily life, and what the research says about why it matters for relationships...</p>
+      </div>
+      <div class="card card-accent" style="border-color:#3A8A80;margin-bottom:10px">
+        <div style="font-size:10px;letter-spacing:2px;color:#3A8A80;text-transform:uppercase;margin-bottom:8px">Areas of growth — your skill priorities</div>
+        <p class="sub">Based on your profile, these are the relational skills with the highest leverage for growth. Each skill card includes your current level, what AI dependency does to it, and how to level up...</p>
+      </div>
+      <div class="card card-accent" style="border-color:#6A4A9A;margin-bottom:10px">
+        <div style="font-size:10px;letter-spacing:2px;color:#6A4A9A;text-transform:uppercase;margin-bottom:8px">Relationship type recommendations</div>
+        <p class="sub">Based on your relational style, erotic importance, neurodivergence, and identity stressors — here are the relationship structures and contexts most likely to work for you. Including openness to non-monogamy, erotic exploration, and sex-positive community...</p>
+      </div>
+      <div class="card card-accent" style="border-color:#C4607A;margin-bottom:10px">
+        <div style="font-size:10px;letter-spacing:2px;color:#C4607A;text-transform:uppercase;margin-bottom:8px">Strategies for progress in each area</div>
+        <p class="sub">Concrete, sequenced next steps for each of your 9 dimensions. Including erotic and somatic practices, community pathways, therapeutic modalities, and digital relating guidelines tailored to your profile...</p>
+      </div>
+    </div>
+    <div class="locked-overlay">
+      <div class="locked-msg">
+        <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#C4933A;margin-bottom:10px">🔒 Unlock the full analysis</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:#F2EDE4;margin-bottom:10px">$20 · Workbook + In-Depth Results</div>
+        <p style="font-size:11px;color:#8A8EAA;margin-bottom:16px;max-width:420px">Includes the 39-page relationship ecosystem workbook, AI relating add-on workbook, full skill deck access, and your personalized in-depth results email.</p>
+        <a href="https://soleilmerroir.com/workbook" style="display:inline-block;background:#C4933A;color:#1A1D2E;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;font-weight:bold;padding:11px 28px;border-radius:3px;text-decoration:none;text-transform:uppercase">
+          Get the Full Analysis →
+        </a>
+        <p style="font-size:9px;color:#8A8EAA;margin-top:10px">Therapist? Ask about the clinician referral code.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FREE PATHWAYS -->
+  <div class="gold-rule"></div>
+  <div class="eyebrow" style="margin-bottom:12px">Two free pathways based on your profile</div>
+
+  <div id="pathwayAI" class="cta-card" style="border-color:rgba(58,138,128,0.4);background:rgba(58,138,128,0.07)">
+    <div style="font-size:10px;letter-spacing:2px;color:#3A8A80;margin-bottom:6px;text-transform:uppercase">Ethical AI Tool Suite</div>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;font-weight:300;color:#F2EDE4;margin-bottom:6px">Use AI intentionally — with ethics built in</h3>
+    <p class="sub" id="aiPathwayText">Curated AI tools matched to your actual needs and quiz results.</p>
+    <span style="font-size:10px;color:#3A8A80;display:block;margin-top:10px">Explore the toolkit → soleilmerroir.com</span>
+  </div>
+
+  <div id="pathwayHuman" class="cta-card" style="border-color:rgba(196,96,122,0.4);background:rgba(196,96,122,0.07)">
+    <div style="font-size:10px;letter-spacing:2px;color:#C4607A;margin-bottom:6px;text-transform:uppercase">Human Relating & Engagement Plan</div>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;font-weight:300;color:#F2EDE4;margin-bottom:6px" id="humanPathwayTitle">A graduated plan for rebuilding human relational capacity</h3>
+    <p class="sub" id="humanPathwayText">Online and AFK — starting where you actually are.</p>
+    <span style="font-size:10px;color:#C4607A;display:block;margin-top:10px">Get the workbook → soleilmerroir.com/workbook</span>
+  </div>
+
+  <!-- SKILL PILLS -->
+  <div class="gold-rule"></div>
+  <div class="eyebrow" style="margin-bottom:8px">Your priority skill cards</div>
+  <p class="sub" style="margin-bottom:14px">Based on your top 3 dimensions. Full skill deck at soleilmerroir.com/skill-deck — 5 cards free.</p>
+  <div class="skill-pills fade-up" id="skillPills"></div>
+
+  <!-- CTAs -->
+  <div class="gold-rule"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px" class="fade-up">
+    <a href="https://soleilmerroir.com/workbook" class="cta-card" style="border-color:rgba(196,147,58,0.4);background:rgba(196,147,58,0.07);text-decoration:none">
+      <div style="font-size:10px;color:#C4933A;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Full Workbook</div>
+      <p style="font-size:11px;color:#F2EDE4;line-height:1.6">39-page Relationship Ecosystem Workbook + AI Relating Add-On + in-depth personalized results email</p>
+      <span style="font-size:10px;color:#C4933A;display:block;margin-top:8px">$20 →</span>
+    </a>
+    <a href="https://soleilmerroir.com" class="cta-card" style="border-color:rgba(106,74,154,0.4);background:rgba(106,74,154,0.07);text-decoration:none">
+      <div style="font-size:10px;color:#6A4A9A;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Book a Session</div>
+      <p style="font-size:11px;color:#F2EDE4;line-height:1.6">Work through your ecosystem visualization 1:1 with Soleil Merroir LCSW · AASECT Certified Sex Therapist</p>
+      <span style="font-size:10px;color:#6A4A9A;display:block;margin-top:8px">soleilmerroir.com →</span>
+    </a>
+    <a href="https://cyborgdreamz.substack.com" class="cta-card" style="border-color:rgba(58,138,128,0.3);background:rgba(58,138,128,0.06);text-decoration:none">
+      <div style="font-size:10px;color:#3A8A80;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Substack</div>
+      <p style="font-size:11px;color:#F2EDE4;line-height:1.6">Ongoing writing on AI, digital intimacy, shame, and the psychology of erotic behavior</p>
+      <span style="font-size:10px;color:#3A8A80;display:block;margin-top:8px">cyborgdreamz →</span>
+    </a>
+    <a href="https://soleilmerroir.com/skill-deck" class="cta-card" style="border-color:rgba(196,96,122,0.3);background:rgba(196,96,122,0.06);text-decoration:none">
+      <div style="font-size:10px;color:#C4607A;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Skill Deck</div>
+      <p style="font-size:11px;color:#F2EDE4;line-height:1.6">16 relational skill cards · what AI dependency does to each · how to level up · 5 free</p>
+      <span style="font-size:10px;color:#C4607A;display:block;margin-top:8px">5 cards free →</span>
+    </a>
+  </div>
+
+  <div class="gold-rule"></div>
+  <p style="font-size:9px;color:#8A8EAA;text-align:center;line-height:1.8">
+    cyborgdreamz · soleilmerroir.com · Soleil Merroir LCSW · AASECT CST · @cyborgdreamz<br>
+    Partner quiz: $12 for both · Therapist referral: ask your clinician for a discount code
+  </p>
+
+</div>
+
+<script>
+// ── DIMENSIONS ─────────────────────────────────────────────
+const DIMS=[
+  {id:"needs",         label:"Unmet Basic Needs",          color:"#3A8A80"},
+  {id:"mentalhealth",  label:"Mental Health Load",          color:"#C4933A"},
+  {id:"identity",      label:"Identity & Body Stressors",   color:"#C4607A"},
+  {id:"erotic",        label:"Erotic & Sensual Importance", color:"#6A4A9A"},
+  {id:"relational",    label:"Relational Style Flexibility", color:"#C4607A"},
+  {id:"emotional",     label:"Emotional Nurturance",         color:"#3A8A80"},
+  {id:"somatic",       label:"Somatic & Spiritual",         color:"#6A4A9A"},
+  {id:"neurodivergence",label:"Neurodivergence",            color:"#C4933A"},
+  {id:"digital",       label:"Digital Relating",            color:"#2A6A8A"},
+];
+
+const INTERPS={
+  needs:[[0,.3,"Your basic needs and community feel relatively met right now — a solid foundation."],[.3,.6,"Some gaps in community, resources, or self-regulation are present and worth naming."],[.6,1,"Significant unmet needs. These gaps are structural, not personal, and shape everything else."]],
+  mentalhealth:[[0,.3,"Your mental health load is relatively low — you have capacity for relational engagement."],[.3,.6,"A moderate mental health load is present. Worth naming with partners and therapists."],[.6,1,"High mental health load. This shapes how you connect, play, and need to be met. Important context for any relationship."]],
+  identity:[[0,.3,"Identity and body stressors are relatively low, and somatic connection is present."],[.3,.6,"Some identity or body-related stress and a developing somatic awareness."],[.6,1,"Significant identity stressors and/or strong somatic awareness — both matter in relational and sexual contexts."]],
+  erotic:[[0,.3,"Erotic and sensual dimensions are less central to your relational world right now."],[.3,.6,"Moderate erotic and sensual importance — some dimensions matter more than others."],[.6,1,"High erotic and sensual importance — these dimensions are central to how you connect and need to be met."]],
+  relational:[[0,.3,"You prefer more defined, contained relational structures. Commitment and clarity matter to you."],[.3,.6,"Moderate flexibility — openness to different relational forms with preference for stability."],[.6,1,"High relational flexibility — openness to multiple connections, new situations, and varied forms of relating."]],
+  emotional:[[0,.3,"Emotional processing and co-regulation are less central to your relational needs right now."],[.3,.6,"Emotional nurturance matters moderately — context-dependent and situation-specific."],[.6,1,"Emotional nurturance and co-regulation are central to how you relate and need to be held."]],
+  somatic:[[0,.3,"Somatic and spiritual dimensions are less central to your relational world."],[.3,.6,"Some somatic or spiritual importance — these dimensions are present but not defining."],[.6,1,"Somatic and spiritual connection are important to how you experience play and relationship."]],
+  neurodivergence:[[0,.3,"ND traits are less present or prominent in your current experience."],[.3,.6,"A moderate presence of ND traits — these shape how you process, communicate, and connect."],[.6,1,"ND traits are significantly present — these are part of your operating system, not a deficit. They need to be named with partners."]],
+  digital:[[0,.3,"Digital and AI spaces are playing a relatively contained role in your relational life."],[.3,.6,"Digital spaces are doing some relational work — worth examining what they're substituting for."],[.6,1,"Digital and AI spaces are doing significant relational work. This shapes your human relating capacity and is worth bringing into therapeutic or relational conversations."]],
+};
+
+const SKILL_MAP={
+  needs:[{n:"ARTICULATOR",c:"#3A8A80"},{n:"CONNECTOR",c:"#C4933A"},{n:"REGULATOR",c:"#2A6A8A"}],
+  mentalhealth:[{n:"REGULATOR",c:"#2A6A8A"},{n:"THE SEER",c:"#3A8A80"},{n:"SHAME SHIFTER",c:"#C4933A"}],
+  identity:[{n:"THE BRAVE",c:"#C4607A"},{n:"SHAME SHIFTER",c:"#C4933A"},{n:"THE SOMATIC",c:"#6A4A9A"}],
+  erotic:[{n:"EROS",c:"#C4607A"},{n:"SAFETY KEEPER",c:"#8A2A3A"},{n:"SOVEREIGN",c:"#6A4A9A"}],
+  relational:[{n:"EMPATH",c:"#C4607A"},{n:"CONNECTOR",c:"#C4933A"},{n:"SOVEREIGN",c:"#6A4A9A"}],
+  emotional:[{n:"WITNESS",c:"#2A6A8A"},{n:"EMPATH",c:"#C4607A"},{n:"THE MENDER",c:"#C4933A"}],
+  somatic:[{n:"THE SOMATIC",c:"#6A4A9A"},{n:"THE CURIOUS",c:"#2A6A8A"},{n:"REGULATOR",c:"#3A8A80"}],
+  neurodivergence:[{n:"REGULATOR",c:"#3A8A80"},{n:"WITNESS",c:"#2A6A8A"},{n:"ARTICULATOR",c:"#3A8A80"}],
+  digital:[{n:"THE BRAVE",c:"#C4607A"},{n:"SHAME SHIFTER",c:"#C4933A"},{n:"CONNECTOR",c:"#C4933A"}],
+};
+
+const TIERS={
+  healthy:{label:"Grounded",tagline:"Intentional, embodied, connected.",color:"#3A8A80",bg:"rgba(58,138,128,0.1)",text:"Your patterns reflect relative balance across these dimensions. Consider sharing your visualization with a partner or therapist to explore what it shows."},
+  concern:{label:"Drifting",tagline:"Moving away from center. Worth looking at.",color:"#C4933A",bg:"rgba(196,147,58,0.1)",text:"Some of your patterns suggest drift — digital or emotional load that may be outpacing your human relational capacity. This is the most common result and the most actionable."},
+  problem:{label:"Deep Drift",tagline:"The gap between digital and human is wide. Support is available.",color:"#C4607A",bg:"rgba(196,96,122,0.1)",text:"Your patterns suggest significant load across multiple dimensions. Digital spaces may be carrying more relational weight than is sustainable. This is worth bringing to a licensed clinician — soleilmerroir.com offers sessions."},
+};
+
+// ── READ URL PARAMS ────────────────────────────────────────
+const params=new URLSearchParams(window.location.search);
+const name=params.get('name')||'friend';
+const tier=params.get('tier')||'healthy';
+const scores={};
+DIMS.forEach(d=>{
+  const raw=parseFloat(params.get(d.id)||'0');
+  scores[d.id]=Math.min(1,Math.max(0,raw/5));
+});
+// SGBV/special flags from quiz
+const si_score=parseFloat(params.get('si')||'0'); // Q13 suicidal ideation /5
+const consent_score=parseFloat(params.get('consent')||'0'); // Q68 /5 (inverted — high = difficulty)
+const shame_erotic=parseFloat(params.get('shame')||'0'); // Q67 /5
+
+// ── CRISIS CHECK ───────────────────────────────────────────
+function checkCrisis(){
+  const box=document.getElementById('crisisBox');
+  const txt=document.getElementById('crisisText');
+  if(si_score>=0.6){
+    box.style.display='block';
+    txt.textContent="Your responses indicate you may be experiencing suicidal ideation. Before moving forward, please know that support is available right now. You don't have to hold this alone.";
+  } else if(consent_score>=0.6){
+    box.style.display='block';
+    box.style.background='rgba(196,147,58,0.1)';
+    box.style.borderColor='rgba(196,147,58,0.4)';
+    txt.textContent="Your responses suggest significant difficulty with consent communication in erotic contexts. The skills section below is particularly relevant — the SAFETY KEEPER and SOVEREIGN cards are worth exploring first.";
+    document.querySelector('#crisisBox p:last-child').textContent="For support: RAINN 1-800-656-4673 · NCADV 1-800-799-7233";
+  }
+}
+
+// ── TIER ───────────────────────────────────────────────────
+function buildTier(){
+  document.getElementById('nameDisplay').textContent=name;
+  const t=TIERS[tier]||TIERS.healthy;
+  const box=document.getElementById('tierBox');
+  box.style.background=t.bg;
+  box.style.borderLeft=`4px solid ${t.color}`;
+  document.getElementById('tierLabel').style.color=t.color;
+  document.getElementById('tierLabel').textContent=t.label;
+  document.getElementById('tierTagline').style.color=t.color;
+  document.getElementById('tierTagline').textContent=t.tagline;
+  document.getElementById('tierText').textContent=t.text;
+}
+
+// ── RADAR ─────────────────────────────────────────────────
+function buildRadar(){
+  const svg=document.getElementById('radarSvg');
+  const cx=240,cy=240,r=170,n=DIMS.length;
+  const angles=DIMS.map((_,i)=>(i/n)*Math.PI*2-Math.PI/2);
+  const pt=(a,v)=>({x:cx+Math.cos(a)*r*v,y:cy+Math.sin(a)*r*v});
+  let html='';
+  [.25,.5,.75,1].forEach(lv=>{
+    const pts=angles.map(a=>pt(a,lv));
+    html+=`<path d="${pts.map((p,i)=>`${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')} Z" fill="none" stroke="rgba(196,147,58,0.1)" stroke-width="1"\/>`
+  });
+  angles.forEach((a,i)=>{const e=pt(a,1);html+=`<line x1="${cx}" y1="${cy}" x2="${e.x.toFixed(1)}" y2="${e.y.toFixed(1)}" stroke="rgba(196,147,58,0.1)" stroke-width="1"\/>`});
+  const dataPoints=DIMS.map((d,i)=>pt(angles[i],scores[d.id]||0));
+  html+=`<path d="${dataPoints.map((p,i)=>`${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')} Z" fill="rgba(196,147,58,0.12)" stroke="#C4933A" stroke-width="1.8"\/>`;
+  DIMS.forEach((d,i)=>{
+    const v=scores[d.id]||0;
+    const dp=pt(angles[i],v);
+    const lp=pt(angles[i],1.28);
+    const anchor=Math.cos(angles[i])>.2?'start':Math.cos(angles[i])<-.2?'end':'middle';
+    const short=d.label.split(' ').slice(0,2).join(' ');
+    html+=`<circle cx="${dp.x.toFixed(1)}" cy="${dp.y.toFixed(1)}" r="5" fill="${d.color}" opacity="0.9"\/>`;
+    html+=`<text x="${lp.x.toFixed(1)}" y="${lp.y.toFixed(1)}" text-anchor="${anchor}" dominant-baseline="middle" font-size="9" fill="${d.color}" font-family="'DM Mono',monospace" opacity="0.85">${short}<\/text>`;
+  });
+  svg.innerHTML=html;
+}
+
+// ── DIMENSION CARDS ────────────────────────────────────────
+function getInterp(id,score){
+  for(const[lo,hi,text]of INTERPS[id]){if(score>=lo&&score<=hi)return text;}
+  return INTERPS[id][INTERPS[id].length-1][2];
+}
+
+function buildDimCards(){
+  const grid=document.getElementById('dimGrid');
+  DIMS.forEach(d=>{
+    const score=scores[d.id]||0;
+    const pct=Math.round(score*100);
+    const div=document.createElement('div');
+    div.className='card card-accent';
+    div.style.borderLeftColor=d.color;
+    div.innerHTML=`
+      <div style="font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:${d.color};margin-bottom:6px">${d.label}</div>
+      <div class="dim-bar-track"><div class="dim-bar-fill" style="width:0%;background:${d.color}" data-w="${pct}"><\/div><\/div>
+      <div style="font-size:10px;color:#8A8EAA;margin-bottom:6px">${(score*5).toFixed(1)} / 5<\/div>
+      <div style="font-size:10.5px;color:#8A8EAA;line-height:1.65;font-style:italic;border-top:1px solid #363A55;padding-top:8px">${getInterp(d.id,score)}<\/div>
+    `;
+    grid.appendChild(div);
+  });
+  setTimeout(()=>{
+    document.querySelectorAll('[data-w]').forEach(el=>{el.style.width=el.dataset.w+'%';});
+  },100);
+}
+
+// ── RELATIONSHIP TYPE RECOMMENDATIONS (personalized) ───────
+function buildPathways(){
+  const rel=scores.relational||0;
+  const erotic=scores.erotic||0;
+  const somatic=scores.somatic||0;
+  const nd=scores.neurodivergence||0;
+  const digital=scores.digital||0;
+  const mh=scores.mentalhealth||0;
+  const id=scores.identity||0;
+
+  // AI pathway personalization
+  let aiText="Curated AI tools matched to your actual needs — with ethics built in, no companion features.";
+  if(digital>0.6) aiText="Your high digital relating score suggests AI tools are already significant in your life. The Ethical AI Suite helps you use them with intention and clear boundaries rather than dependency.";
+  else if(digital<0.3) aiText="Your digital relating score is low — AI tools can be genuinely useful for specific tasks. The Ethical AI Suite focuses on task-based use with clear purpose and limits.";
+  document.getElementById('aiPathwayText').textContent=aiText;
+
+  // Human pathway personalization
+  let humanTitle="A graduated plan for rebuilding human relational capacity";
+  let humanText="Online and AFK — starting where you actually are.";
+  if(nd>0.6) humanText="Given your neurodivergence profile, this plan starts with explicitly structured, low-sensory contexts and builds toward embodied connection at your pace.";
+  if(rel>0.6) humanText="Your high relational flexibility suggests openness to multiple structures. The plan includes non-monogamous community, kink-aware spaces, and explicit relationship design.";
+  if(mh>0.6) humanText="Given your mental health load, this plan starts with therapeutic community and peer support before moving toward more vulnerable relational contexts.";
+  document.getElementById('humanPathwayTitle').textContent=humanTitle;
+  document.getElementById('humanPathwayText').textContent=humanText;
+}
+
+// ── SKILL PILLS ────────────────────────────────────────────
+function buildSkillPills(){
+  const top3=[...DIMS].sort((a,b)=>(scores[b.id]||0)-(scores[a.id]||0)).slice(0,3);
+  const allSkills=[];
+  top3.forEach(d=>{
+    (SKILL_MAP[d.id]||[]).forEach(s=>{
+      if(!allSkills.find(x=>x.n===s.n)) allSkills.push(s);
+    });
+  });
+  // Add SGBV-related skills if flagged
+  if(consent_score>=0.5&&!allSkills.find(s=>s.n==='SAFETY KEEPER')){
+    allSkills.unshift({n:'SAFETY KEEPER',c:'#8A2A3A'});
+  }
+  if(shame_erotic>=0.6&&!allSkills.find(s=>s.n==='SHAME SHIFTER')){
+    allSkills.unshift({n:'SHAME SHIFTER',c:'#C4933A'});
+  }
+  const container=document.getElementById('skillPills');
+  allSkills.slice(0,9).forEach(s=>{
+    const pill=document.createElement('span');
+    pill.className='skill-pill';
+    pill.style.background=s.c+'33';
+    pill.style.border=`1px solid ${s.c}55`;
+    pill.style.color=s.c;
+    pill.textContent=s.n;
+    container.appendChild(pill);
+  });
+}
+
+// ── INIT ───────────────────────────────────────────────────
+checkCrisis();
+buildTier();
+buildRadar();
+buildDimCards();
+buildPathways();
+buildSkillPills();
+</script>
+</body>
+</html>
