@@ -162,6 +162,31 @@
 </div>
 
 <!-- SCREEN 2 — RESULTS -->
+<div id="screen-email" class="screen">
+  <div class="container">
+    <div class="eyebrow">Almost there</div>
+    <h1 style="font-size:28px;margin-bottom:12px">Get your visualization</h1>
+    <p class="sub" style="margin-bottom:24px">Enter your name and email to unlock your 9-dimension radar and results.</p>
+    <div style="max-width:460px">
+      <input id="gate-name" type="text" placeholder="Your first name"
+        style="width:100%;padding:12px 14px;margin-bottom:10px;border:1px solid var(--line);border-radius:3px;font-family:'DM Mono',monospace;font-size:13px;background:rgba(26,20,16,.04);color:var(--ink);outline:none">
+      <div style="display:flex;gap:10px;margin-bottom:12px">
+        <input id="gate-email" type="email" placeholder="your@email.com"
+          style="flex:1;padding:12px 14px;border:1px solid var(--line);border-radius:3px;font-family:'DM Mono',monospace;font-size:13px;background:rgba(26,20,16,.04);color:var(--ink);outline:none">
+        <button class="btn btn-teal" onclick="gateSubmit()">See my results →</button>
+      </div>
+      <p style="font-size:10px;color:var(--muted);line-height:1.7">
+        Your data is private — used only to send your results. No spam.<br>
+        By submitting you agree to our <a href="terms.html" style="color:var(--teal)">Terms of Use</a>.<br>
+        <strong>Referral code?</strong>
+        <input type="text" id="accessCode" placeholder="Enter code" oninput="checkCode(this.value)"
+          style="margin-left:6px;padding:4px 8px;border:1px solid var(--line);border-radius:3px;font-family:'DM Mono',monospace;font-size:11px;background:rgba(26,20,16,.04);color:var(--ink);outline:none;width:110px">
+        <span id="codeStatus" style="display:none;margin-left:6px;font-size:10px;padding:3px 8px;border-radius:3px"></span>
+      </p>
+    </div>
+  </div>
+</div>
+
 <div id="screen-results" class="screen">
   <div class="container">
     <div class="eyebrow">Your profile</div>
@@ -197,7 +222,7 @@
         <button class="btn btn-teal" onclick="submitEmail()">Send my results</button>
       </div>
       <p class="email-note">
-        Your data is private and used only to send your results. No spam. By submitting you agree to our <a href="https://soleilmerroir-stack.github.io/DigitalRelating/terms.html" style="color:var(--teal)">Terms of Use</a>.<br>
+        Your data is private and used only to send your results. No spam.<br>
         Want to explore this with a partner or therapist? Share the quiz link — then compare your visualizations.<br>
         <strong>Partner quiz:</strong> both complete for $12 · <strong>Therapist referral:</strong> ask your clinician for a discount code.
       </p>
@@ -219,11 +244,6 @@
         Want to go deeper? Explore how your profile overlaps with someone else's using the full relationship ecosystem mapper — or book a session to walk through your results.
       </p>
       <a href="https://soleilmerroir.com" class="btn">Back to site</a>
-      <div style="margin-top:24px;font-size:10px;color:var(--muted)">
-        <a href="terms.html" style="color:var(--muted)">Terms of Use</a> ·
-        <a href="solidarity.html" style="color:var(--muted)">Community Solidarity Agreement</a> ·
-        <a href="https://cyborgdreamz.substack.com" style="color:var(--muted)">Substack</a>
-      </div>
     </div>
   </div>
 </div>
@@ -276,16 +296,18 @@ const SECTIONS = [
     desc:"Desire, kink, power, sensuality, frequency",
     accent:"rgba(128,64,168,0.08)",
     questions:[
-      {n:30, text:"How comfortable are you with sexual / sensual / kink exploration with yourself?", lo:"not comfortable", hi:"very comfortable"},
-      {n:31, text:"How comfortable are you with sexual / sensual / kink exploration with others?", lo:"not comfortable", hi:"very comfortable"},
       {n:18, text:"How important is the presence of power and control dynamics for your play / relationships?", lo:"not important", hi:"essential"},
       {n:19, text:"How important is being the initiator / giver / top for your play / relationships?", lo:"not important", hi:"essential"},
       {n:20, text:"How important is the use of pain for your play / relationships?", lo:"not important", hi:"essential"},
-      {n:21, text:"How important or intense are kink or fetish experiences for your play?", lo:"not important", hi:"essential"},
+      {n:21, text:"How important are kink dynamics, experiences, and frameworks for your play / relationships?", lo:"not important", hi:"essential"},
+      {n:22, text:"How important is intensity in kink (pain / power / edge play) for your play / relationships?", lo:"not important", hi:"essential"},
+      {n:23, text:"How important is fetish exploration for your play / relationships?", lo:"not important", hi:"essential"},
+      {n:30, text:"How comfortable are you with sexual / sensual / kink exploration with yourself?", lo:"not comfortable", hi:"very comfortable"},
+      {n:31, text:"How comfortable are you with sexual / sensual / kink exploration with others?", lo:"not comfortable", hi:"very comfortable"},
       {n:32, text:"How important is sensual touch and exploration for your play?", lo:"not important", hi:"essential"},
       {n:34, text:"At what frequency do you prefer sex?", lo:"rarely", hi:"daily or more"},
       {n:35, text:"How important is variety and exploring taboos in your play?", lo:"not important", hi:"essential"},
-      {n:36, text:"How important is erotic / sexual exploration for your play?", lo:"not important", hi:"essential"},
+      {n:36, text:"How important is erotic exploration for your play?", lo:"not important", hi:"essential"},
       {n:67, text:"How much does shame influence what you're willing to share or explore erotically?", lo:"minimal", hi:"significantly"},
     ]
   },
@@ -357,12 +379,10 @@ const SECTIONS = [
     accent:"rgba(42,74,138,0.08)",
     intro:"These questions are about how digital and AI spaces function in your relational and emotional life. There is no judgment here — only information.",
     questions:[
-      {n:60, text:"How much do you rely on AI, parasocial content, or online personas for emotional connection?", lo:"rarely", hi:"primarily"},
-      {n:61, text:"How easy is it to be as vulnerable with humans as you are in digital spaces?", lo:"equally easy", hi:"much harder with humans", invert:true},
-      {n:62, text:"How often does digital connection substitute for in-person or embodied human contact?", lo:"rarely", hi:"frequently"},
-      {n:63, text:"How much does online approval (likes, responses, follows) affect your sense of self?", lo:"minimal impact", hi:"significant impact"},
-      {n:64, text:"How significant is AI in your erotic or intimate life currently?", lo:"not present", hi:"significant"},
-      {n:65, text:"How difficult is it to tolerate waiting for a human response vs. AI's immediacy?", lo:"easy", hi:"very difficult"},
+      {n:60, text:"To what frequency do you engage with AI? Low is occasional once a week use, high is constant daily use.", lo:"occasionally, once a week", hi:"constant daily use"},
+      {n:61, text:"How frequently do you engage with parasocial or online personality relationships as an escape and/or social, emotional or sexual outlet?", lo:"rarely", hi:"frequently, core part of my life"},
+      {n:62, text:"Of the people you are most vulnerable with, what percentage of them are digital or online?", lo:"mostly in-person connections", hi:"mostly digital or online"},
+      {n:63, text:"In this space, how integrated is your digital or online self with your physical life? Low means you're a different person in your online spaces and the two never meet.", lo:"completely separate — different person online", hi:"fully integrated everywhere"},
     ]
   }
 ];
@@ -498,7 +518,7 @@ function nextSection(){
     return;
   }
   if(currentSection<SECTIONS.length-1){currentSection++;renderSection();}
-  else{computeScores();showResults();}
+  else{computeScores();showScreen('email');window.scrollTo(0,0);}
 }
 
 function prevSection(){if(currentSection>0){currentSection--;renderSection();}}
@@ -706,6 +726,17 @@ function showResults(){
   window.scrollTo(0,0);
 }
 
+
+function gateSubmit(){
+  var name = document.getElementById('gate-name').value.trim();
+  var email = document.getElementById('gate-email').value.trim();
+  if(!name || !email){ alert('Please enter your name and email to see your results.'); return; }
+  // Populate the original name/email fields for submitEmail
+  document.getElementById('result-name').value = name;
+  document.getElementById('result-email').value = email;
+  submitEmail();
+}
+
 function submitEmail(){
   const email=document.getElementById('result-email').value.trim();
   const name=document.getElementById('result-name').value.trim();
@@ -734,12 +765,60 @@ function submitEmail(){
   };
   const WEBHOOK_URL='https://hook.us2.make.com/6xrwfh7vvdqw329wm5u0mhe7l7v39kx9';
   fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
-  showScreen('thankyou');
-  window.scrollTo(0,0);
+  showResults();showScreen('results');window.scrollTo(0,0);
 }
 
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');}
 function retakeQuiz(){answers={};scores={};currentSection=0;showScreen('quiz');renderSection();}
+
+// INTERPRETATIONS — Soleil Merroir
+const INTERPS={
+  needs:[
+    [0,.3,"Your unmet needs are relatively low right now — but monitor when stressors shift. Survival stress impacts our relationship to time, energy and presence with ourselves and others. We were never wired to do this alone."],
+    [.3,.6,"Your unmet needs are likely impacting how you show up in relationship spaces. Financial and well-being stress limits time, capacity to connect, and the ability to relax into pleasure. The relational difficulty isn't pathology — it's the system."],
+    [.6,1,"Your unmet needs are significantly impacting how you relate. Poverty and capitalist exploitation isn't your fault, but the cultural shame can make us feel like it is. Belonging and love don't require financial stability — leaning into community support as a resource, not a deficit, is the move."],
+  ],
+  mentalhealth:[
+    [0,.3,"Your mental health needs are relatively low — but monitor when activation or dysregulation starts impacting daily life. As a more regulated person, you are a vital community anchor for others. That capacity matters and is worth protecting."],
+    [.3,.6,"Your mental health needs are elevated. These are reactions to stressors, trauma, and cultural rejection — your nervous system adapting to survive. Getting support to understand your activation patterns isn't about fixing you. It's about reducing distress so you have more capacity for connection, pleasure and belonging."],
+    [.6,1,"Your mental health needs are high, and it's important to seek human support. Your symptoms are your nervous system's adaptations to a world that is genuinely traumatizing — not a sign of deficit within you. Check our resource section, reach out to community, and know you are not alone in this."],
+  ],
+  identity:[
+    [0,.3,"Your identity awareness and relationship to your body remain strong. Consider how your identities and strengths provide capacity to care for others — while staying curious about the impact of identity-based power and privilege in your dynamics."],
+    [.3,.6,"There are core aspects of yourself in conflict that need support. The distress comes from biased and hateful cultural systems, not from anything wrong with who you are. Your identities and body are magical sites of possibility when held with care. What aspects can you show more self-compassion?"],
+    [.6,1,"You're experiencing high distress related to identity and body. What's wrong isn't you — it's the world you came into and how it treats people like you. This trauma affects every part of life and relationships, especially when those patterns are replicated in social dynamics. You get to be included in conversations about who you are from day one."],
+  ],
+  erotic:[
+    [0,.3,"Eroticism and sensuality are of low importance to you right now, and that's okay. Everyone relates to sexuality and pleasure differently, particularly those on the Ace / Grey scale. You can still create meaningful, pleasurable connection — with yourself, in fantasy, or with others — entirely on your own terms."],
+    [.3,.6,"Eroticism and sensuality matter to you and can be cultivated in endless forms — individually, with partners, digitally, in community, or in fantasy. Give yourself permission to explore what that looks like in each context, separately. Consent-based practice opens doors shame keeps closed."],
+    [.6,1,"Erotic and sensual expression are key to your well-being — your relational dynamics should make space for this, or create pathways to seek expression elsewhere. High desire isn't pathology, but it requires more communication and creativity to navigate ethically. You deserve access to all of yourself."],
+  ],
+  relational:[
+    [0,.3,"You're more monogamously oriented — seeking depth and commitment in a partner-centered world. A reminder: you are a whole person, not needing another to complete you. Your own secure attachment base, with community as foundation, is the long-term infrastructure for your well-being."],
+    [.3,.6,"You're relationally flexible — either on the journey to a new relationship ecosystem, or curious about what's possible if you break some boxes. What would it look like to disperse your needs across your relational ecosystem with consent and clarity?"],
+    [.6,1,"You're collectively wired and seeking interconnectedness — not just a partner, but an ecosystem. We're not defaulting to polyamory here. We're defaulting to dispersing your needs across the relational ecosystem with consent and clarity. Building communication and conflict skills will be the infrastructure that makes it work."],
+  ],
+  emotional:[
+    [0,.3,"You've identified low need for emotional nurturance. This often correlates with ND traits or socialization away from vulnerability. If you're comfortable here, how might you communicate early about dynamics with low emotional intertwinement? And what does aftercare look like for you?"],
+    [.3,.6,"Emotional nurturance accentuates your ability to feel close and connected. Feeling emotionally held might precede your ability to experience arousal or safety with another. It's key to communicate these needs early and often — including what support you need after intimate experiences."],
+    [.6,1,"Emotional nurturance is central to how you relate and a pathway to your sexual openness. You want to feel seen and held in your full emotional expansiveness. This requires high self-knowledge and the ability to teach your partners and community what it actually feels like to hold you well."],
+  ],
+  somatic:[
+    [0,.3,"Somatic grounding and spiritual exploration aren't required for your well-being, but they remain parts of you and of others. Is there an opening to finding more connection with your body and its cues as a pathway to more pleasure and presence?"],
+    [.3,.6,"Spirituality and somatic awareness are tools in your toolbox for well-being and relating. Explore connections that celebrate these aspects and give you space to play, ground and create ritual around pleasure and connection."],
+    [.6,1,"Your spiritual and somatic self are anchors to your well-being. Your body guides your intuition and rootedness — to ancestry, to nature, to other dimensions of being. These aren't separate from your sexuality; they are part of it."],
+  ],
+  neurodivergence:[
+    [0,.3,"Your ND-related traits are relatively low — but you've likely been or will be in connections with folks who have neurospicy brains and systems. Understanding how different brains and bodies work makes you a more attuned community member and partner."],
+    [.3,.6,"You're experiencing ND-related traits that are likely impacting your daily well-being and relationships. The more specifically you can name your experiences, patterns and sensitivities, the more you can create relational dynamics that actually suit you. These aren't deficits — they are places of adaptation and enhanced communication."],
+    [.6,1,"You're experiencing a high level of neurodivergence, which impacts every facet of how you relate. Map your traits, sensitivities and needs — and lead with them in relational conversations. It is not too much to ask people to make accommodations to communicate and understand you. You're not broken — you're a uniquely sexy rubix cube seeking to unlock your own patterns."],
+  ],
+  digital:[
+    [0,.3,"Digital relationships aren't a significant part of your ecosystem right now — but consider how digital communities might enhance your well-being and access to parts of yourself that are harder to reach in person. There's no shame in starting there."],
+    [.3,.6,"Digital relationships are already in your ecosystem. How integrated is the you who exists online compared to IRL? Digital connections nourish us best the more values-aligned and integrated our expression is — are you bringing yourself fully into your digital spaces?"],
+    [.6,1,"Your digital relationships are doing significant relational work, which can be both a resource and a challenge. Does your vulnerability have safe places to exist online? How balanced are those connections with away-from-keyboard human contact? These questions aren't judgment — they're a gentle cue toward embodied, human relating."],
+  ],
+};
 </script>
 </body>
 </html>
