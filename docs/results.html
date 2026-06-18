@@ -49,7 +49,7 @@ body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height
     <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,5vw,42px);font-weight:300;font-style:italic;line-height:1.15;margin-bottom:8px">
       Your Ecosystem, <span id="nameDisplay" style="color:#C4933A">friend</span>
     </h1>
-    <p class="sub">9 dimensions · a map, not a verdict · there is no ideal shape</p>
+    <p class="sub">9 dimensions · a visual vulnerability tool · conversation starters</p>
   </div>
 
   <!-- CRISIS FLAG — shown only if needed -->
@@ -94,7 +94,7 @@ body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height
     <div id="paidPreview" style="opacity:0.35;pointer-events:none">
       <div class="card card-accent" style="border-color:#C4933A;margin-bottom:10px">
         <div style="font-size:10px;letter-spacing:2px;color:#C4933A;text-transform:uppercase;margin-bottom:8px">Areas of concern — deeper look</div>
-        <p class="sub">Your highest-scoring dimensions are telling you something important. This section breaks down what each elevated score actually means clinically, what it typically looks like in daily life, and what the research says about why it matters for relationships...</p>
+        <p class="sub">Your highest-scoring dimensions are telling you something important. This section breaks down what each elevated score actually means, what it typically looks like in daily life, and what the research says about why it matters for relationships...</p>
       </div>
       <div class="card card-accent" style="border-color:#3A8A80;margin-bottom:10px">
         <div style="font-size:10px;letter-spacing:2px;color:#3A8A80;text-transform:uppercase;margin-bottom:8px">Areas of growth — your skill priorities</div>
@@ -194,8 +194,8 @@ const DIMS=[
 ];
 
 const INTERPS={
-  needs:[[0,.3,"Your basic needs and community feel relatively met right now — a solid foundation."],[.3,.6,"Some gaps in community, resources, or self-regulation are present and worth naming."],[.6,1,"Significant unmet needs. These gaps are structural, not personal, and shape everything else."]],
-  mentalhealth:[[0,.3,"Your mental health load is relatively low — you have capacity for relational engagement."],[.3,.6,"A moderate mental health load is present. Worth naming with partners and therapists."],[.6,1,"High mental health load. This shapes how you connect, play, and need to be met. Important context for any relationship."]],
+  needs:[[0,.3,"Your basic needs and community feel relatively met right now — a solid foundation."],[.3,.6,"Some gaps in community, resources, or self-regulation are present and worth naming."],[.6,1,"Significant unmet needs. These gaps are structural and systemic, not personal, and shape everything else."]],
+  mentalhealth:[[0,.3,"Your mental health load is relatively low — you have capacity for relational engagement."],[.3,.6,"A moderate mental health load is present. Worth naming with partners and therapists."],[.6,1,"High mental health load. This likely has a big impact on how you feel and connect. Important context for any relationship."]],
   identity:[[0,.3,"Identity and body stressors are relatively low, and somatic connection is present."],[.3,.6,"Some identity or body-related stress and a developing somatic awareness."],[.6,1,"Significant identity stressors and/or strong somatic awareness — both matter in relational and sexual contexts."]],
   erotic:[[0,.3,"Erotic and sensual dimensions are less central to your relational world right now."],[.3,.6,"Moderate erotic and sensual importance — some dimensions matter more than others."],[.6,1,"High erotic and sensual importance — these dimensions are central to how you connect and need to be met."]],
   relational:[[0,.3,"You prefer more defined, contained relational structures. Commitment and clarity matter to you."],[.3,.6,"Moderate flexibility — openness to different relational forms with preference for stability."],[.6,1,"High relational flexibility — openness to multiple connections, new situations, and varied forms of relating."]],
@@ -218,7 +218,7 @@ const SKILL_MAP={
 };
 
 const TIERS={
-  healthy:{label:"Grounded",tagline:"Intentional, embodied, connected.",color:"#3A8A80",bg:"rgba(58,138,128,0.1)",text:"Your patterns reflect relative balance across these dimensions. Consider sharing your visualization with a partner or therapist to explore what it shows."},
+  healthy:{label:"grounded",tagline:"Intentional, embodied, connected.",color:"#3A8A80",bg:"rgba(58,138,128,0.1)",text:"Your patterns reflect relative balance across these dimensions. Consider sharing your visualization with a partner or therapist to explore what it shows."},
   concern:{label:"Drifting",tagline:"Moving away from center. Worth looking at.",color:"#C4933A",bg:"rgba(196,147,58,0.1)",text:"Some of your patterns suggest drift — digital or emotional load that may be outpacing your human relational capacity. This is the most common result and the most actionable."},
   problem:{label:"Deep Drift",tagline:"The gap between digital and human is wide. Support is available.",color:"#C4607A",bg:"rgba(196,96,122,0.1)",text:"Your patterns suggest significant load across multiple dimensions. Digital spaces may be carrying more relational weight than is sustainable. This is worth bringing to a licensed clinician — soleilmerroir.com offers sessions."},
 };
