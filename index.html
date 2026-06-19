@@ -91,6 +91,57 @@
   .pathway-box h3{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:400;font-style:italic;margin-bottom:6px}
   .pathway-box p{font-size:11px;color:var(--muted);line-height:1.7}
   .pathway-box a{color:var(--teal);text-decoration:none;font-size:11px}
+
+  /* ── MOBIUS MESH CARD — fully scoped under #mmc-root, no shared var
+       names with the page's own :root, to prevent any collision. ── */
+  #mmc-root{
+    --mmc-bg:#0A0A1A; --mmc-bg2:#140E28; --mmc-ink:#F2EFFA; --mmc-muted:rgba(242,239,250,0.62);
+    --mmc-accent:#A78BD9; --mmc-teal:#1FB8A8; --mmc-magenta:#FF3D8F;
+    --mmc-glass:rgba(22,17,42,0.55); --mmc-glassLine:rgba(167,139,217,0.32);
+    font-family:'DM Mono',monospace; width:100%; max-width:380px;
+  }
+  #mmc-root *{box-sizing:border-box}
+  #mmc-root .mmc-card{
+    position:relative;border-radius:28px;padding:24px 22px 20px;
+    background:linear-gradient(180deg, rgba(26,20,48,0.92), rgba(14,11,28,0.96));
+    border:1px solid var(--mmc-glassLine);
+    box-shadow:0 20px 50px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+    color:var(--mmc-ink);
+  }
+  #mmc-root .mmc-identity{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+  #mmc-root .mmc-avatar{
+    width:64px;height:64px;flex-shrink:0;border-radius:50%;
+    background:conic-gradient(from 180deg, var(--mmc-accent), var(--mmc-teal), var(--mmc-magenta), var(--mmc-accent));
+    display:flex;align-items:center;justify-content:center;font-size:22px;
+  }
+  #mmc-root .mmc-id-eyebrow{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--mmc-muted);margin-bottom:3px}
+  #mmc-root .mmc-id-name{font-size:21px;font-weight:700;color:var(--mmc-ink);line-height:1.1}
+  #mmc-root .mmc-id-tagline{font-size:9px;color:var(--mmc-accent);margin-top:3px}
+  #mmc-root .mmc-panel{border-radius:20px;padding:16px 18px;background:var(--mmc-glass);border:1px solid var(--mmc-glassLine);margin-bottom:14px}
+  #mmc-root .mmc-panel-title{font-size:14px;font-weight:600;color:var(--mmc-ink);margin-bottom:10px}
+  #mmc-root .mmc-trait-row{display:flex;align-items:baseline;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06)}
+  #mmc-root .mmc-trait-row:last-child{border-bottom:none}
+  #mmc-root .mmc-trait-row.mmc-locked .mmc-trait-label{color:rgba(242,239,250,0.3)}
+  #mmc-root .mmc-trait-row.mmc-locked .mmc-trait-value{color:rgba(242,239,250,0.3)}
+  #mmc-root .mmc-trait-label{font-size:13px;color:var(--mmc-muted)}
+  #mmc-root .mmc-trait-value{font-size:13px;font-weight:700}
+  #mmc-root .mmc-status-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+  #mmc-root .mmc-status-tag{font-size:8px;letter-spacing:.06em;color:var(--mmc-muted);width:60px;flex-shrink:0;text-transform:uppercase}
+  #mmc-root .mmc-status-track{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,0.08);overflow:hidden}
+  #mmc-root .mmc-status-fill{height:100%;border-radius:3px}
+  #mmc-root .mmc-unlock-strip{
+    margin-top:4px;padding:12px 14px;border-radius:14px;
+    background:rgba(196,147,58,0.1);border:1px solid rgba(196,147,58,0.3);
+    display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  }
+  #mmc-root .mmc-unlock-strip p{font-size:10px;color:rgba(242,239,250,0.75);margin:0;flex:1;min-width:140px}
+  #mmc-root .mmc-unlock-strip a{
+    font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#0A0A1A;
+    background:#E8C068;padding:8px 14px;border-radius:16px;text-decoration:none;font-weight:600;white-space:nowrap;
+  }
+  #mmc-root .mmc-brand-row{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)}
+  #mmc-root .mmc-brand-row .mmc-word{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--mmc-muted)}
+  #mmc-root .mmc-brand-row .mmc-word span{color:var(--mmc-teal)}
 </style>
 </head>
 <body>
@@ -238,6 +289,13 @@
         Want to work through this with someone? <a href="https://soleilmerroir.com" style="color:#8040A8">soleilmerroir.com</a>
       </p>
     </div>
+
+    <!-- MOBIUS MESH CARD — free preview, embedded inline. Container styled
+         dark/contrasting on purpose since it reads as a distinct collectible
+         object (a trading card), not a section that should blend into the
+         page's cream/navy palette. -->
+    <div id="mesh-card-mount" style="margin:0 0 32px;display:flex;justify-content:center"></div>
+
     <div class="radar-wrap" style="margin-bottom:16px">
       <svg class="radar" id="radar-svg" viewBox="0 0 460 460" width="100%" style="max-width:460px"></svg>
     </div>
@@ -723,6 +781,82 @@ function buildEcosystemViz(){
     (rel>0.5?'Your relational flexibility suggests openness to multiple forms — use that.':'Starting small with structured, low-stakes human contact is the right entry point.');
 }
 
+// ── MOBIUS MESH CARD — free inline preview ──────────────────────
+// Same dimension/scoring convention as results.html: trait dims (identity-
+// stable) vs status dims (current-state, always fully shown). Free preview
+// shows 3 of 6 trait dims + all 3 status sliders; the other 3 traits are
+// visually locked with a Stripe CTA, matching results.html's existing
+// soft-paywall convention (visual lock, not access control).
+const MESH_DIMS=[
+  {id:"needs",          label:"Unmet Needs",   color:"var(--mmc-teal)",    group:"status"},
+  {id:"mentalhealth",   label:"Mental Health", color:"#D9A23B",            group:"status"},
+  {id:"neurodivergence",label:"Neuro",         color:"#5FBF6A",           group:"status"},
+  {id:"identity",       label:"Identity",       color:"#FF7A59",          group:"trait", free:true},
+  {id:"erotic",         label:"Erotic",         color:"var(--mmc-magenta)", group:"trait", free:true},
+  {id:"emotional",      label:"Emotional",      color:"#5AA0D9",          group:"trait", free:true},
+  {id:"relational",     label:"R. Flexibility", color:"#C97FE0",          group:"trait", free:false},
+  {id:"somatic",        label:"Somatic",        color:"var(--mmc-accent)", group:"trait", free:false},
+  {id:"digital",        label:"Digital",        color:"#5577D9",          group:"trait", free:false},
+];
+
+function renderMeshCard(opts){
+  opts = opts || {};
+  const allUnlocked = !!opts.allUnlocked;
+  const mount = document.getElementById(opts.mountId || 'mesh-card-mount');
+  if(!mount) return;
+  const name = (document.getElementById('result-name') && document.getElementById('result-name').value.trim()) || 'friend';
+
+  const traitDims = MESH_DIMS.filter(d=>d.group==='trait');
+  const statusDims = MESH_DIMS.filter(d=>d.group==='status');
+
+  const traitHtml = traitDims.map(d=>{
+    const unlocked = allUnlocked || d.free;
+    const v = (scores[d.id]||0)*5;
+    if(!unlocked){
+      return `<div class="mmc-trait-row mmc-locked"><span class="mmc-trait-label">${d.label}</span><span class="mmc-trait-value">🔒</span></div>`;
+    }
+    return `<div class="mmc-trait-row"><span class="mmc-trait-label">${d.label}</span><span class="mmc-trait-value" style="color:${d.color}">${v.toFixed(1)}</span></div>`;
+  }).join('');
+
+  const statusHtml = statusDims.map(d=>{
+    const v = (scores[d.id]||0)*5;
+    const pct = (v/5)*100;
+    return `<div class="mmc-status-row"><span class="mmc-status-tag">${d.label}</span><div class="mmc-status-track"><div class="mmc-status-fill" style="width:${pct}%;background:${d.color}"></div></div></div>`;
+  }).join('');
+
+  const unlockStrip = allUnlocked ? '' : `
+    <div class="mmc-unlock-strip">
+      <p>3 traits locked — unlock your full Mesh card with the Full Analysis</p>
+      <a href="https://buy.stripe.com/4gM6oJfmQaMcafmgtQ57W00">Unlock →</a>
+    </div>`;
+
+  mount.innerHTML = `
+    <div id="mmc-root">
+      <div class="mmc-card">
+        <div class="mmc-identity">
+          <div class="mmc-avatar">◈</div>
+          <div>
+            <div class="mmc-id-eyebrow">cyborgdreamz · mesh profile</div>
+            <div class="mmc-id-name">${name}</div>
+            <div class="mmc-id-tagline">a map, not a verdict</div>
+          </div>
+        </div>
+        <div class="mmc-panel">
+          <div class="mmc-panel-title">Connection</div>
+          ${traitHtml}
+        </div>
+        <div class="mmc-panel" style="margin-bottom:${allUnlocked?'0':'14px'}">
+          <div class="mmc-panel-title" style="font-size:12px">Current state</div>
+          ${statusHtml}
+        </div>
+        ${unlockStrip}
+        <div class="mmc-brand-row">
+          <div class="mmc-word">Mobius<span> Mesh</span></div>
+        </div>
+      </div>
+    </div>`;
+}
+
 function showResults(){
   // Result tier box — neutral preview only.
   // Headline is pulled directly from Soleil's own INTERPRETATIONS text for whichever
@@ -740,6 +874,8 @@ function showResults(){
       <h2 style="margin-bottom:8px">${previewNames}<\/h2>
       <p class="sub" style="margin-bottom:12px">${headline}<\/p>
     <\/div>`;
+
+  renderMeshCard({allUnlocked:false});
 
   // Consent education module — shown whenever Q6 (shame-on-rejection) or
   // Q7 (pushback-on-rejection) is any non-zero value. This is informational
