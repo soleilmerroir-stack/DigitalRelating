@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuestionario del Ecosistema Relacional — cyborgdreamz</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F0E8; --ink: #1A1410; --muted: rgba(26,20,16,0.68);
+    --line: rgba(26,20,16,0.1); --accent: #8B4513; --teal: #0D7A70;
+    --c-needs:#107870; --c-mentalhealth:#906010; --c-identity:#B85020;
+    --c-erotic:#8040A8; --c-relational:#C04878; --c-emotional:#2878A0;
+    --c-somatic:#5830A0; --c-neuro:#3A7030; --c-digital:#2A4A8A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'DM Mono',monospace;font-size:14px;line-height:1.6;min-height:100vh}
+  .screen{display:none}.screen.active{display:block}
+  .container{max-width:720px;margin:0 auto;padding:48px 20px 80px;overflow-x:hidden}
+  .serif{font-family:'Cormorant Garamond',serif}
+  h1{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,5vw,42px);font-weight:300;font-style:italic;line-height:1.15;margin-bottom:16px}
+  h2{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;font-style:italic;margin-bottom:12px}
+  .eyebrow{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+  .rule{height:1px;background:var(--line);margin:28px 0}
+  .sub{font-size:13px;color:var(--muted);line-height:1.85}
+  .btn{display:inline-block;cursor:pointer;background:var(--ink);color:var(--bg);border:none;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;padding:14px 32px;border-radius:2px;transition:opacity .2s;margin-top:8px}
+  .btn:hover{opacity:.8}
+  .btn-outline{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+  details summary::marker{color:var(--accent)}
+  details summary::-webkit-details-marker{color:var(--accent)}
+  details[open] summary{color:var(--accent)}
+  .btn-teal{background:var(--teal)}
+  .progress-bar{height:3px;background:var(--line);border-radius:2px;margin-bottom:36px;overflow:hidden}
+  .progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease}
+  .progress-label{font-size:11px;color:rgba(26,20,16,0.55);margin-bottom:8px;letter-spacing:.1em}
+  .section-header{background:rgba(26,20,16,.04);border-left:3px solid var(--accent);padding:14px 18px;margin-bottom:28px;border-radius:0 3px 3px 0}
+  .section-header h2{margin-bottom:4px;font-size:18px}
+  .section-header p{font-size:13px;color:var(--muted);line-height:1.7}
+  .question{margin-bottom:40px;padding-bottom:8px}
+  .q-label{font-size:14px;line-height:1.78;margin-bottom:18px;color:var(--ink)}
+  .q-label strong{font-weight:500;color:var(--accent);font-size:12px;letter-spacing:.05em;display:block;margin-bottom:8px}
+  .scale{display:flex;gap:0;background:rgba(26,20,16,.04);border-radius:4px;overflow:hidden;border:1px solid var(--line);width:100%;min-width:0}
+  .scale-opt{flex:1;text-align:center;padding:12px 2px;cursor:pointer;font-size:12px;font-weight:500;color:rgba(26,20,16,0.65);min-width:0;overflow:hidden;transition:all .15s;border-right:1px solid var(--line);user-select:none}
+  .scale-opt:last-child{border-right:none}
+  .scale-opt:hover{background:rgba(26,20,16,.07);color:var(--ink)}
+  .scale-opt.selected{background:var(--ink);color:var(--bg)}
+  .scale-labels{display:flex;justify-content:space-between;margin-top:5px}
+  .scale-labels span{font-size:11px;color:var(--muted);letter-spacing:.04em;margin-top:5px;display:inline-block}
+  .safety-notice{background:rgba(139,69,19,.07);border:1px solid rgba(139,69,19,.2);border-radius:3px;padding:14px 18px;margin:20px 0;font-size:11px;color:var(--accent);line-height:1.75}
+  .safety-notice a{color:var(--accent)}
+  .nav-row{display:flex;gap:12px;align-items:center;margin-top:36px;flex-wrap:wrap}
+  .nav-row .q-count{font-size:10px;color:var(--muted);margin-left:auto}
+  /* results */
+  .results-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:28px}
+  @media(max-width:560px){.results-grid{grid-template-columns:1fr}}
+  .radar-wrap{grid-column:1/-1;display:flex;flex-direction:column;align-items:center}
+  .result-tier{border-radius:4px;padding:20px 24px;margin-bottom:24px;border:1px solid var(--line)}
+  .result-tier h2{margin-bottom:8px}
+  .result-tier p{font-size:12px;line-height:1.75;color:var(--muted)}
+  .dim-card{background:rgba(26,20,16,.03);border:1px solid var(--line);border-radius:3px;padding:16px;position:relative;overflow:hidden}
+  .dim-card-accent{position:absolute;top:0;left:0;width:3px;height:100%}
+  .dim-card-label{font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;word-wrap:break-word;white-space:normal}
+  .dim-card-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:400;margin-bottom:8px;line-height:1.2}
+  .dim-card-bar{height:6px;background:rgba(26,20,16,.08);border-radius:3px;margin-bottom:6px;overflow:hidden}
+  .dim-card-fill{height:100%;border-radius:3px}
+  .dim-card-score{font-size:12px;color:rgba(26,20,16,0.6)}
+  .dim-card-interp{font-size:11.5px;color:rgba(26,20,16,0.65);line-height:1.7;margin-top:8px;font-style:italic;border-top:1px solid var(--line);padding-top:8px;word-wrap:break-word;overflow-wrap:break-word}
+  .email-panel{background:rgba(13,122,112,.05);border:1px solid rgba(13,122,112,.25);border-radius:3px;padding:24px 28px;margin-top:32px}
+  .email-panel h2{color:var(--teal);margin-bottom:8px}
+  .email-row{display:flex;gap:10px;flex-wrap:wrap}
+  .email-input{flex:1;min-width:200px;padding:12px 14px;border:1px solid rgba(13,122,112,.3);border-radius:2px;font-family:'DM Mono',monospace;font-size:12px;background:white;color:var(--ink);outline:none}
+  .email-input:focus{border-color:var(--teal)}
+  .name-input{width:100%;padding:12px 14px;margin-bottom:10px;border:1px solid rgba(13,122,112,.3);border-radius:2px;font-family:'DM Mono',monospace;font-size:12px;background:white;color:var(--ink);outline:none}
+  @media(max-width:580px){
+    .container{padding:28px 14px 60px}
+    .scale-opt{font-size:11px;padding:10px 1px}
+    .scale-labels span{font-size:9.5px}
+    .q-label{font-size:13px}
+    .results-grid{grid-template-columns:1fr}
+    .dim-card-name{font-size:14px}
+  }
+  .email-note{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.7}
+  .thankyou{text-align:center;padding:48px 24px}
+  .thankyou h1{margin-bottom:16px}
+  svg.radar text{font-family:'DM Mono',monospace}
+  /* skill card preview */
+  .skills-preview{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .skill-pill{font-size:10px;padding:4px 12px;border-radius:20px;color:white;letter-spacing:.05em}
+  /* pathway boxes */
+  .pathway-box{border-radius:3px;padding:16px 20px;margin-bottom:12px;border:1px solid var(--line)}
+  .pathway-box h3{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:400;font-style:italic;margin-bottom:6px}
+  .pathway-box p{font-size:11px;color:var(--muted);line-height:1.7}
+  .pathway-box a{color:var(--teal);text-decoration:none;font-size:11px}
+
+  /* ── MOBIUS MESH CARD — fully scoped under #mmc-root, no shared var
+       names with the page's own :root, to prevent any collision. ── */
+  #mmc-root{
+    --mmc-bg:#0A0A1A; --mmc-bg2:#140E28; --mmc-ink:#F2EFFA; --mmc-muted:rgba(242,239,250,0.62);
+    --mmc-accent:#A78BD9; --mmc-teal:#1FB8A8; --mmc-magenta:#FF3D8F;
+    --mmc-glass:rgba(22,17,42,0.55); --mmc-glassLine:rgba(167,139,217,0.32);
+    font-family:'DM Mono',monospace; width:100%; max-width:380px;
+  }
+  #mmc-root *{box-sizing:border-box}
+  #mmc-root .mmc-card{
+    position:relative;border-radius:28px;padding:24px 22px 20px;
+    background:linear-gradient(180deg, rgba(26,20,48,0.92), rgba(14,11,28,0.96));
+    border:1px solid var(--mmc-glassLine);
+    box-shadow:0 20px 50px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+    color:var(--mmc-ink);
+  }
+  #mmc-root .mmc-identity{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+  #mmc-root .mmc-avatar{
+    width:64px;height:64px;flex-shrink:0;border-radius:50%;
+    background:conic-gradient(from 180deg, var(--mmc-accent), var(--mmc-teal), var(--mmc-magenta), var(--mmc-accent));
+    display:flex;align-items:center;justify-content:center;font-size:22px;
+  }
+  #mmc-root .mmc-id-eyebrow{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--mmc-muted);margin-bottom:3px}
+  #mmc-root .mmc-id-name{font-size:21px;font-weight:700;color:var(--mmc-ink);line-height:1.1}
+  #mmc-root .mmc-id-tagline{font-size:9px;color:var(--mmc-accent);margin-top:3px}
+  #mmc-root .mmc-panel{border-radius:20px;padding:16px 18px;background:var(--mmc-glass);border:1px solid var(--mmc-glassLine);margin-bottom:14px}
+  #mmc-root .mmc-panel-title{font-size:14px;font-weight:600;color:var(--mmc-ink);margin-bottom:10px}
+  #mmc-root .mmc-trait-row{display:flex;align-items:baseline;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06)}
+  #mmc-root .mmc-trait-row:last-child{border-bottom:none}
+  #mmc-root .mmc-trait-row.mmc-locked .mmc-trait-label{color:rgba(242,239,250,0.3)}
+  #mmc-root .mmc-trait-row.mmc-locked .mmc-trait-value{color:rgba(242,239,250,0.3)}
+  #mmc-root .mmc-trait-label{font-size:13px;color:var(--mmc-muted)}
+  #mmc-root .mmc-trait-value{font-size:13px;font-weight:700}
+  #mmc-root .mmc-status-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+  #mmc-root .mmc-status-tag{font-size:8px;letter-spacing:.06em;color:var(--mmc-muted);width:60px;flex-shrink:0;text-transform:uppercase}
+  #mmc-root .mmc-status-track{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,0.08);overflow:hidden}
+  #mmc-root .mmc-status-fill{height:100%;border-radius:3px}
+  #mmc-root .mmc-unlock-strip{
+    margin-top:4px;padding:12px 14px;border-radius:14px;
+    background:rgba(196,147,58,0.1);border:1px solid rgba(196,147,58,0.3);
+    display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  }
+  #mmc-root .mmc-unlock-strip p{font-size:10px;color:rgba(242,239,250,0.75);margin:0;flex:1;min-width:140px}
+  #mmc-root .mmc-unlock-strip a{
+    font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#0A0A1A;
+    background:#E8C068;padding:8px 14px;border-radius:16px;text-decoration:none;font-weight:600;white-space:nowrap;
+  }
+  #mmc-root .mmc-brand-row{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)}
+  #mmc-root .mmc-brand-row .mmc-word{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--mmc-muted)}
+  #mmc-root .mmc-brand-row .mmc-word span{color:var(--mmc-teal)}
+</style>
+</head>
+<body>
+
+<!-- SCREEN 0 — INTRO -->
+<div id="screen-intro" class="screen active">
+  <div class="container">
+    <div class="eyebrow">cyborgdreamz · Cuestionario del Ecosistema Relacional</div>
+    <h1>Cuestionario del Ecosistema Relacional</h1>
+    <div class="rule"></div>
+
+    <p class="sub" style="margin-bottom:20px" id="intro-who-this-is-for">
+      Este cuestionario es un punto de partida para personas que se han sentido invisibles, excluidas de la sexualidad y las citas convencionales, limitadas por su salud mental, derrotadas por sistemas que refuerzan cuerpos y mentes normativas, que no entienden cómo existes o te relacionas. Eres deseable y querido/a exactamente como eres, y estás listo/a para encontrar a otras personas que celebren eso.
+    </p>
+
+    <p class="sub" style="margin-bottom:20px" id="intro-what-it-does">
+      Esto no es un juego de emparejamiento, un horóscopo, un arquetipo ni un lenguaje del amor. En lugar de una definición categórica estrecha, es un retrato integral de facetas de ti — presentado visualmente con caminos sencillos para profundizar. Cada dimensión y puntaje está en constante cambio según tus necesidades y experiencias, así que ofrece puntos de partida para la conversación y áreas para explorar antes de construir conexiones que centren nuestras sensibilidades e identidades con cuidado.
+    </p>
+
+    <p class="sub" style="margin-bottom:12px" id="intro-what-it-is-not">
+      El amor es mágico y hermoso, pero las barreras a la seguridad, el cuidado y la compatibilidad son reales y merecen ser entendidas. Este cuestionario, sus resultados y el ecosistema comunitario están enraizados en la vulnerabilidad libre de vergüenza, la no patologización, la anti-opresión, la aceptación y la curiosidad por lo que podría ser el relacionarnos humano y no-humano. Una nota sobre la IA: usamos IA solo para infraestructura y análisis de datos — todas las reflexiones generativas, creativas y de apoyo son hechas por humanos.
+    </p>
+    <div class="safety-notice" style="margin-bottom:20px">
+      <strong>Aviso de contenido:</strong> Este cuestionario incluye preguntas sobre salud mental, sexualidad, trauma, neurodivergencia, ideación suicida y uso de sustancias. Toma descansos si los necesitas. Omite cualquier pregunta que no se sienta segura en este momento.<br><br>
+      <strong>Esto no es una evaluación clínica</strong> — es una herramienta de autoconocimiento. No sustituye la terapia, el diagnóstico ni el apoyo en crisis. Sin embargo, está diseñado para que sea útil compartirlo con tu terapeuta, pareja, u otras personas en tu vida como punto de partida para la conversación.<br><br>
+      Si estás teniendo ideación suicida, por favor pide ayuda. <a href="https://www.mysafetyplan.org/" target="_blank">Plan de seguridad →</a> · Línea de crisis: <strong>988</strong> (presiona 2 para español) · Envía HOLA al 741741<br><br>
+      Rasgos de neurodivergencia adaptados de <a href="https://www.livedexperienceeducator.com/blog/theneurodiversitysmorgasbord" target="_blank">Sonny Wise</a>. Algunas categorías adaptadas de Dimensions of Desire por <a href="https://drlizpowell.com/" target="_blank">Dr. Liz Powell</a>. Power Threat Meaning Framework: Johnstone & Boyle (BPS, 2018).
+    </div>
+
+    <details style="margin-bottom:20px;border:1px solid var(--line);border-radius:3px;padding:14px 18px;background:rgba(26,20,16,.02)">
+      <summary style="cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);outline:none">Cómo Llegamos a Ser Libres</summary>
+      <div style="margin-top:16px;font-size:12.5px;line-height:1.75;color:var(--ink)">
+        <p style="margin-bottom:14px"><em>Por qué esto existe</em></p>
+        <p style="margin-bottom:14px">Construí este cuestionario después de años de observar cómo los espacios de sanación — la terapia, la cultura del bienestar, el trabajo psicodélico, incluso mi propia formación — reforzaban silenciosamente los mismos patrones patriarcales, coloniales y capitalistas de los que decían estar sanando. Los espacios de sanación blancos enseñaron a las personas a consumir su camino hacia el bienestar en soledad. Lo que realmente funcionó, casi siempre, fue algo más simple y más difícil: otros seres humanos que de verdad se preocuparon, en comunidad, no en una transacción.</p>
+        <p style="margin-bottom:18px">No vengo de una cultura con un linaje ininterrumpido. No puedo tomar prestada la sabiduría de supervivencia de comunidades que soportaron lo que la mía no soportó — y no voy a pretender que sí. Lo que puedo hacer es construir mi propio tapiz, abiertamente, en apoyo y siguiendo el liderazgo de las personas de quienes proviene este conocimiento, en lugar de extraerlo.</p>
+
+        <p style="margin-bottom:14px"><em>Quién me enseñó esto</em></p>
+        <p style="margin-bottom:18px">Este trabajo está formado por — y es responsable ante — colegas, maestros y marcos de trabajo que incluyen a: Molly Mitchell, Gary Smith, Raquel Savage, Yosenio Lewis, Dr. Yu Rock, Shadeen Francis, Afrosexology, Ruby Bouie Johnson, y Jimenekia Eborn. Mis colegas en la comunidad de AASECT. Las personas que hacen trabajo de kink informado en trauma, y todas las personas que me han llamado a la reflexión, me han confrontado, y me han hecho responsable en el camino.</p>
+
+        <p style="margin-bottom:14px"><em>La visión real</em></p>
+        <p>Este cuestionario es la primera pieza de algo más grande: un ecosistema descentralizado de ayuda mutua para el sexo y las citas — no una app de citas, no un algoritmo de emparejamiento. El modelo a largo plazo: los fondos más allá de lo necesario para construir esto van a un fondo descentralizado que apoya el intercambio entre pares y la ayuda mutua basada en banco de horas, donde el trabajo y el cuidado se intercambian hora por hora, no por valor de mercado. El acceso no se trata de cumplir estándares de belleza — se trata de evaluación, educación, responsabilidad y cuidado demostrado, centrando a las personas más dañadas por los sistemas actuales de sexo y citas, incluyendo a las trabajadoras sexuales.</p>
+      </div>
+    </details>
+
+    <div class="rule"></div>
+    <p class="sub" style="margin-bottom:24px;font-size:11px">68 questions across 9 dimensions · takes about 12 minutes · all answers are private</p>
+    <div style="margin-bottom:20px">
+      <div style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Referral or access code (optional)</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <input type="text" id="accessCode" placeholder="Ingresa un código si tienes uno"
+          style="flex:1;min-width:180px;padding:10px 14px;border:1px solid var(--line);border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;background:rgba(26,20,16,.04);color:var(--ink);outline:none"
+          oninput="checkCode(this.value)">
+        <span id="codeStatus" style="display:none;padding:10px 14px;border-radius:3px;font-size:11px;font-family:'DM Mono',monospace;align-self:center"></span>
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.6">
+        Clínicos/as: comparte tu código de referido con tus clientes para acceso gratuito.<br>
+        Miembros de la comunidad de trabajo sexual: usa tu código comunitario.<br>
+        ¿Sin código? El cuestionario es gratuito — no se requiere código.
+      </div>
+    </div>
+    <button class="btn" onclick="startQuiz()">Comenzar →</button>
+  </div>
+</div>
+
+<!-- SCREEN 1 — QUIZ -->
+<div id="screen-quiz" class="screen">
+  <div class="container">
+    <div class="progress-label" id="progress-label">Sección 1 de 9</div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div id="section-content"></div>
+    <div class="nav-row">
+      <button class="btn btn-outline" id="btn-back" onclick="prevSection()" style="display:none">← Atrás</button>
+      <button class="btn" id="btn-next" onclick="nextSection()">Next →</button>
+      <span class="q-count" id="q-count"></span>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 2 — RESULTS -->
+<div id="screen-email" class="screen">
+  <div class="container">
+    <div class="eyebrow">Casi terminamos</div>
+    <h1 style="font-size:28px;margin-bottom:12px">Obtén tu visualización</h1>
+    <p class="sub" style="margin-bottom:24px">Ingresa tu nombre y correo electrónico para desbloquear tu radar de 9 dimensiones y tus resultados.</p>
+    <div style="max-width:460px">
+      <input id="gate-name" type="text" placeholder="Tu primer nombre"
+        style="width:100%;padding:12px 14px;margin-bottom:10px;border:1px solid var(--line);border-radius:3px;font-family:'DM Mono',monospace;font-size:13px;background:rgba(26,20,16,.04);color:var(--ink);outline:none">
+      <div style="display:flex;gap:10px;margin-bottom:12px">
+        <input id="gate-email" type="email" placeholder="tu@correo.com"
+          style="flex:1;padding:12px 14px;border:1px solid var(--line);border-radius:3px;font-family:'DM Mono',monospace;font-size:13px;background:rgba(26,20,16,.04);color:var(--ink);outline:none">
+        <button class="btn btn-teal" onclick="gateSubmit()">Ver mis resultados →</button>
+      </div>
+      <p style="font-size:10px;color:var(--muted);line-height:1.7">
+        Tus datos son privados — se usan solo para enviarte tus resultados. Sin spam.<br>
+        Al enviar, aceptas nuestros <a href="terms.html" style="color:var(--teal)">Términos de Uso</a>.<br>
+        <strong>¿Código de referido?</strong>
+        <input type="text" id="accessCode" placeholder="Ingresa el código" oninput="checkCode(this.value)"
+          style="margin-left:6px;padding:4px 8px;border:1px solid var(--line);border-radius:3px;font-family:'DM Mono',monospace;font-size:11px;background:rgba(26,20,16,.04);color:var(--ink);outline:none;width:110px">
+        <span id="codeStatus" style="display:none;margin-left:6px;font-size:10px;padding:3px 8px;border-radius:3px"></span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div id="screen-results" class="screen">
+  <div class="container">
+    <div class="eyebrow">Tu perfil</div>
+    <h1>Tu Visualización</h1>
+    <p class="sub" style="margin-bottom:8px">Cada dimensión refleja un conjunto de tus respuestas. No hay una forma ideal — esto es un mapa, no un veredicto.</p>
+    <div class="rule"></div>
+    <div id="result-tier-box"></div>
+
+    <!-- CONSENT EDUCATION MODULE — shown when Q6 or Q7 > 0, hidden otherwise -->
+    <div id="consent-module" style="display:none;margin:0 0 24px;padding:18px 20px;background:rgba(128,64,168,0.07);border:1px solid rgba(128,64,168,0.25);border-radius:6px">
+      <div class="eyebrow" style="color:#8040A8;margin-bottom:10px">Una nota sobre el rechazo y el no.</div>
+      <p class="sub" style="margin-bottom:12px">
+        Cuando alguien dice no a una iniciativa o a una petición, su no viene de adentro de sí misma/o — de su cuerpo, su momento, sus propias necesidades en ese instante. No sabes de qué se trata su no. No te debe una explicación completa. Escuchó su voz interior y dijo <em>esto no es lo que estoy sintiendo o necesitando en este momento</em> — y eso es exactamente lo que queremos que las personas puedan hacer.
+      </p>
+      <p class="sub" style="margin-bottom:12px">
+        La historia de que un no es un rechazo a tu atractivo, tu deseabilidad, tu valor — esa historia tiene raíces en marcos de posesión, competencia y conquista. Cuando salimos de eso y entramos a uno donde somos personas iguales intercambiando energía y buscando conexión, un no se convierte en información, no en un veredicto. Si alguien no dice un sí rotundo, ¿de verdad quieres esa conexión en este momento?
+      </p>
+      <p class="sub" style="margin-bottom:16px;font-style:italic;border-left:2px solid #8040A8;padding-left:12px">
+        Un no, idealmente, es "gracias por cuidarte." — Reid Mihalko
+      </p>
+      <p class="sub" style="margin-bottom:12px">
+        Si interpretas un no como una oportunidad para intentarlo con más fuerza, ese es un patrón que vale la pena examinar — uno que trata el cuerpo de otra persona como un juego que hay que ganar. Puedes estar plenamente presente, apasionada/o, e incluso intensa/o con consentimiento claro y límites negociados. De hecho es más caliente. Y un no es un no: no hay vuelta a preguntar sin una invitación explícita de su parte. Tu capacidad de dejarlo ahí no es una pérdida. Es lo que te hace alguien con quien es seguro estar.
+      </p>
+      <div class="rule" style="margin:14px 0"></div>
+      <p style="font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase">Recursos</p>
+      <p style="font-size:11px;color:var(--muted);line-height:1.8">
+        RAINN: <a href="https://rainn.org" style="color:#8040A8">rainn.org</a> · 1-800-656-4673<br>
+        SIECUS (educación sexual): <a href="https://siecus.org" style="color:#8040A8">siecus.org</a><br>
+        Reid Mihalko: <a href="https://reidaboutsex.com" style="color:#8040A8">reidaboutsex.com</a><br>
+        ¿Quieres trabajar esto con alguien? <a href="https://soleilmerroir.com" style="color:#8040A8">soleilmerroir.com</a>
+      </p>
+    </div>
+
+    <!-- MOBIUS MESH CARD — free preview, embedded inline. Container styled
+         dark/contrasting on purpose since it reads as a distinct collectible
+         object (a trading card), not a section that should blend into the
+         page's cream/navy palette. -->
+    <div id="mesh-card-mount" style="margin:0 0 32px;display:flex;justify-content:center"></div>
+
+    <div class="radar-wrap" style="margin-bottom:16px">
+      <svg class="radar" id="radar-svg" viewBox="0 0 460 460" width="100%" style="max-width:460px"></svg>
+    </div>
+    <div id="radar-legend" style="margin-bottom:32px;line-height:1.8"></div>
+    <div class="results-grid" id="results-cards"></div>
+    <div id="pathways-section" style="margin-top:28px"></div>
+    
+  <!-- RELATIONSHIP ECOSYSTEM VISUALIZATION -->
+  <div style="margin:36px 0 28px">
+    <div class="eyebrow" style="margin-bottom:6px">Your relationship ecosystem</div>
+    <p class="sub" style="margin-bottom:18px">Where you currently invest relational energy — and what a more intentional distribution might look like based on your scores.</p>
+    <svg id="ecosystemSvg" viewBox="0 0 560 320" width="100%" style="max-width:560px;display:block;margin:0 auto"></svg>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;max-width:560px;margin-left:auto;margin-right:auto">
+      <div id="ecosystemNote1" style="background:rgba(26,20,16,.04);border-radius:3px;padding:10px 14px;font-size:11px;color:rgba(26,20,16,0.65);line-height:1.65;border-left:3px solid #C04878"></div>
+      <div id="ecosystemNote2" style="background:rgba(26,20,16,.04);border-radius:3px;padding:10px 14px;font-size:11px;color:rgba(26,20,16,0.65);line-height:1.65;border-left:3px solid #107870"></div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <div class="email-panel">
+      <h2>Recibe tus resultados</h2>
+      <p class="sub" style="margin-bottom:16px">Ingresa tu nombre y correo electrónico para recibir tu visualización junto con una guía para explorar tus resultados con personas en tu vida.</p>
+      <input class="name-input" id="result-name" type="text" placeholder="Tu primer nombre"/>
+      <div class="email-row">
+        <input class="email-input" id="result-email" type="email" placeholder="tu@correo.com"/>
+        <button class="btn btn-teal" onclick="submitEmail()">Enviar mis resultados</button>
+      </div>
+      <p class="email-note">
+        Tus datos son privados y se usan solo para enviarte tus resultados. Sin spam.<br>
+        ¿Quieres explorar esto con una pareja o terapeuta? Comparte el enlace del cuestionario — y luego comparen sus visualizaciones.<br>
+        <strong>Cuestionario en pareja:</strong> ambos lo completan por $12 · <strong>Referido de terapeuta:</strong> pídele a tu clínico/a un código de descuento.
+      </p>
+    </div>
+    <div class="rule"></div>
+    <button class="btn btn-outline" onclick="retakeQuiz()" style="font-size:10px">Empezar de nuevo</button>
+  </div>
+</div>
+
+<!-- SCREEN 3 — THANK YOU -->
+<div id="screen-thankyou" class="screen">
+  <div class="container">
+    <div class="thankyou">
+      <div class="eyebrow">Gracias</div>
+      <h1>En camino hacia ti</h1>
+      <p class="sub">Tu visualización está siendo preparada y llegará a tu bandeja de entrada en breve. Revisa la carpeta de spam si no la ves en unos minutos.</p>
+      <div class="rule"></div>
+      <p class="sub" style="margin-bottom:24px">
+        ¿Quieres profundizar más? Explora cómo se superpone tu perfil con el de otra persona usando el mapeador completo del ecosistema relacional — o reserva una sesión para repasar tus resultados.
+      </p>
+      <a href="https://soleilmerroir.com" class="btn">Volver al sitio</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const SECTIONS = [
+  {
+    id:"needs", label:"Necesidades Básicas No Satisfechas", color:"#107870",
+    desc:"Comunidad, autorregulación, necesidades básicas, educación",
+    accent:"rgba(16,120,112,0.12)",
+    questions:[
+      {n:1, text:"¿Qué tan grande es tu necesidad / brecha en apoyo de cuidado, amistad e integración comunitaria?", lo:"sin brechas", hi:"brechas significativas"},
+      {n:2, text:"¿Qué tan difícil es la autorregulación para ti actualmente?", lo:"muy fácil", hi:"muy difícil"},
+      {n:3, text:"¿Qué tan grandes son tus brechas en necesidades básicas (alimentación, vivienda, etc)?", lo:"necesidades cubiertas", hi:"brechas significativas"},
+      {n:4, text:"¿Qué tan grande es tu necesidad de más educación sexual y relacional / mayor autoconciencia sexual?", lo:"ninguna", hi:"necesidad significativa"},
+      {n:5, text:"¿Qué tan segura/o te sientes comunicando consentimiento y límites en tiempo real durante encuentros eróticos?", lo:"muy segura/o", hi:"poco segura/o", flag:true},
+      {n:6, text:"Cuando alguien dice que no o se retrae, ¿cuánto te repliegas hacia adentro en vergüenza o autocrítica?", lo:"raramente", hi:"significativamente", flag:true},
+      {n:7, text:"Cuando alguien dice que no o vacila, ¿qué tan probable es que vuelvas a preguntar, persuadas, o busques formas de evitarlo?", lo:"raramente", hi:"muy probable", flag:true},
+      {n:8, text:"¿Qué tan fuertes son tus patrones de evitación y dificultades de comunicación (en conflicto, relaciones, procesamiento)?", lo:"mínimos", hi:"fuertes"},
+      {n:9, text:"¿Qué tan cómoda/o te sientes nombrando y procesando emociones?", lo:"muy cómoda/o", hi:"muy incómoda/o"},
+    ]
+  },
+  {
+    id:"mentalhealth", label:"Carga de Salud Mental", color:"#906010",
+    desc:"Intensidad actual de ansiedad, depresión, disociación y otros síntomas",
+    accent:"rgba(144,96,16,0.1)", safety:true,
+    questions:[
+      {n:10, text:"¿Qué tan fuertes / frecuentes son tus pensamientos intrusivos?", lo:"raros", hi:"constantes"},
+      {n:11, text:"¿Qué tan fuerte / frecuente es tu hipervigilancia / sistema nervioso elevado?", lo:"raro", hi:"constante"},
+      {n:12, text:"¿Qué tan fuertes / frecuentes son tus respuestas de disociación / desconexión?", lo:"raras", hi:"frecuentes"},
+      {n:13, text:"¿Cuánto peso tiene el uso de sustancias en tu funcionamiento diario?", lo:"para nada", hi:"significativamente"},
+      {n:14, text:"¿Qué tan frecuente / intensa es tu ideación suicida últimamente?", lo:"ninguna", hi:"frecuente", safety:true},
+      {n:15, text:"¿Qué tan intensos / impactantes son tus síntomas de depresión actualmente?", lo:"mínimos", hi:"intensos"},
+      {n:16, text:"¿Qué tan intensos / impactantes son tus síntomas de ansiedad actualmente?", lo:"mínimos", hi:"intensos"},
+      {n:17, text:"¿Qué tan intensos / impactantes son tus síntomas de TOC actualmente?", lo:"mínimos", hi:"intensos"},
+      {n:18, text:"¿Qué tan intensos / impactantes son tus síntomas psicóticos actualmente?", lo:"ninguno", hi:"significativos"},
+    ]
+  },
+  {
+    id:"identity", label:"Identidad y Estresores Corporales", color:"#B85020",
+    desc:"Género, trauma, conciencia somática, discapacidades",
+    accent:"rgba(184,80,32,0.08)",
+    questions:[
+      {n:19, text:"¿Qué tan intenso es tu trauma relacionado con la identidad (disforia, raza, género, imagen corporal, etc)?", lo:"mínimo", hi:"intenso"},
+      {n:20, text:"¿Qué tan intenso es tu trauma religioso o de impacto cultural?", lo:"mínimo", hi:"intenso"},
+      {n:21, text:"¿Hay condiciones de salud física u otras discapacidades que impactan tu juego / relaciones?", lo:"ninguna", hi:"impacto significativo"},
+      {n:22, text:"¿Cuánto impacta tu identidad y expresión de género, y el estigma asociado, tu bienestar diario?", lo:"impacto mínimo", hi:"impacto diario significativo"},
+      {n:66, text:"¿Qué tan difícil es tu relación con tu cuerpo?", lo:"de aceptación", hi:"de odio o destrucción"},
+    ]
+  },
+  {
+    id:"erotic", label:"Erótica y Kink", color:"#8040A8",
+    desc:"Deseo, kink, dinámicas de poder, autoconocimiento erótico, vergüenza",
+    accent:"rgba(128,64,168,0.08)",
+    intro:"El sexo no es penetración ni clímax, y todos los cuerpos son cuerpos sexys merecedores de placer y expresión. La sexualidad es el concepto general bajo el cual puede existir una infinidad de experiencias, tanto solas como con otras personas, digitalmente o AFK (fuera del teclado). Algunas expresiones comunes de la sexualidad incluyen el kink (BDSM, fetiche, poder, bondage, dolor, etc), el juego sensorial / sensual (cualquier tipo de contacto consensuado, que puede o no incluir contacto genital), el erotismo (actos explícitos que involucran genitales o lenguaje erótico), y experiencias de fetiche (una experiencia o elemento erótico específico). Por ejemplo, podrías identificarte como Ace pero aún participar en dinámicas sensuales y de kink mientras prefieres que no se dirija energía erótica hacia ti. O podrías ser una persona kinky que requiere romance y erotismo, y solo juega en privado. No incluimos dinámicas relacionales o de pareja aquí porque es importante evaluar tu ser sexual y sensual en tu totalidad, distinto de otras dinámicas de pareja en tu vida.",
+    questions:[
+      {n:23, text:"¿Qué tan cómoda/o te sientes con la exploración sexual, sensual o de kink contigo misma/o?", lo:"nada cómoda/o", hi:"muy cómoda/o"},
+      {n:24, text:"¿Qué tan cómoda/o te sientes con la exploración sexual, sensual o de kink con otras personas?", lo:"nada cómoda/o", hi:"muy cómoda/o"},
+      {n:25, text:"¿Qué tan importantes son las dinámicas de poder, experiencias de kink y sus marcos para tu juego / relaciones?", lo:"no importante", hi:"esencial"},
+      {n:26, text:"¿Qué tan importante es la intensidad en el kink (dolor / poder / edge play) para tu juego / relaciones?", lo:"no importante", hi:"esencial"},
+      {n:27, text:"¿Qué tan importante es ser quien inicia / da / domina para tu juego / relaciones?", lo:"no importante", hi:"esencial"},
+      {n:28, text:"¿Qué tan importante es el uso del dolor para tu juego / relaciones?", lo:"no importante", hi:"esencial"},
+      {n:29, text:"¿Qué tan importante es la exploración de fetiches para tu juego / relaciones?", lo:"no importante", hi:"esencial"},
+      {n:30, text:"¿Qué tan importante es el toque y la exploración sensual no sexual para tu juego?", lo:"no importante", hi:"esencial"},
+      {n:31, text:"¿Con qué frecuencia prefieres tener sexo?", lo:"raramente", hi:"diario o más"},
+      {n:32, text:"¿Qué tan importante es la variedad y explorar tabúes en tu juego?", lo:"no importante", hi:"esencial"},
+      {n:33, text:"¿Cuánto influye la vergüenza en lo que estás dispuesta/o a compartir o explorar eróticamente?", lo:"mínimamente", hi:"significativamente"},
+    ]
+  },
+  {
+    id:"emotional", label:"Nutrición Emocional", color:"#2878A0",
+    desc:"Necesidad de co-regulación, procesamiento emocional, calma",
+    accent:"rgba(40,120,160,0.07)",
+    questions:[
+      {n:34, text:"¿Qué tan fuerte es tu necesidad de que el juego ocurra solo en una relación emocionalmente profunda y comprometida / a largo plazo?", lo:"ninguna necesidad", hi:"necesidad fuerte"},
+      {n:35, text:"Cuando piensas en tus conexiones emocionales más profundas en tu vida, ¿con qué frecuencia fueron con parejas sexuales (saludables)?", lo:"raramente o nunca", hi:"casi siempre"},
+      {n:36, text:"¿Con qué intensidad necesitas nutrición emocional, ser presenciada/o, y procesamiento para tus relaciones de kink / sensuales / sexuales?", lo:"no importante", hi:"esencial"},
+      {n:37, text:"¿Qué tan importantes son las experiencias de calma / co-regulación para tus relaciones de kink / sexuales?", lo:"no importante", hi:"esencial"},
+      {n:38, text:"¿Cuánto necesitas chequeos verbales y emocionales durante experiencias sexuales / sensuales o de kink?", lo:"raramente necesario", hi:"siempre necesario"},
+    ]
+  },
+  {
+    id:"relational", label:"Arquitectura y Visión Relacional", color:"#C04878",
+    desc:"Visión de estructura relacional, colectiva vs diádica, integración cultural, diseño de relaciones",
+    accent:"rgba(192,72,120,0.07)",
+    questions:[
+      {n:39, text:"¿Qué tan importante es el entrelazamiento profundo de vidas — futuros compartidos, logística compartida, construir vidas juntas — en tus relaciones?", lo:"no importante", hi:"muy importante"},
+      {n:40, text:"¿Qué tan abierta/o estás a tener múltiples parejas o conexiones integradas en cualquier formato (solo romántico, parejas de vida que cohabitan con hogares y grupos compartidos, parejas co-parentales, amores solo digitales, parejas de kink, etc)?", lo:"nada abierta/o", hi:"muy abierta/o"},
+      {n:41, text:"¿Cuánto quieres que tus vínculos sociales y comunitarios tengan el mismo peso e inversión que tus relaciones románticas?", lo:"la relación romántica es primaria", hi:"la comunidad tiene igual o mayor peso"},
+      {n:42, text:"¿Qué tan centrales son las tradiciones culturales, prácticas ancestrales, u obligaciones comunitarias en cómo estructuras tus relaciones y arreglos de vida?", lo:"construí mi propio marco independientemente", hi:"la práctica cultural y la comunidad son guías primarias"},
+    ]
+  },
+  {
+    id:"somatic", label:"Importancia Somática y Espiritual", color:"#5830A0",
+    desc:"Espiritualidad, trabajo de respiración, conciencia corporal en el juego",
+    accent:"rgba(88,48,160,0.07)",
+    questions:[
+      {n:43, text:"¿Qué tan importante es la espiritualidad / lo sagrado y el ritual para tu juego o tu vida diaria?", lo:"no importante", hi:"esencial"},
+      {n:44, text:"¿Qué tan conectada/o estás con tu conciencia somática / corporal en el juego y las relaciones?", lo:"desconectada/o", hi:"profundamente conectada/o"},
+      {n:45, text:"¿Qué tan conectada/o estás con tu respiración y su capacidad de regular / mejorar el placer y el bienestar?", lo:"desconectada/o", hi:"profundamente conectada/o"},
+    ]
+  },
+  {
+    id:"neurodivergence", label:"Neurodivergencia", color:"#3A7030",
+    desc:"Rasgos de neurodivergencia — adaptado del Neurodiversity Smorgasbord de Sonny Wise",
+    accent:"rgba(58,112,48,0.07)",
+    intro:"Estas preguntas son sobre rasgos que puedes experimentar — no son déficits. No hay una forma incorrecta aquí.",
+    questions:[
+      {n:46, text:"Estados alterados (sueños lúcidos, ensoñación, alucinaciones, visiones, manía, psicosis, disociación)", lo:"raramente", hi:"frecuentemente"},
+      {n:47, text:"Diferencias en la atención (regular la atención, monotropismo, estado de flujo, hiperenfoque)", lo:"raramente", hi:"frecuentemente"},
+      {n:48, text:"Diferencias de comunicación (comunicación no hablada, ecolalia, diferencias en tono, ritmo, contacto visual)", lo:"raramente", hi:"frecuentemente"},
+      {n:49, text:"Diferencias o dificultades alimentarias", lo:"raramente", hi:"frecuentemente"},
+      {n:50, text:"Diferencias en el procesamiento emocional (diferencias en intensidad, duración, nombrar, describir emociones)", lo:"raramente", hi:"frecuentemente"},
+      {n:51, text:"Diferencias de empatía (cognitiva, emocional, somática, especular, estética)", lo:"raramente", hi:"frecuentemente"},
+      {n:52, text:"Diferencias de memoria (memoria de trabajo, semántica, prospectiva, episódica, procedimental)", lo:"raramente", hi:"frecuentemente"},
+      {n:53, text:"Diferencias en funcionamiento motor (control motor, motricidad fina, motricidad gruesa, tics motores)", lo:"raramente", hi:"frecuentemente"},
+      {n:54, text:"Pluralidad (multiplicidad, múltiples seres distintos, niña/o interior, múltiples diálogos internos, partes)", lo:"raramente", hi:"frecuentemente"},
+      {n:55, text:"Diferencias sensoriales (búsqueda sensorial, evitación, hipersensibilidad, hiposensibilidad, sinestesia)", lo:"raramente", hi:"frecuentemente"},
+      {n:56, text:"Diferencias o problemas de sueño", lo:"raramente", hi:"frecuentemente"},
+      {n:57, text:"Estimulación / stimming (auditiva, táctil, vocal, visual, vestibular, propioceptiva, olfativa)", lo:"raramente", hi:"frecuentemente"},
+      {n:58, text:"Diferencias en la percepción del tiempo (variabilidad, acelerarse, desacelerarse, tiempo cíclico vs lineal)", lo:"raramente", hi:"frecuentemente"},
+      {n:59, text:"Diferencias en la imaginación visual (afantasía, afantasía parcial, hiperfantasía)", lo:"raramente", hi:"frecuentemente"},
+      {n:60, text:"Escuchar voces (monólogo interno, pensamientos intrusivos, voces externas o internas)", lo:"raramente", hi:"frecuentemente"},
+      {n:61, text:"Diferencias en procesar o expresar información", lo:"raramente", hi:"frecuentemente"},
+    ]
+  },
+  {
+    id:"digital", label:"Relación Digital", color:"#2A4A8A",
+    desc:"Uso de IA, conexión parasocial, y patrones de sustitución digital",
+    accent:"rgba(42,74,138,0.08)",
+    intro:"Estas preguntas son sobre cómo funcionan los espacios digitales y de IA en tu vida relacional y emocional. No hay juicio aquí — solo información.",
+    questions:[
+      {n:62, text:"¿Con qué frecuencia interactúas con IA? Bajo es uso ocasional una vez por semana, alto es uso constante diario.", lo:"ocasionalmente, una vez por semana", hi:"uso constante diario"},
+      {n:63, text:"¿Con qué frecuencia te involucras en relaciones parasociales o con personalidades en línea como una salida de escape y/o social, emocional o sexual?", lo:"raramente", hi:"frecuentemente, parte central de mi vida"},
+      {n:64, text:"De las personas con quienes eres más vulnerable, ¿qué porcentaje de ellas son digitales o en línea?", lo:"mayormente conexiones en persona", hi:"mayormente digitales o en línea"},
+      {n:65, text:"En este espacio, ¿qué tan integrado está tu yo digital o en línea con tu vida física? Bajo significa que eres una persona diferente en tus espacios en línea y los dos nunca se encuentran.", lo:"completamente separado — persona diferente en línea", hi:"completamente integrado en todas partes"},
+    ]
+  }
+];
+
+const SKILL_MAP = {
+  needs:        {skills:["ARTICULATOR","CONNECTOR","REGULATOR"], colors:["#0a9080","#ffd700","#39ff14"]},
+  mentalhealth: {skills:["REGULATOR","THE SEER","SHAME SHIFTER"], colors:["#39ff14","#00c8a0","#c8802a"]},
+  identity:     {skills:["THE BRAVE","SHAME SHIFTER","THE SOMATIC"], colors:["#ff6b9d","#c8802a","#6040b0"]},
+  erotic:       {skills:["EROS","SAFETY KEEPER","SOVEREIGN"], colors:["#d4336e","#a02030","#7b2fff"]},
+  relational:   {skills:["EMPATH","CONNECTOR","SOVEREIGN"], colors:["#ff2d78","#ffd700","#7b2fff"]},
+  emotional:    {skills:["WITNESS","EMPATH","THE MENDER"], colors:["#00e5ff","#ff2d78","#ffb347"]},
+  somatic:      {skills:["THE SOMATIC","THE CURIOUS","REGULATOR"], colors:["#6040b0","#3060d0","#39ff14"]},
+  neurodivergence:{skills:["REGULATOR","WITNESS","ARTICULATOR","THE CURIOUS"], colors:["#39ff14","#00e5ff","#0a9080","#3060d0"]},
+  digital:      {skills:["THE BRAVE","SHAME SHIFTER","CONNECTOR","SAFETY KEEPER"], colors:["#ff6b9d","#c8802a","#ffd700","#a02030"]},
+};
+
+// INTERPRETATIONS — Soleil Merroir's own words (written + audio transcript)
+const INTERPRETATIONS = {
+  needs:[
+    [0,.3,"Tus necesidades no satisfechas están relativamente bajas en este momento — pero presta atención cuando los factores de estrés cambien. El estrés de supervivencia impacta nuestra relación con el tiempo, la energía y la presencia con nosotras/os mismas/os y con otras personas. Nunca fuimos diseñadas/os para hacer esto solas/os."],
+    [.3,.6,"Tus necesidades no satisfechas probablemente están impactando cómo te presentas en espacios relacionales. El estrés financiero y de bienestar limita el tiempo, la capacidad de conectar, y la habilidad de relajarte en el placer. La dificultad relacional no es patología — es el sistema."],
+    [.6,1,"Tus necesidades no satisfechas están impactando significativamente cómo te relacionas. La pobreza y la explotación capitalista no son tu culpa, pero la vergüenza cultural puede hacernos sentir que sí lo son. La pertenencia y el amor no requieren estabilidad financiera — apoyarte en el apoyo comunitario como un recurso, no como un déficit, es el camino."],
+  ],
+  mentalhealth:[
+    [0,.3,"Tus necesidades de salud mental están relativamente bajas — pero presta atención cuando la activación o la desregulación comiencen a impactar la vida diaria. Como persona más regulada, eres un ancla comunitaria vital para otras personas. Esa capacidad importa y merece ser protegida."],
+    [.3,.6,"Tus necesidades de salud mental están elevadas. Estas son reacciones a factores de estrés, trauma y rechazo cultural — tu sistema nervioso adaptándose para sobrevivir. Buscar apoyo para entender tus patrones de activación no se trata de arreglarte. Se trata de reducir el malestar para que tengas más capacidad de conexión, placer y pertenencia."],
+    [.6,1,"Tus necesidades de salud mental son altas, y es importante buscar apoyo humano. Tus síntomas son las adaptaciones de tu sistema nervioso a un mundo que es genuinamente traumatizante — no una señal de déficit en ti. Revisa nuestra sección de recursos, acércate a la comunidad, y sabe que no estás sola/o en esto."],
+  ],
+  identity:[
+    [0,.3,"Tu conciencia de identidad y tu relación con tu cuerpo permanecen fuertes. Considera cómo tus identidades y fortalezas te dan capacidad para cuidar a otras personas — mientras te mantienes curiosa/o sobre el impacto del poder y el privilegio basados en la identidad en tus dinámicas."],
+    [.3,.6,"Hay aspectos centrales de ti misma/o en conflicto que necesitan apoyo. El malestar viene de sistemas culturales sesgados y llenos de odio, no de algo incorrecto en quien eres. Tus identidades y tu cuerpo son sitios mágicos de posibilidad cuando se sostienen con cuidado. ¿Qué aspectos puedes tratar con más autocompasión?"],
+    [.6,1,"Estás experimentando un malestar alto relacionado con la identidad y el cuerpo. Lo que está mal no eres tú — es el mundo al que llegaste y cómo trata a personas como tú. Este trauma afecta cada parte de la vida y las relaciones, especialmente cuando esos patrones se replican en dinámicas sociales. Mereces ser incluida/o en las conversaciones sobre quién eres desde el primer día."],
+  ],
+  erotic:[
+    [0,.3,"El erotismo y la sensualidad tienen baja importancia para ti en este momento, y está bien. Cada persona se relaciona con la sexualidad y el placer de manera diferente, particularmente quienes están en la escala Ace / Grey. Aún puedes crear conexión significativa y placentera — contigo misma/o, en fantasía, o con otras personas — completamente en tus propios términos."],
+    [.3,.6,"El erotismo y la sensualidad te importan y pueden cultivarse en formas infinitas — individualmente, con parejas, digitalmente, en comunidad, o en fantasía. Dáte permiso para explorar cómo se ve eso en cada contexto, por separado. La práctica basada en el consentimiento abre puertas que la vergüenza mantiene cerradas."],
+    [.6,1,"La expresión erótica y sensual son clave para tu bienestar — tus dinámicas relacionales deberían hacer espacio para esto, o crear caminos para buscar expresión en otro lugar. El deseo alto no es patología, pero requiere más comunicación y creatividad para navegarlo éticamente. Mereces acceso a la totalidad de ti misma/o."],
+  ],
+  relational:[
+    [0,.3,"Te orientas más hacia la monogamia — buscando profundidad y compromiso en un mundo centrado en la pareja. Un recordatorio: eres una persona completa, que no necesita a otra para completarte. Tu propia base de apego seguro, con la comunidad como fundamento, es la infraestructura a largo plazo para tu bienestar."],
+    [.3,.6,"Eres relacionalmente flexible — ya sea en el camino hacia un nuevo ecosistema relacional, o con curiosidad sobre lo que es posible si rompes algunos esquemas. ¿Cómo se vería distribuir tus necesidades a través de tu ecosistema relacional con consentimiento y claridad?"],
+    [.6,1,"Estás conectada/o colectivamente y buscas interconexión — no solo una pareja, sino un ecosistema. No estamos asumiendo poliamor aquí por defecto. Estamos asumiendo por defecto distribuir tus necesidades a través del ecosistema relacional con consentimiento y claridad. Construir habilidades de comunicación y manejo de conflicto será la infraestructura que lo haga funcionar."],
+  ],
+  emotional:[
+    [0,.3,"Has identificado una baja necesidad de nutrición emocional. Esto a menudo se correlaciona con rasgos de neurodivergencia o con la socialización lejos de la vulnerabilidad. Si te sientes cómoda/o aquí, ¿cómo podrías comunicar temprano sobre dinámicas con bajo entrelazamiento emocional? ¿Y cómo se ve el aftercare para ti?"],
+    [.3,.6,"La nutrición emocional acentúa tu capacidad de sentirte cerca y conectada/o. Sentirte sostenida/o emocionalmente puede preceder tu capacidad de experimentar excitación o seguridad con otra persona. Es clave comunicar estas necesidades temprano y a menudo — incluyendo qué apoyo necesitas después de experiencias íntimas."],
+    [.6,1,"La nutrición emocional es central en cómo te relacionas y un camino hacia tu apertura sexual. Quieres sentirte vista/o y sostenida/o en toda tu expansividad emocional. Esto requiere un alto autoconocimiento y la capacidad de enseñar a tus parejas y comunidad cómo se siente realmente sostenerte bien."],
+  ],
+  somatic:[
+    [0,.3,"El anclaje somático y la exploración espiritual no son requeridos para tu bienestar, pero siguen siendo partes de ti y de otras personas. ¿Hay una apertura para encontrar más conexión con tu cuerpo y sus señales como un camino hacia más placer y presencia?"],
+    [.3,.6,"La espiritualidad y la conciencia somática son herramientas en tu caja de herramientas para el bienestar y el relacionarte. Explora conexiones que celebren estos aspectos y te den espacio para jugar, anclarte y crear ritual alrededor del placer y la conexión."],
+    [.6,1,"Tu ser espiritual y somático son anclas para tu bienestar. Tu cuerpo guía tu intuición y tu arraigo — a la ancestría, a la naturaleza, a otras dimensiones del ser. Estos no están separados de tu sexualidad; son parte de ella."],
+  ],
+  neurodivergence:[
+    [0,.3,"Tus rasgos relacionados con la neurodivergencia están relativamente bajos — pero probablemente has estado o estarás en conexiones con personas que tienen cerebros y sistemas neuropicantes. Entender cómo funcionan diferentes cerebros y cuerpos te hace una/un miembro de la comunidad y pareja más sintonizada/o."],
+    [.3,.6,"Estás experimentando rasgos relacionados con la neurodivergencia que probablemente están impactando tu bienestar diario y tus relaciones. Cuanto más específicamente puedas nombrar tus experiencias, patrones y sensibilidades, más podrás crear dinámicas relacionales que realmente te convengan. Estos no son déficits — son lugares de adaptación y comunicación mejorada."],
+    [.6,1,"Estás experimentando un nivel alto de neurodivergencia, que impacta cada faceta de cómo te relacionas. Mapea tus rasgos, sensibilidades y necesidades — y guíate por ellos en las conversaciones relacionales. No es pedir demasiado que las personas hagan adaptaciones para comunicarse contigo y entenderte. No estás rota/o — eres un cubo Rubik único y sexy que busca desbloquear sus propios patrones."],
+  ],
+  digital:[
+    [0,.3,"Las relaciones digitales no son una parte significativa de tu ecosistema en este momento — pero considera cómo las comunidades digitales podrían mejorar tu bienestar y tu acceso a partes de ti misma/o que son más difíciles de alcanzar en persona. No hay vergüenza en empezar ahí."],
+    [.3,.6,"Las relaciones digitales ya están en tu ecosistema. ¿Qué tan integrada/o está la persona que existes en línea comparada con la vida real? Las conexiones digitales nos nutren mejor cuanto más alineada e integrada esté nuestra expresión con nuestros valores — ¿te estás trayendo completamente a tus espacios digitales?"],
+    [.6,1,"Tus relaciones digitales están haciendo un trabajo relacional significativo, lo cual puede ser tanto un recurso como un desafío. ¿Tu vulnerabilidad tiene lugares seguros para existir en línea? ¿Qué tan equilibradas están esas conexiones con el contacto humano fuera del teclado? Estas preguntas no son un juicio — son una señal gentil hacia el relacionarte humano y encarnado."],
+  ],
+};
+
+// RESULT_TIERS eliminado — no hay puntuación de severidad compuesta ni etiquetas de veredicto en ningún lugar.
+// Todo el encuadre de las dimensiones es informativo y empático, basado en INTERPRETATIONS.
+// Las señales de consentimiento de Q6/Q7 activan un módulo educativo separado, no una categoría de puntuación.
+
+let currentSection = 0, answers = {}, scores = {};
+
+// Referral codes — add/change as needed
+const VALID_CODES = {
+  'SWFREE':      {label:'Sex Worker Community',    tier:'sw',         discount:true},
+  'SWCOMMUNITY': {label:'Sex Worker Community',    tier:'sw',         discount:true},
+  'THERAPIST':   {label:'Clinician Referral',      tier:'clinician',  discount:true},
+  'CLINICIAN':   {label:'Clinician Referral',      tier:'clinician',  discount:true},
+  'CYBORGDREAMZ':{label:'cyborgdreamz Community',  tier:'community',  discount:true},
+  'CYBER2026':   {label:'cyborgdreamz Community',  tier:'community',  discount:true},
+};
+let referralCode = null;
+let referralTier = null;
+
+function checkCode(val) {
+  const code = val.trim().toUpperCase();
+  const status = document.getElementById('codeStatus');
+  const input = document.getElementById('accessCode');
+  if (!code) { status.style.display='none'; return; }
+  if (VALID_CODES[code]) {
+    const entry = VALID_CODES[code];
+    referralCode = code;
+    referralTier = entry.tier;
+    status.style.display='inline-block';
+    status.style.background='rgba(16,120,112,.1)';
+    status.style.color='#107870';
+    status.style.border='1px solid rgba(16,120,112,.3)';
+    status.textContent='✓ ' + entry.label;
+    input.style.borderColor='rgba(16,120,112,.4)';
+  } else if (code.length >= 4) {
+    referralCode = null;
+    referralTier = null;
+    status.style.display='inline-block';
+    status.style.background='rgba(184,80,32,.08)';
+    status.style.color='#B85020';
+    status.style.border='1px solid rgba(184,80,32,.2)';
+    status.textContent='Código no reconocido';
+    input.style.borderColor='rgba(184,80,32,.3)';
+  } else {
+    status.style.display='none';
+  }
+}
+
+function startQuiz(){ showScreen('quiz'); renderSection(); }
+
+function renderSection(){
+  const sec = SECTIONS[currentSection];
+  const totalQ = SECTIONS.reduce((a,s)=>a+s.questions.length,0);
+  const doneQ = SECTIONS.slice(0,currentSection).reduce((a,s)=>a+s.questions.length,0);
+  const pct = Math.round((currentSection/SECTIONS.length)*100);
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('progress-label').textContent=`Sección ${currentSection+1} de ${SECTIONS.length} — ${sec.label}`;
+  document.getElementById('q-count').textContent=`P${doneQ+1}–${doneQ+sec.questions.length} de ${totalQ}`;
+  document.getElementById('btn-back').style.display=currentSection>0?'inline-block':'none';
+  document.getElementById('btn-next').textContent=currentSection===SECTIONS.length-1?'Ver mis resultados →':'Siguiente →';
+  let html=`<div class="section-header" style="border-left-color:${sec.color};background:${sec.accent}"><h2 style="color:${sec.color}">${sec.label}<\/h2><p>${sec.desc}<\/p><\/div>`;
+  if(sec.intro) html+=`<p class="sub" style="margin-bottom:24px;font-style:italic">${sec.intro}<\/p>`;
+  if(sec.safety){var sn=document.createElement('div');sn.className='safety-notice';sn.innerHTML='If you\'re experiencing suicidal ideation, please reach out. '+'<a href="https://www.mysafetyplan.org/" target="_blank" onclick="event.stopPropagation()">Safety planning →<'+'/a>'+'  |  Crisis line: <strong>988<'+'/'+'strong>  |  Text HOME to 741741';document.getElementById('section-content').appendChild(sn);}
+  sec.questions.forEach(q=>{
+    const val=answers[q.n]!==undefined?answers[q.n]:null;
+    html+=`<div class="question"><div class="q-label"><strong>Q${q.n}<\/strong>${q.text}<\/div><div class="scale">${[0,1,2,3,4,5].map(v=>`<div class="scale-opt ${val===v?'selected':''}" onclick="selectAnswer(${q.n},${v},this)" data-q="${q.n}" data-v="${v}">${v}</div>`).join('')}<\/div><div class="scale-labels"><span>0 — ${q.lo}<\/span><span>${q.hi} — 5<\/span><\/div><\/div>`;
+  });
+  document.getElementById('section-content').innerHTML=html;
+  window.scrollTo(0,0);
+}
+
+function selectAnswer(qn,val,el){
+  answers[qn]=val;
+  document.querySelectorAll(`[data-q="${qn}"]`).forEach(o=>o.classList.toggle('selected',+o.dataset.v===val));
+}
+
+function nextSection(){
+  const sec=SECTIONS[currentSection];
+  const missing=sec.questions.filter(q=>answers[q.n]===undefined);
+  if(missing.length>0){
+    const el=document.querySelector(`[data-q="${missing[0].n}"]`);
+    if(el){el.closest('.question').scrollIntoView({behavior:'smooth',block:'center'});el.closest('.question').style.outline='2px solid #B85020';setTimeout(()=>el.closest('.question').style.outline='',2000);}
+    return;
+  }
+  if(currentSection<SECTIONS.length-1){currentSection++;renderSection();}
+  else{computeScores();showScreen('email');window.scrollTo(0,0);}
+}
+
+function prevSection(){if(currentSection>0){currentSection--;renderSection();}}
+
+function computeScores(){
+  scores={};
+  SECTIONS.forEach(sec=>{
+    // Flagged questions (Q5/Q6/Q7 — consent/SGBV screening) are displayed and sent to
+    // the webhook but excluded from dimension averages — they're clinical flags, not
+    // traits to score. Q6/Q7 > 0 triggers the consent education module in showResults().
+    const scored=sec.questions.filter(q=>!q.flag);
+    const vals=scored.map(q=>{let v=(answers[q.n]||0)/5;if(q.invert)v=1-v;return v;});
+    scores[sec.id]=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;
+  });
+  // Keep suicidal-ideation safety flag lookup for crisis routing — this is
+  // not a severity bucket, it's a specific safety check with its own module.
+  let siQ=null;
+  for(const sec of SECTIONS){ const f=sec.questions.find(q=>q.safety); if(f){siQ=f;break;} }
+  scores._si=siQ?(answers[siQ.n]||0)/5:0;
+  // Consent/pushback flag scores — any non-zero value triggers education module
+  scores._shame_rejection=(answers[6]||0)/5;
+  scores._pushback_rejection=(answers[7]||0)/5;
+}
+
+function getInterp(id,score){
+  for(const[lo,hi,text]of INTERPRETATIONS[id]){if(score>=lo&&score<=hi)return text;}
+  return INTERPRETATIONS[id][INTERPRETATIONS[id].length-1][2];
+}
+
+function buildQuickChartURL(){
+  const labels=SECTIONS.map(s=>s.label.split(' ').slice(0,2).join(' '));
+  const data=SECTIONS.map(s=>+((scores[s.id]||0)*5).toFixed(1));
+  const chartConfig={
+    type:'radar',
+    data:{
+      labels:labels,
+      datasets:[{
+        data:data,
+        borderColor:'rgb(139,69,19)',
+        backgroundColor:'rgba(139,69,19,0.12)',
+        borderWidth:2,
+        pointBackgroundColor:'rgb(139,69,19)',
+        pointRadius:4
+      }]
+    },
+    options:{
+      scale:{ticks:{min:0,max:5,stepSize:1,display:false},pointLabels:{fontSize:10}},
+      legend:{display:false}
+    }
+  };
+  return 'https://quickchart.io/chart?width=400&height=400&c='+encodeURIComponent(JSON.stringify(chartConfig));
+}
+
+function buildEcosystemViz(){
+  var svg=document.getElementById('ecosystemSvg');
+  var W=560,H=320,cx=160,cy=160,r=130;
+  // Zone scores from quiz dimensions
+  var dig=scores.digital||0;       // digital relating
+  var rel=scores.relational||0;    // relational flexibility
+  var emo=scores.emotional||0;     // emotional nurturance
+  var erotic=scores.erotic||0;     // erotic/sensual
+  var nd=scores.neurodivergence||0;
+  var mh=scores.mentalhealth||0;
+
+  // Current distribution (based on scores)
+  var aiZone=Math.min(0.95,dig*1.1);
+  var digitalHuman=Math.min(0.95,(dig*0.6)+(mh*0.3));
+  var inPersonComm=Math.max(0.05,1-dig-rel*0.3);
+  var inPersonPart=Math.min(0.9,(rel*0.4)+(emo*0.4));
+
+  // Normalise to sum roughly to 1
+  var total=aiZone+digitalHuman+inPersonComm+inPersonPart+0.001;
+  aiZone/=total; digitalHuman/=total; inPersonComm/=total; inPersonPart/=total;
+
+  // Ideal distribution nudge (reduce digital, increase human)
+  var idealAI=Math.max(0.08,aiZone-0.15);
+  var idealDH=Math.max(0.1,digitalHuman-0.1);
+  var idealComm=Math.min(0.45,inPersonComm+0.15);
+  var idealPart=Math.min(0.45,inPersonPart+0.1);
+  var it=idealAI+idealDH+idealComm+idealPart;
+  idealAI/=it; idealDH/=it; idealComm/=it; idealPart/=it;
+
+  // Draw pie charts side by side
+  function arc(cx,cy,r,start,end,color,opacity){
+    var sa=start*Math.PI*2-Math.PI/2;
+    var ea=end*Math.PI*2-Math.PI/2;
+    var large=end-start>0.5?1:0;
+    var x1=cx+Math.cos(sa)*r; var y1=cy+Math.sin(sa)*r;
+    var x2=cx+Math.cos(ea)*r; var y2=cy+Math.sin(ea)*r;
+    return '<path d="M'+cx+','+cy+' L'+x1.toFixed(1)+','+y1.toFixed(1)+' A'+r+','+r+' 0 '+large+',1 '+x2.toFixed(1)+','+y2.toFixed(1)+' Z" fill="'+color+'" opacity="'+opacity+'"\/>';
+  }
+
+  var zones=[
+    {label:'AI / Parasocial',color:'#2A4A8A',now:aiZone,ideal:idealAI},
+    {label:'Digital Human',color:'#107870',now:digitalHuman,ideal:idealDH},
+    {label:'In-Person Community',color:'#906010',now:inPersonComm,ideal:idealComm},
+    {label:'Partnered / Intimate',color:'#C04878',now:inPersonPart,ideal:idealPart},
+  ];
+
+  var html='';
+
+  // LEFT: Current
+  var cumNow=0;
+  zones.forEach(function(z){
+    html+=arc(cx,cy,r,cumNow,cumNow+z.now,z.color,0.75);
+    cumNow+=z.now;
+  });
+  html+='<circle cx="'+cx+'" cy="'+cy+'" r="38" fill="#F5F0E8"\/>';
+  html+='<text x="'+cx+'" y="'+(cy-8)+'" text-anchor="middle" font-size="9" fill="rgba(26,20,16,0.5)" font-family="DM Mono,monospace">NOW<\/text>';
+  html+='<text x="'+cx+'" y="'+(cy+8)+'" text-anchor="middle" font-size="8" fill="rgba(26,20,16,0.35)" font-family="DM Mono,monospace">current<\/text>';
+
+  // RIGHT: Ideal
+  var rx=390;
+  var cumIdeal=0;
+  zones.forEach(function(z){
+    html+=arc(rx,cy,r,cumIdeal,cumIdeal+z.ideal,z.color,0.45);
+    cumIdeal+=z.ideal;
+  });
+  html+='<circle cx="'+rx+'" cy="'+cy+'" r="38" fill="#F5F0E8"\/>';
+  html+='<text x="'+rx+'" y="'+(cy-8)+'" text-anchor="middle" font-size="9" fill="rgba(26,20,16,0.5)" font-family="DM Mono,monospace">IDEAL<\/text>';
+  html+='<text x="'+rx+'" y="'+(cy+8)+'" text-anchor="middle" font-size="8" fill="rgba(26,20,16,0.35)" font-family="DM Mono,monospace">direction<\/text>';
+
+  // Legend
+  var lx=20,ly=300;
+  zones.forEach(function(z,i){
+    var lxpos=lx+(i*130);
+    html+='<rect x="'+lxpos+'" y="'+(ly-8)+'" width="9" height="9" rx="2" fill="'+z.color+'" opacity="0.7"\/>';
+    html+='<text x="'+(lxpos+13)+'" y="'+ly+'" font-size="8" fill="rgba(26,20,16,0.5)" font-family="DM Mono,monospace">'+z.label+'<\/text>';
+  });
+
+  // Arrow between charts
+  html+='<text x="275" y="166" text-anchor="middle" font-size="18" fill="rgba(26,20,16,0.2)">→<\/text>';
+
+  svg.innerHTML=html;
+
+  // Notes
+  var note1=document.getElementById('ecosystemNote1');
+  var note2=document.getElementById('ecosystemNote2');
+
+  var biggestNow=zones.reduce(function(a,b){return b.now>a.now?b:a});
+  note1.innerHTML='<strong>Right now</strong> — most of your relational energy goes to <strong>'+biggestNow.label+'</strong>. '+
+    (dig>0.5?'Your digital relating score suggests AI and online spaces are carrying significant relational weight.':'Your relational energy is relatively distributed.');
+  
+  var biggestShift=zones.reduce(function(a,b){return (b.ideal-b.now)>(a.ideal-a.now)?b:a});
+  note2.innerHTML='<strong>Direction</strong> — the biggest shift that would serve you is more investment in <strong>'+biggestShift.label+'</strong>. '+
+    (rel>0.5?'Your relational flexibility suggests openness to multiple forms — use that.':'Starting small with structured, low-stakes human contact is the right entry point.');
+}
+
+// ── MOBIUS MESH CARD — free inline preview ──────────────────────
+// Same dimension/scoring convention as results.html: trait dims (identity-
+// stable) vs status dims (current-state, always fully shown). Free preview
+// shows 3 of 6 trait dims + all 3 status sliders; the other 3 traits are
+// visually locked with a Stripe CTA, matching results.html's existing
+// soft-paywall convention (visual lock, not access control).
+const MESH_DIMS=[
+  {id:"needs",          label:"Necesidades",   color:"var(--mmc-teal)",    group:"status"},
+  {id:"mentalhealth",   label:"Salud Mental", color:"#D9A23B",            group:"status"},
+  {id:"neurodivergence",label:"Neuro",         color:"#5FBF6A",           group:"status"},
+  {id:"identity",       label:"Identidad",       color:"#FF7A59",          group:"trait", free:true},
+  {id:"erotic",         label:"Erótica",         color:"var(--mmc-magenta)", group:"trait", free:true},
+  {id:"emotional",      label:"Emocional",      color:"#5AA0D9",          group:"trait", free:true},
+  {id:"relational",     label:"Flexibilidad",   color:"#C97FE0",          group:"trait", free:false},
+  {id:"somatic",        label:"Somática",        color:"var(--mmc-accent)", group:"trait", free:false},
+  {id:"digital",        label:"Digital",        color:"#5577D9",          group:"trait", free:false},
+];
+
+function renderMeshCard(opts){
+  opts = opts || {};
+  const allUnlocked = !!opts.allUnlocked;
+  const mount = document.getElementById(opts.mountId || 'mesh-card-mount');
+  if(!mount) return;
+  const name = (document.getElementById('result-name') && document.getElementById('result-name').value.trim()) || 'amiga/o';
+
+  const traitDims = MESH_DIMS.filter(d=>d.group==='trait');
+  const statusDims = MESH_DIMS.filter(d=>d.group==='status');
+
+  const traitHtml = traitDims.map(d=>{
+    const unlocked = allUnlocked || d.free;
+    const v = (scores[d.id]||0)*5;
+    if(!unlocked){
+      return `<div class="mmc-trait-row mmc-locked"><span class="mmc-trait-label">${d.label}</span><span class="mmc-trait-value">🔒</span></div>`;
+    }
+    return `<div class="mmc-trait-row"><span class="mmc-trait-label">${d.label}</span><span class="mmc-trait-value" style="color:${d.color}">${v.toFixed(1)}</span></div>`;
+  }).join('');
+
+  const statusHtml = statusDims.map(d=>{
+    const v = (scores[d.id]||0)*5;
+    const pct = (v/5)*100;
+    return `<div class="mmc-status-row"><span class="mmc-status-tag">${d.label}</span><div class="mmc-status-track"><div class="mmc-status-fill" style="width:${pct}%;background:${d.color}"></div></div></div>`;
+  }).join('');
+
+  const unlockStrip = allUnlocked ? '' : `
+    <div class="mmc-unlock-strip">
+      <p>3 rasgos bloqueados — desbloquea tu Mesh card completa con el Análisis Completo</p>
+      <a href="https://buy.stripe.com/4gM6oJfmQaMcafmgtQ57W00">Desbloquear →</a>
+    </div>`;
+
+  mount.innerHTML = `
+    <div id="mmc-root">
+      <div class="mmc-card">
+        <div class="mmc-identity">
+          <div class="mmc-avatar">◈</div>
+          <div>
+            <div class="mmc-id-eyebrow">cyborgdreamz · perfil mesh</div>
+            <div class="mmc-id-name">${name}</div>
+            <div class="mmc-id-tagline">un mapa, no un veredicto</div>
+          </div>
+        </div>
+        <div class="mmc-panel">
+          <div class="mmc-panel-title">Conexión</div>
+          ${traitHtml}
+        </div>
+        <div class="mmc-panel" style="margin-bottom:${allUnlocked?'0':'14px'}">
+          <div class="mmc-panel-title" style="font-size:12px">Estado actual</div>
+          ${statusHtml}
+        </div>
+        ${unlockStrip}
+        <div class="mmc-brand-row">
+          <div class="mmc-word">Mobius<span> Mesh</span></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function showResults(){
+  // Result tier box — neutral preview only.
+  // Headline is pulled directly from Soleil's own INTERPRETATIONS text for whichever
+  // dimension scored highest, never composed/extrapolated. Value framing (good/bad)
+  // is only applied for Unmet Needs, Mental Health Load, and the consent/abuse flags —
+  // every other dimension is presented descriptively, with no judgment on score level.
+  const sortedDims=[...SECTIONS].sort((a,b)=>(scores[b.id]||0)-(scores[a.id]||0));
+  const topDim=sortedDims[0];
+  const topScore=scores[topDim.id]||0;
+  const headline=getInterp(topDim.id,topScore);
+  const previewNames=sortedDims.slice(0,3).map(d=>d.label).join(' · ');
+  document.getElementById('result-tier-box').innerHTML=`
+    <div class="result-tier" style="background:rgba(26,20,16,0.03);border-color:rgba(26,20,16,0.12)">
+      <div class="eyebrow">Tus áreas con puntaje más alto<\/div>
+      <h2 style="margin-bottom:8px">${previewNames}<\/h2>
+      <p class="sub" style="margin-bottom:12px">${headline}<\/p>
+    <\/div>`;
+
+  renderMeshCard({allUnlocked:false});
+
+  // Consent education module — shown whenever Q6 (shame-on-rejection) or
+  // Q7 (pushback-on-rejection) is any non-zero value. This is informational
+  // and empathetic — not a verdict. Content in Soleil's own voice.
+  const shameScore=scores._shame_rejection||0;
+  const pushbackScore=scores._pushback_rejection||0;
+  const consentModuleEl=document.getElementById('consent-module');
+  if(consentModuleEl){
+    if(shameScore>0||pushbackScore>0){
+      consentModuleEl.style.display='block';
+    } else {
+      consentModuleEl.style.display='none';
+    }
+  }
+
+  // Radar — letter markers (A–I) instead of inline text labels, which clipped/overlapped
+  // at this density. A legend below the chart spells out the key.
+  const svg=document.getElementById('radar-svg');
+  const cx=230,cy=230,r=165,n=SECTIONS.length;
+  const letters=['A','B','C','D','E','F','G','H','I'];
+  const angles=SECTIONS.map((_,i)=>(i/n)*Math.PI*2-Math.PI/2);
+  const getPoint=(a,v)=>({x:cx+Math.cos(a)*r*v,y:cy+Math.sin(a)*r*v});
+  let svgHtml='';
+  [.25,.5,.75,1].forEach(lv=>{
+    const pts=angles.map(a=>getPoint(a,lv));
+    svgHtml+=`<path d="${pts.map((p,i)=>`${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')} Z" fill="none" stroke="rgba(26,20,16,0.07)" stroke-width="1"/>`;
+  });
+  angles.forEach((a,i)=>{const e=getPoint(a,1);svgHtml+=`<line x1="${cx}" y1="${cy}" x2="${e.x.toFixed(1)}" y2="${e.y.toFixed(1)}" stroke="rgba(26,20,16,0.07)" stroke-width="1"/>`;});
+  const dataPoints=SECTIONS.map((sec,i)=>getPoint(angles[i],scores[sec.id]||0));
+  svgHtml+=`<path d="${dataPoints.map((p,i)=>`${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')} Z" fill="rgba(139,69,19,0.12)" stroke="rgba(139,69,19,0.7)" stroke-width="2"/>`;
+  SECTIONS.forEach((sec,i)=>{
+    const score=scores[sec.id]||0;
+    const pt=getPoint(angles[i],score);
+    const lp=getPoint(angles[i],1.22);
+    svgHtml+=`<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="5" fill="${sec.color}"/>`;
+    svgHtml+=`<circle cx="${lp.x.toFixed(1)}" cy="${lp.y.toFixed(1)}" r="13" fill="${sec.color}" opacity="0.15"/>`;
+    svgHtml+=`<text x="${lp.x.toFixed(1)}" y="${lp.y.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-size="17" font-weight="600" fill="${sec.color}">${letters[i]}<\/text>`;
+  });
+  svg.innerHTML=svgHtml;
+
+  // Legend — letter key below the chart
+  const legendHtml=SECTIONS.map((sec,i)=>
+    `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:16px;margin-bottom:6px">
+       <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:${sec.color};color:#fff;font-size:11px;font-weight:600">${letters[i]}<\/span>
+       <span style="font-size:10.5px;color:var(--muted)">${sec.label}<\/span>
+     <\/span>`
+  ).join('');
+  const legendEl=document.getElementById('radar-legend');
+  if(legendEl) legendEl.innerHTML=legendHtml;
+
+  // Dimension cards with skill preview
+  let cardsHtml='';
+  SECTIONS.forEach(sec=>{
+    const score=scores[sec.id]||0;
+    const pct=Math.round(score*100);
+    const interp=getInterp(sec.id,score);
+    const map=SKILL_MAP[sec.id];
+    const skillPills=map.skills.map((s,i)=>`<span class="skill-pill" style="background:${map.colors[i]}">${s}<\/span>`).join('');
+    cardsHtml+=`<div class="dim-card"><div class="dim-card-accent" style="background:${sec.color}"><\/div><div class="dim-card-label" style="color:${sec.color}">${sec.label}<\/div><div class="dim-card-bar"><div class="dim-card-fill" style="width:${pct}%;background:${sec.color}"><\/div><\/div><div class="dim-card-score">${(score*5).toFixed(1)} / 5<\/div><div class="dim-card-interp">${interp}<\/div><div class="skills-preview">${skillPills}<\/div><\/div>`;
+  });
+  document.getElementById('results-cards').innerHTML=cardsHtml;
+
+  // Pathways — only links to destinations that currently exist.
+  // Book a Session, Substack, and the free pathway cards (Ethical AI Suite, Human Relating Plan)
+  // were removed since those pages/tools don't exist yet. Their copy is preserved in
+  // project notes for reuse once those destinations are live.
+  document.getElementById('pathways-section').innerHTML=`
+    <div style="margin-bottom:12px"><div class="eyebrow">Próximos pasos<\/div><\/div>
+    <div class="pathway-box" style="border-color:rgba(139,69,19,0.3);background:rgba(139,69,19,0.04)">
+      <h3 style="color:#8B4513">Análisis Completo<\/h3>
+      <p>El desglose personalizado completo de las 9 dimensiones, recomendaciones de tipo de relación, y estrategias para avanzar. <a href="https://buy.stripe.com/4gM6oJfmQaMcafmgtQ57W00">Obtén el análisis completo ($20) →<\/a><\/p>
+    <\/div>
+    <div class="pathway-box" style="border-color:rgba(255,45,120,0.3);background:rgba(255,45,120,0.04)">
+      <h3 style="color:#C04878">Mazo de Habilidades<\/h3>
+      <p>Dieciséis cartas de habilidades relacionales mapeadas a estas dimensiones — qué son, por qué importan, y cómo construirlas. <a href="https://soleilmerroir.com/skill-deck">Explora el mazo de habilidades →<\/a><\/p>
+    <\/div>`;
+
+  buildEcosystemViz();
+  showScreen('results');
+  window.scrollTo(0,0);
+}
+
+
+function gateSubmit(){
+  var name = document.getElementById('gate-name').value.trim();
+  var email = document.getElementById('gate-email').value.trim();
+  if(!name || !email){ alert('Por favor ingresa tu nombre y correo electrónico para ver tus resultados.'); return; }
+  // Populate the original name/email fields for submitEmail
+  document.getElementById('result-name').value = name;
+  document.getElementById('result-email').value = email;
+  submitEmail();
+}
+
+function submitEmail(){
+  const email=document.getElementById('result-email').value.trim();
+  const name=document.getElementById('result-name').value.trim();
+  if(!email||!email.includes('@')){document.getElementById('result-email').focus();return;}
+  const scoresSummary=SECTIONS.map(sec=>({dimension:sec.label,score:+(scores[sec.id]*5).toFixed(1),interpretation:getInterp(sec.id,scores[sec.id])}));
+  const payload={
+    name:name||'amiga/o', email, language:'es',
+    scores:scoresSummary, raw_scores:scores,
+    needs_score:+((scores.needs||0)*5).toFixed(1),
+    mentalhealth_score:+((scores.mentalhealth||0)*5).toFixed(1),
+    identity_score:+((scores.identity||0)*5).toFixed(1),
+    erotic_score:+((scores.erotic||0)*5).toFixed(1),
+    relational_score:+((scores.relational||0)*5).toFixed(1),
+    emotional_score:+((scores.emotional||0)*5).toFixed(1),
+    somatic_score:+((scores.somatic||0)*5).toFixed(1),
+    neurodivergence_score:+((scores.neurodivergence||0)*5).toFixed(1),
+    digital_score:+((scores.digital||0)*5).toFixed(1),
+    consent_difficulty:+(answers[5]||0),
+    shame_on_rejection:+(answers[6]||0),
+    pushback_on_rejection:+(answers[7]||0),
+    consent_module_triggered:((answers[6]||0)>0||(answers[7]||0)>0),
+    referral_code:referralCode||null,
+    referral_tier:referralTier||null,
+    quickchart_url:buildQuickChartURL(),
+    skill_deck_url:'https://soleilmerroir.com/skill-deck',
+    workbook_url:'https://buy.stripe.com/4gM6oJfmQaMcafmgtQ57W00',
+    timestamp:new Date().toISOString()
+  };
+  const WEBHOOK_URL='https://hook.us2.make.com/6xrwfh7vvdqw329wm5u0mhe7l7v39kx9';
+  fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
+  showResults();showScreen('results');window.scrollTo(0,0);
+}
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');}
+function retakeQuiz(){answers={};scores={};currentSection=0;showScreen('quiz');renderSection();}
+
+</script>
+</body>
+</html>
