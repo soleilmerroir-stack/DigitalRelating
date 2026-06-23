@@ -785,8 +785,29 @@ function submitEmail(){
     timestamp:new Date().toISOString()
   };
   const WEBHOOK_URL='https://hook.us2.make.com/6xrwfh7vvdqw329wm5u0mhe7l7v39kx9';
-  fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
-  showResults();showScreen('results');window.scrollTo(0,0);
+  fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{}).finally(()=>{
+    // Redirect to the standalone results page with query params so the
+    // deployed `results.html` can render the same visualization.
+    try{
+      const params=new URLSearchParams();
+      params.set('name', (name||'friend'));
+      SECTIONS.forEach(s=>{
+        params.set(s.id, ((scores[s.id]||0)*5).toFixed(2));
+      });
+      // suicidal ideation / safety flag (normalized 0-1)
+      let siQ=null; for(const sec of SECTIONS){ const f=sec.questions.find(q=>q.safety); if(f){siQ=f;break;} }
+      const si = siQ?((answers[siQ.n]||0)/5):0;
+      params.set('si', si.toFixed(2));
+      // consent/shame flags (normalized)
+      params.set('consent', ((answers[5]||0)/5).toFixed(2));
+      params.set('shame', ((answers[6]||0)/5).toFixed(2));
+      // Use a relative URL so this works on GitHub Pages and local server.
+      window.location.href = 'results.html?'+params.toString();
+    }catch(e){
+      // Fallback to inline rendering if redirect fails
+      showResults();showScreen('results');window.scrollTo(0,0);
+    }
+  });
 }
 
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');}
