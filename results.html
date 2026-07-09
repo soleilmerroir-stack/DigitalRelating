@@ -72,19 +72,23 @@ body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height
     <p class="sub" id="tierText"></p>
   </div>
 
-  <!-- RADAR -->
-  <div class="fade-up" style="display:flex;flex-direction:column;align-items:center;margin-bottom:28px">
-    <div class="diamond-row"><div class="diamond"></div><div class="diamond"></div><div class="diamond"></div></div>
-    <p class="eyebrow" style="margin-bottom:12px">your 9-dimension profile</p>
-    <svg id="radarSvg" viewBox="0 0 480 480" width="100%" style="max-width:460px"></svg>
-    <p style="font-size:9px;color:#8A8EAA;margin-top:8px;font-style:italic">Further from center = higher score in that dimension</p>
-  </div>
-
-  <!-- DIMENSION CARDS — FREE -->
+  <!-- STATUS SECTION -->
   <div class="gold-rule"></div>
-  <div class="eyebrow" style="margin-bottom:8px">Your 9 dimensions</div>
-  <p class="sub" style="margin-bottom:16px">Each bar shows your score. The interpretation below each is your free overview.</p>
-  <div class="dim-grid fade-up" id="dimGrid"></div>
+  <div class="eyebrow" style="margin-bottom:4px">Status</div>
+  <p class="sub" style="margin-bottom:14px">Capacity &amp; operating conditions — what&#39;s shaping how you show up right now.</p>
+  <div class="fade-up" style="display:flex;flex-direction:column;align-items:center;margin-bottom:20px">
+    <svg id="radarSvgStatus" viewBox="0 0 480 480" width="100%" style="max-width:360px"></svg>
+  </div>
+  <div class="dim-grid fade-up" id="statusGrid"></div>
+
+  <!-- RELATING SECTION -->
+  <div class="gold-rule"></div>
+  <div class="eyebrow" style="margin-bottom:4px">Relating</div>
+  <p class="sub" style="margin-bottom:14px">Orientation &amp; design — how you want to connect. These aren&#39;t scored — they&#39;re areas you indicated are present and active for you.</p>
+  <div class="fade-up" style="display:flex;flex-direction:column;align-items:center;margin-bottom:20px">
+    <svg id="radarSvgRelating" viewBox="0 0 480 480" width="100%" style="max-width:360px"></svg>
+  </div>
+  <div class="dim-grid fade-up" id="relatingGrid"></div>
 
   <!-- LOCKED — PAID SECTION TEASER -->
   <div class="gold-rule"></div>
@@ -284,29 +288,36 @@ function buildTier(){
 }
 
 // ── RADAR ─────────────────────────────────────────────────
-function buildRadar(){
-  const svg=document.getElementById('radarSvg');
-  const cx=240,cy=240,r=170,n=DIMS.length;
-  const angles=DIMS.map((_,i)=>(i/n)*Math.PI*2-Math.PI/2);
+function drawRadar(svgId, group){
+  const svg=document.getElementById(svgId);
+  const dims=DIMS.filter(d=>d.group===group);
+  const cx=240,cy=240,r=170,n=dims.length;
+  const angles=dims.map((_,i)=>(i/n)*Math.PI*2-Math.PI/2);
   const pt=(a,v)=>({x:cx+Math.cos(a)*r*v,y:cy+Math.sin(a)*r*v});
   let html='';
   [.25,.5,.75,1].forEach(lv=>{
     const pts=angles.map(a=>pt(a,lv));
-    html+=`<path d="${pts.map((p,i)=>`${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')} Z" fill="none" stroke="rgba(196,147,58,0.1)" stroke-width="1"\/>`
+    html+=`<path d="${pts.map((p,i)=>`${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')} Z" fill="none" stroke="rgba(196,147,58,0.1)" stroke-width="1"\/>`;
   });
-  angles.forEach((a,i)=>{const e=pt(a,1);html+=`<line x1="${cx}" y1="${cy}" x2="${e.x.toFixed(1)}" y2="${e.y.toFixed(1)}" stroke="rgba(196,147,58,0.1)" stroke-width="1"\/>`});
-  const dataPoints=DIMS.map((d,i)=>pt(angles[i],scores[d.id]||0));
+  angles.forEach((a,i)=>{const e=pt(a,1);html+=`<line x1="${cx}" y1="${cy}" x2="${e.x.toFixed(1)}" y2="${e.y.toFixed(1)}" stroke="rgba(196,147,58,0.1)" stroke-width="1"\/>`;});
+  const dataPoints=dims.map((d,i)=>pt(angles[i],scores[d.id]||0));
   html+=`<path d="${dataPoints.map((p,i)=>`${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')} Z" fill="rgba(196,147,58,0.12)" stroke="#C4933A" stroke-width="1.8"\/>`;
-  DIMS.forEach((d,i)=>{
+  dims.forEach((d,i)=>{
     const v=scores[d.id]||0;
     const dp=pt(angles[i],v);
     const lp=pt(angles[i],1.28);
     const anchor=Math.cos(angles[i])>.2?'end':Math.cos(angles[i])<-.2?'start':'middle';
-    const short=d.label.split(' ').slice(0,2).join(' ');
+    const dispLabel=getDimLabel(d,v);
+    const short=dispLabel.split(' ').slice(0,2).join(' ');
     html+=`<circle cx="${dp.x.toFixed(1)}" cy="${dp.y.toFixed(1)}" r="5" fill="${d.color}" opacity="0.9"\/>`;
     html+=`<text x="${lp.x.toFixed(1)}" y="${lp.y.toFixed(1)}" text-anchor="${anchor}" dominant-baseline="middle" font-size="9" fill="${d.color}" font-family="'DM Mono',monospace" opacity="0.85">${short}<\/text>`;
   });
   svg.innerHTML=html;
+}
+
+function buildRadar(){
+  drawRadar('radarSvgStatus','status');
+  drawRadar('radarSvgRelating','relating');
 }
 
 // ── DIMENSION CARDS ────────────────────────────────────────
@@ -315,23 +326,58 @@ function getInterp(id,score){
   return INTERPS[id][INTERPS[id].length-1][2];
 }
 
+function buildStatusCard(d,grid){
+  // STATUS: show score bar + interpretation — strain/capacity indicators
+  const score=scores[d.id]||0;
+  const pct=Math.round(score*100);
+  const div=document.createElement('div');
+  div.className='card card-accent';
+  div.style.borderLeftColor=d.color;
+  let metaHtml='';
+  if(d.id==='mentalhealth'&&(activation_general!==null||mh_origin.length||mh_patterns.length)){
+    metaHtml='<div style="margin-top:10px;padding:8px 10px;background:rgba(255,255,255,0.04);border-radius:4px;font-size:10.5px;color:#8A8EAA;line-height:1.8">';
+    if(activation_general!==null) metaHtml+='<div><span style="font-weight:600;color:#C9B8A8">Baseline activation:</span> '+(activation_general*5).toFixed(1)+'/5 \u2014 '+(activation_general<0.4?'leaning Stuck Off':activation_general>0.6?'leaning Stuck On':'Regulated')+'<\/div>';
+    if(activation_relational!==null) metaHtml+='<div><span style="font-weight:600;color:#C9B8A8">In relationships:</span> '+(activation_relational*5).toFixed(1)+'/5 \u2014 '+(activation_relational<0.4?'leaning Stuck Off':activation_relational>0.6?'leaning Stuck On':'Regulated')+'<\/div>';
+    if(mh_origin.length) metaHtml+='<div><span style="font-weight:600;color:#C9B8A8">Origin:<\/span> '+mh_origin.join(', ')+'<\/div>';
+    if(mh_patterns.length) metaHtml+='<div><span style="font-weight:600;color:#C9B8A8">Patterns:<\/span> '+mh_patterns.join(', ')+'<\/div>';
+    metaHtml+='<\/div>';
+  }
+  div.innerHTML=`
+    <div style="font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:${d.color};margin-bottom:6px">${d.label}<\/div>
+    <div class="dim-bar-track"><div class="dim-bar-fill" style="width:0%;background:${d.color}" data-w="${pct}"><\/div><\/div>
+    <div style="font-size:10px;color:#8A8EAA;margin-bottom:6px">${(score*5).toFixed(1)} / 5<\/div>
+    <div style="font-size:10.5px;color:#8A8EAA;line-height:1.65;font-style:italic;border-top:1px solid #363A55;padding-top:8px">${getInterp(d.id,score)}<\/div>
+    ${metaHtml}
+  `;
+  grid.appendChild(div);
+}
+
+function buildRelatingCard(d,grid){
+  // RELATING: no score, no bar. Show presence/trend — orientation & design, not strain.
+  const score=scores[d.id]||0;
+  const dispLabel=getDimLabel(d,score);
+  // Present = they were clicking mostly 3-5 on items in this section
+  const present=score>=0.4;
+  const div=document.createElement('div');
+  div.className='card card-accent';
+  div.style.borderLeftColor=d.color;
+  div.style.opacity=present?'1':'0.55';
+  div.innerHTML=`
+    <div style="font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:${d.color};margin-bottom:6px">${dispLabel}<\/div>
+    ${present
+      ? `<div style="display:inline-block;font-size:9px;letter-spacing:.1em;color:${d.color};background:${d.color}22;border:1px solid ${d.color}55;border-radius:3px;padding:2px 8px;margin-bottom:8px;text-transform:uppercase">Present &amp; active<\/div>`
+      : `<div style="display:inline-block;font-size:9px;letter-spacing:.1em;color:#8A8EAA;background:rgba(255,255,255,0.04);border:1px solid #363A55;border-radius:3px;padding:2px 8px;margin-bottom:8px;text-transform:uppercase">Lower presence right now<\/div>`
+    }
+    <div style="font-size:10.5px;color:#8A8EAA;line-height:1.65;font-style:italic;border-top:1px solid #363A55;padding-top:8px">${getInterp(d.id,score)}<\/div>
+  `;
+  grid.appendChild(div);
+}
+
 function buildDimCards(){
-  const grid=document.getElementById('dimGrid');
-  DIMS.forEach(d=>{
-    const score=scores[d.id]||0;
-    const pct=Math.round(score*100);
-    const div=document.createElement('div');
-    div.className='card card-accent';
-    div.style.borderLeftColor=d.color;
-    div.innerHTML=`
-      <div style="font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:${d.color};margin-bottom:6px">${d.label}</div>
-      <div class="dim-bar-track"><div class="dim-bar-fill" style="width:0%;background:${d.color}" data-w="${pct}"><\/div><\/div>
-      <div style="font-size:10px;color:#8A8EAA;margin-bottom:6px">${(score*5).toFixed(1)} / 5<\/div>
-      <div style="font-size:10.5px;color:#8A8EAA;line-height:1.65;font-style:italic;border-top:1px solid #363A55;padding-top:8px">${getInterp(d.id,score)}<\/div>
-      ${d.id==='mentalhealth'&&(activation_general!==null||mh_origin.length||mh_patterns.length)?`<div style="margin-top:10px;padding:8px 10px;background:rgba(255,255,255,0.04);border-radius:4px;font-size:10.5px;color:#8A8EAA;line-height:1.8">${activation_general!==null?'<div><span style="font-weight:600;color:#C9B8A8">Baseline activation:</span> '+(activation_general*5).toFixed(1)+'/5 — '+(activation_general<0.4?'leaning Stuck Off':activation_general>0.6?'leaning Stuck On':'Regulated')+'</div>':''}${activation_relational!==null?'<div><span style="font-weight:600;color:#C9B8A8">In relationships:</span> '+(activation_relational*5).toFixed(1)+'/5 — '+(activation_relational<0.4?'leaning Stuck Off':activation_relational>0.6?'leaning Stuck On':'Regulated')+'</div>':''}${mh_origin.length?'<div><span style="font-weight:600;color:#C9B8A8">Origin:</span> '+mh_origin.join(', ')+'</div>':''}${mh_patterns.length?'<div><span style="font-weight:600;color:#C9B8A8">Patterns:</span> '+mh_patterns.join(', ')+'</div>':''}</div>`:''}
-    `;
-    grid.appendChild(div);
-  });
+  const statusGrid=document.getElementById('statusGrid');
+  const relatingGrid=document.getElementById('relatingGrid');
+  DIMS.filter(d=>d.group==='status').forEach(d=>buildStatusCard(d,statusGrid));
+  DIMS.filter(d=>d.group==='relating').forEach(d=>buildRelatingCard(d,relatingGrid));
   setTimeout(()=>{
     document.querySelectorAll('[data-w]').forEach(el=>{el.style.width=el.dataset.w+'%';});
   },100);
