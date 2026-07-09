@@ -36,43 +36,6 @@ body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .fade-up{animation:fadeUp .5s ease both}
 .crisis-box{background:rgba(196,96,122,0.12);border:1px solid rgba(196,96,122,0.4);border-radius:6px;padding:16px 20px;margin-bottom:16px}
-
-/* ── MOBIUS MESH CARD — gift card, fully unlocked on this page ── */
-#mmc-root{width:100%;max-width:380px;margin:0 auto;font-family:'DM Mono',monospace}
-#mmc-root *{box-sizing:border-box}
-#mmc-root .mmc-gift-label{
-  text-align:center;font-size:9px;letter-spacing:.2em;text-transform:uppercase;
-  color:#E8C068;margin-bottom:10px;
-}
-#mmc-root .mmc-card{
-  position:relative;border-radius:28px;padding:24px 22px 20px;
-  background:linear-gradient(180deg, rgba(26,20,48,0.95), rgba(14,11,28,0.98));
-  border:1px solid rgba(167,139,217,0.32);
-  box-shadow:0 20px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
-  color:#F2EFFA;
-}
-#mmc-root .mmc-identity{display:flex;align-items:center;gap:14px;margin-bottom:18px}
-#mmc-root .mmc-avatar{
-  width:64px;height:64px;flex-shrink:0;border-radius:50%;
-  background:conic-gradient(from 180deg, #A78BD9, #1FB8A8, #FF3D8F, #A78BD9);
-  display:flex;align-items:center;justify-content:center;font-size:22px;
-}
-#mmc-root .mmc-id-eyebrow{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:rgba(242,239,250,0.62);margin-bottom:3px}
-#mmc-root .mmc-id-name{font-size:21px;font-weight:700;color:#F2EFFA;line-height:1.1}
-#mmc-root .mmc-id-tagline{font-size:9px;color:#A78BD9;margin-top:3px}
-#mmc-root .mmc-panel{border-radius:20px;padding:16px 18px;background:rgba(22,17,42,0.55);border:1px solid rgba(167,139,217,0.32);margin-bottom:14px}
-#mmc-root .mmc-panel-title{font-size:14px;font-weight:600;color:#F2EFFA;margin-bottom:10px}
-#mmc-root .mmc-trait-row{display:flex;align-items:baseline;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06)}
-#mmc-root .mmc-trait-row:last-child{border-bottom:none}
-#mmc-root .mmc-trait-label{font-size:13px;color:rgba(242,239,250,0.62)}
-#mmc-root .mmc-trait-value{font-size:13px;font-weight:700}
-#mmc-root .mmc-status-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
-#mmc-root .mmc-status-tag{font-size:8px;letter-spacing:.06em;color:rgba(242,239,250,0.62);width:60px;flex-shrink:0;text-transform:uppercase}
-#mmc-root .mmc-status-track{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,0.08);overflow:hidden}
-#mmc-root .mmc-status-fill{height:100%;border-radius:3px}
-#mmc-root .mmc-brand-row{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)}
-#mmc-root .mmc-brand-row .mmc-word{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(242,239,250,0.62)}
-#mmc-root .mmc-brand-row .mmc-word span{color:#1FB8A8}
 </style>
 </head>
 <body>
@@ -109,40 +72,11 @@ body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height
     <p class="sub" id="tierText"></p>
   </div>
 
-  <!-- MOBIUS MESH CARD — your gift, fully unlocked, all 6 traits visible -->
-  <div id="mesh-card-gift" class="fade-up" style="margin:0 0 28px"></div>
-
-  <!-- CONSENT EDUCATION MODULE — shown when Q6 or Q7 > 0 -->
-  <div id="consentModule" class="fade-up" style="display:none;margin:0 0 24px;padding:18px 20px;background:rgba(106,74,154,0.08);border:1px solid rgba(106,74,154,0.3);border-radius:6px">
-    <div class="eyebrow" style="color:#6A4A9A;margin-bottom:10px">A note on rejection and no.</div>
-    <p class="sub" style="margin-bottom:12px">
-      When someone says no to an initiation or a request, their no is coming from inside themselves — their body, their timing, their own needs in that moment. You don't know what their no is about. They don't owe you a full explanation. They listened to their inner voice and said <em>this isn't what I'm feeling or needing right now</em> — and that is exactly what we want people to be able to do.
-    </p>
-    <p class="sub" style="margin-bottom:12px">
-      The story that a no is a rejection of your attractiveness, your desirability, your worth — that story is rooted in frameworks of ownership, competition, and conquest. When we step out of that and into one where we are equal humans exchanging energy and seeking connection, a no becomes information, not a verdict. If someone isn't a hell yes, do you even want that connection right now?
-    </p>
-    <p class="sub" style="margin-bottom:16px;font-style:italic;border-left:2px solid #6A4A9A;padding-left:12px">
-      A no, ideally, is "thank you for taking care of yourself." — Reid Mihalko
-    </p>
-    <p class="sub" style="margin-bottom:12px">
-      If you interpret a no as an opportunity to try harder, that's a pattern worth examining — one that treats another person's body as a game to win. You can be fully present, passionate, and even ravaging with clear consent and negotiated limits. It's actually hotter. And a no is a no: there is no ask-again without an explicit invitation from them. Your ability to leave it alone is not a loss. It is what makes you someone safe to be with.
-    </p>
-    <div style="border-top:1px solid rgba(106,74,154,0.2);margin:14px 0 12px"></div>
-    <p style="font-size:9px;color:#8A8EAA;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Resources</p>
-    <p style="font-size:11px;color:#8A8EAA;line-height:1.9">
-      RAINN: <a href="https://rainn.org" style="color:#6A4A9A">rainn.org</a> · 1-800-656-4673<br>
-      SIECUS (sex education): <a href="https://siecus.org" style="color:#6A4A9A">siecus.org</a><br>
-      Reid Mihalko: <a href="https://reidaboutsex.com" style="color:#6A4A9A">reidaboutsex.com</a><br>
-      Work through this with someone: <a href="https://soleilmerroir.com" style="color:#6A4A9A">soleilmerroir.com</a>
-    </p>
-  </div>
-
   <!-- RADAR -->
   <div class="fade-up" style="display:flex;flex-direction:column;align-items:center;margin-bottom:28px">
     <div class="diamond-row"><div class="diamond"></div><div class="diamond"></div><div class="diamond"></div></div>
     <p class="eyebrow" style="margin-bottom:12px">your 9-dimension profile</p>
     <svg id="radarSvg" viewBox="0 0 480 480" width="100%" style="max-width:460px"></svg>
-    <div id="radarLegend" style="margin-top:12px;line-height:1.8;text-align:center"></div>
     <p style="font-size:9px;color:#8A8EAA;margin-top:8px;font-style:italic">Further from center = higher score in that dimension</p>
   </div>
 
@@ -168,7 +102,7 @@ body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height
       </div>
       <div class="card card-accent" style="border-color:#6A4A9A;margin-bottom:10px">
         <div style="font-size:10px;letter-spacing:2px;color:#6A4A9A;text-transform:uppercase;margin-bottom:8px">Relationship type recommendations</div>
-        <p class="sub">Based on your relational style, erotic importance, neurodivergence, and identity stressors — here are the relationship structures and contexts most likely to work for you. Including openness to non-monogamy, erotic exploration, and sex-positive community...</p>
+        <p class="sub">Based on your relational style, erotic importance, neurodivergence, and communication patterns — here are the relationship structures and contexts most likely to work for you. Including openness to non-monogamy, erotic exploration, and sex-positive community...</p>
       </div>
       <div class="card card-accent" style="border-color:#C4607A;margin-bottom:10px">
         <div style="font-size:10px;letter-spacing:2px;color:#C4607A;text-transform:uppercase;margin-bottom:8px">Strategies for progress in each area</div>
@@ -179,8 +113,8 @@ body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height
       <div class="locked-msg">
         <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#C4933A;margin-bottom:10px">🔒 Unlock the full analysis</div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:#F2EDE4;margin-bottom:10px">$20 · Workbook + In-Depth Results</div>
-        <p style="font-size:11px;color:#8A8EAA;margin-bottom:16px;max-width:420px">Includes the Relationship Ecosystem Workbook, AI Relating Add-On workbook, full skill deck access, and your personalized in-depth results email.</p>
-        <a href="https://buy.stripe.com/4gM6oJfmQaMcafmgtQ57W00" style="display:inline-block;background:#C4933A;color:#1A1D2E;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;font-weight:bold;padding:11px 28px;border-radius:3px;text-decoration:none;text-transform:uppercase">
+        <p style="font-size:11px;color:#8A8EAA;margin-bottom:16px;max-width:420px">Includes the 39-page relationship ecosystem workbook, AI relating add-on workbook, full skill deck access, and your personalized in-depth results email.</p>
+        <a href="https://soleilmerroir.com/workbook" style="display:inline-block;background:#C4933A;color:#1A1D2E;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;font-weight:bold;padding:11px 28px;border-radius:3px;text-decoration:none;text-transform:uppercase">
           Get the Full Analysis →
         </a>
         <p style="font-size:9px;color:#8A8EAA;margin-top:10px">Therapist? Ask about the clinician referral code.</p>
@@ -188,8 +122,23 @@ body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height
     </div>
   </div>
 
-  <!-- copy for these two pathways preserved in project notes for reuse once
-       soleilmerroir.com hosts the Ethical AI Suite and Human Relating Plan pages -->
+  <!-- FREE PATHWAYS -->
+  <div class="gold-rule"></div>
+  <div class="eyebrow" style="margin-bottom:12px">Two free pathways based on your profile</div>
+
+  <div id="pathwayAI" class="cta-card" style="border-color:rgba(58,138,128,0.4);background:rgba(58,138,128,0.07)">
+    <div style="font-size:10px;letter-spacing:2px;color:#3A8A80;margin-bottom:6px;text-transform:uppercase">Ethical AI Tool Suite</div>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;font-weight:300;color:#F2EDE4;margin-bottom:6px">Use AI intentionally — with ethics built in</h3>
+    <p class="sub" id="aiPathwayText">Curated AI tools matched to your actual needs and quiz results.</p>
+    <span style="font-size:10px;color:#3A8A80;display:block;margin-top:10px">Explore the toolkit → soleilmerroir.com</span>
+  </div>
+
+  <div id="pathwayHuman" class="cta-card" style="border-color:rgba(196,96,122,0.4);background:rgba(196,96,122,0.07)">
+    <div style="font-size:10px;letter-spacing:2px;color:#C4607A;margin-bottom:6px;text-transform:uppercase">Human Relating & Engagement Plan</div>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;font-weight:300;color:#F2EDE4;margin-bottom:6px" id="humanPathwayTitle">A graduated plan for rebuilding human relational capacity</h3>
+    <p class="sub" id="humanPathwayText">Online and AFK — starting where you actually are.</p>
+    <span style="font-size:10px;color:#C4607A;display:block;margin-top:10px">Get the workbook → soleilmerroir.com/workbook</span>
+  </div>
 
   <!-- SKILL PILLS -->
   <div class="gold-rule"></div>
@@ -200,10 +149,20 @@ body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height
   <!-- CTAs -->
   <div class="gold-rule"></div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px" class="fade-up">
-    <a href="https://buy.stripe.com/4gM6oJfmQaMcafmgtQ57W00" class="cta-card" style="border-color:rgba(196,147,58,0.4);background:rgba(196,147,58,0.07);text-decoration:none">
+    <a href="https://soleilmerroir.com/workbook" class="cta-card" style="border-color:rgba(196,147,58,0.4);background:rgba(196,147,58,0.07);text-decoration:none">
       <div style="font-size:10px;color:#C4933A;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Full Workbook</div>
-      <p style="font-size:11px;color:#F2EDE4;line-height:1.6">Relationship Ecosystem Workbook + AI Relating Add-On + in-depth personalized results email</p>
+      <p style="font-size:11px;color:#F2EDE4;line-height:1.6">39-page Relationship Ecosystem Workbook + AI Relating Add-On + in-depth personalized results email</p>
       <span style="font-size:10px;color:#C4933A;display:block;margin-top:8px">$20 →</span>
+    </a>
+    <a href="https://soleilmerroir.com" class="cta-card" style="border-color:rgba(106,74,154,0.4);background:rgba(106,74,154,0.07);text-decoration:none">
+      <div style="font-size:10px;color:#6A4A9A;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Book a Session</div>
+      <p style="font-size:11px;color:#F2EDE4;line-height:1.6">Work through your ecosystem visualization 1:1 with Soleil Merroir LCSW · AASECT Certified Sex Therapist</p>
+      <span style="font-size:10px;color:#6A4A9A;display:block;margin-top:8px">soleilmerroir.com →</span>
+    </a>
+    <a href="https://cyborgdreamz.substack.com" class="cta-card" style="border-color:rgba(58,138,128,0.3);background:rgba(58,138,128,0.06);text-decoration:none">
+      <div style="font-size:10px;color:#3A8A80;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Substack</div>
+      <p style="font-size:11px;color:#F2EDE4;line-height:1.6">Ongoing writing on AI, digital intimacy, shame, and the psychology of erotic behavior</p>
+      <span style="font-size:10px;color:#3A8A80;display:block;margin-top:8px">cyborgdreamz →</span>
     </a>
     <a href="https://soleilmerroir.com/skill-deck" class="cta-card" style="border-color:rgba(196,96,122,0.3);background:rgba(196,96,122,0.06);text-decoration:none">
       <div style="font-size:10px;color:#C4607A;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Skill Deck</div>
@@ -223,93 +182,61 @@ body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height
 <script>
 // ── DIMENSIONS ─────────────────────────────────────────────
 const DIMS=[
-  {id:"needs",         label:"Unmet Basic Needs",            color:"#107870"},
-  {id:"mentalhealth",  label:"Mental Health Load",            color:"#906010"},
-  {id:"identity",      label:"Identity & Body Stressors",     color:"#B85020"},
-  {id:"erotic",        label:"Erotic & Kink",                 color:"#8040A8"},
-  {id:"emotional",     label:"Emotional Nurturance",          color:"#2878A0"},
-  {id:"relational",    label:"Relational Architecture & Vision", color:"#C04878"},
-  {id:"somatic",       label:"Somatic & Spiritual Importance", color:"#5830A0"},
-  {id:"neurodivergence",label:"Neurodivergence",              color:"#3A7030"},
-  {id:"digital",       label:"Digital Relating",              color:"#2A4A8A"},
+  {id:"needs",          label:"Unmet Basic Needs",             color:"#107870", group:"status"},
+  {id:"mentalhealth",   label:"Mental Health Load",            color:"#906010", group:"status"},
+  {id:"neurodivergence",label:"Neurodivergence & Access",      color:"#3A7030", group:"status"},
+  {id:"communication",  label:"Communication & Repair",        color:"#C47A2A", group:"status"},
+  {id:"erotic",         label:"Erotic & Kink",                 color:"#8040A8", group:"relating"},
+  {id:"emotional",      label:"Emotional Nurturance",          color:"#2878A0", group:"relating"},
+  {id:"relational",     label:"Relational Architecture & Vision",color:"#C04878",group:"relating"},
+  {id:"somatic",        label:"Somatic & Spiritual Importance",color:"#5830A0", group:"relating"},
+  {id:"digital",        label:"Digital Relating",              color:"#2A4A8A", group:"relating"},
 ];
 
 const INTERPS={
-  needs:[
-    [0,.3,"Your unmet needs are relatively low right now — but monitor when stressors shift. Survival stress impacts our relationship to time, energy and presence with ourselves and others. We were never wired to do this alone."],
-    [.3,.6,"Your unmet needs are likely impacting how you show up in relationship spaces. Financial and well-being stress limits time, capacity to connect, and the ability to relax into pleasure. The relational difficulty isn't pathology — it's the system."],
-    [.6,1,"Your unmet needs are significantly impacting how you relate. Poverty and capitalist exploitation isn't your fault, but the cultural shame can make us feel like it is. Belonging and love don't require financial stability — leaning into community support as a resource, not a deficit, is the move."],
-  ],
-  mentalhealth:[
-    [0,.3,"Your mental health needs are relatively low — but monitor when activation or dysregulation starts impacting daily life. As a more regulated person, you are a vital community anchor for others. That capacity matters and is worth protecting."],
-    [.3,.6,"Your mental health needs are elevated. These are reactions to stressors, trauma, and cultural rejection — your nervous system adapting to survive. Getting support to understand your activation patterns isn't about fixing you. It's about reducing distress so you have more capacity for connection, pleasure and belonging."],
-    [.6,1,"Your mental health needs are high, and it's important to seek human support. Your symptoms are your nervous system's adaptations to a world that is genuinely traumatizing — not a sign of deficit within you. Check our resource section, reach out to community, and know you are not alone in this."],
-  ],
-  identity:[
-    [0,.3,"Your identity awareness and relationship to your body remain strong. Consider how your identities and strengths provide capacity to care for others — while staying curious about the impact of identity-based power and privilege in your dynamics."],
-    [.3,.6,"There are core aspects of yourself in conflict that need support. The distress comes from biased and hateful cultural systems, not from anything wrong with who you are. Your identities and body are magical sites of possibility when held with care. What aspects can you show more self-compassion?"],
-    [.6,1,"You're experiencing high distress related to identity and body. What's wrong isn't you — it's the world you came into and how it treats people like you. This trauma affects every part of life and relationships, especially when those patterns are replicated in social dynamics. You get to be included in conversations about who you are from day one."],
-  ],
-  erotic:[
-    [0,.3,"Eroticism and sensuality are of low importance to you right now, and that's okay. Everyone relates to sexuality and pleasure differently, particularly those on the Ace / Grey scale. You can still create meaningful, pleasurable connection — with yourself, in fantasy, or with others — entirely on your own terms."],
-    [.3,.6,"Eroticism and sensuality matter to you and can be cultivated in endless forms — individually, with partners, digitally, in community, or in fantasy. Give yourself permission to explore what that looks like in each context, separately. Consent-based practice opens doors shame keeps closed."],
-    [.6,1,"Erotic and sensual expression are key to your well-being — your relational dynamics should make space for this, or create pathways to seek expression elsewhere. High desire isn't pathology, but it requires more communication and creativity to navigate ethically. You deserve access to all of yourself."],
-  ],
-  relational:[
-    [0,.3,"You're more monogamously oriented — seeking depth and commitment in a partner-centered world. A reminder: you are a whole person, not needing another to complete you. Your own secure attachment base, with community as foundation, is the long-term infrastructure for your well-being."],
-    [.3,.6,"You're relationally flexible — either on the journey to a new relationship ecosystem, or curious about what's possible if you break some boxes. What would it look like to disperse your needs across your relational ecosystem with consent and clarity?"],
-    [.6,1,"You're collectively wired and seeking interconnectedness — not just a partner, but an ecosystem. We're not defaulting to polyamory here. We're defaulting to dispersing your needs across the relational ecosystem with consent and clarity. Building communication and conflict skills will be the infrastructure that makes it work."],
-  ],
-  emotional:[
-    [0,.3,"You've identified low need for emotional nurturance. This often correlates with ND traits or socialization away from vulnerability. If you're comfortable here, how might you communicate early about dynamics with low emotional intertwinement? And what does aftercare look like for you?"],
-    [.3,.6,"Emotional nurturance accentuates your ability to feel close and connected. Feeling emotionally held might precede your ability to experience arousal or safety with another. It's key to communicate these needs early and often — including what support you need after intimate experiences."],
-    [.6,1,"Emotional nurturance is central to how you relate and a pathway to your sexual openness. You want to feel seen and held in your full emotional expansiveness. This requires high self-knowledge and the ability to teach your partners and community what it actually feels like to hold you well."],
-  ],
-  somatic:[
-    [0,.3,"Somatic grounding and spiritual exploration aren't required for your well-being, but they remain parts of you and of others. Is there an opening to finding more connection with your body and its cues as a pathway to more pleasure and presence?"],
-    [.3,.6,"Spirituality and somatic awareness are tools in your toolbox for well-being and relating. Explore connections that celebrate these aspects and give you space to play, ground and create ritual around pleasure and connection."],
-    [.6,1,"Your spiritual and somatic self are anchors to your well-being. Your body guides your intuition and rootedness — to ancestry, to nature, to other dimensions of being. These aren't separate from your sexuality; they are part of it."],
-  ],
-  neurodivergence:[
-    [0,.3,"Your ND-related traits are relatively low — but you've likely been or will be in connections with folks who have neurospicy brains and systems. Understanding how different brains and bodies work makes you a more attuned community member and partner."],
-    [.3,.6,"You're experiencing ND-related traits that are likely impacting your daily well-being and relationships. The more specifically you can name your experiences, patterns and sensitivities, the more you can create relational dynamics that actually suit you. These aren't deficits — they are places of adaptation and enhanced communication."],
-    [.6,1,"You're experiencing a high level of neurodivergence, which impacts every facet of how you relate. Map your traits, sensitivities and needs — and lead with them in relational conversations. It is not too much to ask people to make accommodations to communicate and understand you. You're not broken — you're a uniquely sexy rubix cube seeking to unlock your own patterns."],
-  ],
-  digital:[
-    [0,.3,"Digital relationships aren't a significant part of your ecosystem right now — but consider how digital communities might enhance your well-being and access to parts of yourself that are harder to reach in person. There's no shame in starting there."],
-    [.3,.6,"Digital relationships are already in your ecosystem. How integrated is the you who exists online compared to IRL? Digital connections nourish us best the more values-aligned and integrated our expression is — are you bringing yourself fully into your digital spaces?"],
-    [.6,1,"Your digital relationships are doing significant relational work, which can be both a resource and a challenge. Does your vulnerability have safe places to exist online? How balanced are those connections with away-from-keyboard human contact? These questions aren't judgment — they're a gentle cue toward embodied, human relating."],
-  ],
+  needs:[[0,.3,"Your basic needs and community feel relatively met right now."],[.3,.6,"Some gaps in community, resources, or self-regulation are present."],[.6,1,"Significant unmet needs are present. These gaps are structural, not personal, and shape everything else."]],
+  mentalhealth:[[0,.3,"Your nervous system reads as relatively regulated right now, with low additional load from OCD, psychotic, identity, or body-related symptoms."],[.3,.6,"A moderate load is present — some activation off-center (stuck on or stuck off), possibly alongside identity, body, or cultural trauma. This is context for relational and sexual situations."],[.6,1,"Significant load — nervous system activation is pulling well off regulated, possibly alongside identity, body, or cultural trauma. This shapes how you connect, play, and need to be met."]],
+  neurodivergence:[[0,.3,"ND traits and access needs are less present or prominent in your current experience."],[.3,.6,"A moderate presence of ND traits and/or access needs — these shape how you process, communicate, and connect."],[.6,1,"ND traits and/or access needs are significantly present — these are part of your operating system, not a deficit. They shape how you relate, in any relationship."]],
+  communication:[[0,.3,"Your conflict and communication patterns are relatively steady right now — repair and directness come fairly naturally."],[.3,.6,"Some communication patterns — like defensiveness, withdrawal, or over-functioning to keep the peace — show up under pressure."],[.6,1,"Communication and repair show up as a current skill-development area. This isn't a character flaw — these are learnable patterns."]],
+  erotic:[[0,.3,"Erotic and sensual dimensions are less central to your relational world right now."],[.3,.6,"Moderate erotic and sensual importance — some dimensions matter more than others."],[.6,1,"High erotic and sensual importance — these dimensions are central to how you connect and need to be met."]],
+  relational:[[0,.3,"You prefer more defined, contained relational structures — commitment and clarity matter."],[.3,.6,"Moderate flexibility — some openness to different relational forms, some preference for stability."],[.6,1,"High relational flexibility — openness to multiple connections, new situations, and varied forms of relating."]],
+  emotional:[[0,.3,"Emotional processing and co-regulation are less central to your relational needs right now."],[.3,.6,"Emotional nurturance matters moderately — context-dependent."],[.6,1,"Emotional nurturance and co-regulation are central to how you relate and need to be held."]],
+  somatic:[[0,.3,"Somatic and spiritual dimensions are less central to your relational world."],[.3,.6,"Some somatic or spiritual importance — these dimensions are present but not defining."],[.6,1,"Somatic and spiritual connection are central to how you experience play and relationship."]],
+  digital:[[0,.3,"Digital and AI spaces are playing a relatively contained role in your relational life."],[.3,.6,"Digital spaces are doing some relational work — information about what role they're currently playing."],[.6,1,"Digital and AI spaces are doing significant relational work. This is context for your human relating capacity."]],
 };
 
 const SKILL_MAP={
-  needs:[{n:"ARTICULATOR",c:"#3A8A80"},{n:"CONNECTOR",c:"#C4933A"},{n:"REGULATOR",c:"#2A6A8A"}],
-  mentalhealth:[{n:"REGULATOR",c:"#2A6A8A"},{n:"THE SEER",c:"#3A8A80"},{n:"SHAME SHIFTER",c:"#C4933A"}],
-  identity:[{n:"THE BRAVE",c:"#C4607A"},{n:"SHAME SHIFTER",c:"#C4933A"},{n:"THE SOMATIC",c:"#6A4A9A"}],
-  erotic:[{n:"EROS",c:"#C4607A"},{n:"SAFETY KEEPER",c:"#8A2A3A"},{n:"SOVEREIGN",c:"#6A4A9A"}],
-  relational:[{n:"EMPATH",c:"#C4607A"},{n:"CONNECTOR",c:"#C4933A"},{n:"SOVEREIGN",c:"#6A4A9A"}],
-  emotional:[{n:"WITNESS",c:"#2A6A8A"},{n:"EMPATH",c:"#C4607A"},{n:"THE MENDER",c:"#C4933A"}],
-  somatic:[{n:"THE SOMATIC",c:"#6A4A9A"},{n:"THE CURIOUS",c:"#2A6A8A"},{n:"REGULATOR",c:"#3A8A80"}],
-  neurodivergence:[{n:"REGULATOR",c:"#3A8A80"},{n:"WITNESS",c:"#2A6A8A"},{n:"ARTICULATOR",c:"#3A8A80"}],
-  digital:[{n:"THE BRAVE",c:"#C4607A"},{n:"SHAME SHIFTER",c:"#C4933A"},{n:"CONNECTOR",c:"#C4933A"}],
+  needs:[{n:"ARTICULATOR",c:"#0a9080"},{n:"CONNECTOR",c:"#ffd700"},{n:"REGULATOR",c:"#39ff14"}],
+  mentalhealth:[{n:"REGULATOR",c:"#39ff14"},{n:"THE SEER",c:"#00c8a0"},{n:"SHAME SHIFTER",c:"#c8802a"},{n:"THE BRAVE",c:"#ff6b9d"}],
+  neurodivergence:[{n:"REGULATOR",c:"#39ff14"},{n:"WITNESS",c:"#00e5ff"},{n:"ARTICULATOR",c:"#0a9080"},{n:"THE CURIOUS",c:"#3060d0"}],
+  communication:[{n:"WITNESS",c:"#00e5ff"},{n:"THE OWNER",c:"#c47a2a"},{n:"SOVEREIGN",c:"#7b2fff"},{n:"THE MENDER",c:"#ffb347"},{n:"REGULATOR",c:"#39ff14"}],
+  erotic:[{n:"EROS",c:"#d4336e"},{n:"SAFETY KEEPER",c:"#a02030"},{n:"SOVEREIGN",c:"#7b2fff"}],
+  emotional:[{n:"WITNESS",c:"#00e5ff"},{n:"EMPATH",c:"#ff2d78"},{n:"THE MENDER",c:"#ffb347"}],
+  relational:[{n:"EMPATH",c:"#ff2d78"},{n:"CONNECTOR",c:"#ffd700"},{n:"SOVEREIGN",c:"#7b2fff"}],
+  somatic:[{n:"THE SOMATIC",c:"#6040b0"},{n:"THE CURIOUS",c:"#3060d0"},{n:"REGULATOR",c:"#39ff14"}],
+  digital:[{n:"THE BRAVE",c:"#ff6b9d"},{n:"SHAME SHIFTER",c:"#c8802a"},{n:"CONNECTOR",c:"#ffd700"},{n:"SAFETY KEEPER",c:"#a02030"}],
 };
 
-// TIERS removed — no verdict labels rendered anywhere. The ?tier= URL param
-// is no longer sent from the quiz (removed from webhook payload too).
 
 // ── READ URL PARAMS ────────────────────────────────────────
 const params=new URLSearchParams(window.location.search);
 const name=params.get('name')||'friend';
+const tier=params.get('tier')||'healthy';
 const scores={};
 DIMS.forEach(d=>{
   const raw=parseFloat(params.get(d.id)||'0');
   scores[d.id]=Math.min(1,Math.max(0,raw/5));
 });
-// Safety and consent flags from quiz
-const si_score=parseFloat(params.get('si')||'0');
-const shame_rejection=parseFloat(params.get('shame_rejection')||'0');   // Q6 /5
-const pushback_rejection=parseFloat(params.get('pushback_rejection')||'0'); // Q7 /5
-const consent_module_triggered=shame_rejection>0||pushback_rejection>0;
+// SGBV/special flags from quiz
+const si_score=parseFloat(params.get('si')||'0'); // Q14 suicidal ideation /5
+const consent_score=parseFloat(params.get('consent')||'0'); // inverted — high = difficulty
+const shame_erotic=parseFloat(params.get('shame')||'0'); // erotic shame flag
+// Mental health activation layer (new — from activation dials + chips in quiz)
+const activation_general=params.get('activation_general')!==null?parseFloat(params.get('activation_general')):null;
+const activation_relational=params.get('activation_relational')!==null?parseFloat(params.get('activation_relational')):null;
+const mh_origin=params.get('mh_origin_tags')?params.get('mh_origin_tags').split(',').filter(Boolean):[];
+const mh_patterns=params.get('mh_manifestation_patterns')?params.get('mh_manifestation_patterns').split(',').filter(Boolean):[];
+const si_elevated=si_score>=0.6;
 
 // ── CRISIS CHECK ───────────────────────────────────────────
 function checkCrisis(){
@@ -318,94 +245,48 @@ function checkCrisis(){
   if(si_score>=0.6){
     box.style.display='block';
     txt.textContent="Your responses indicate you may be experiencing suicidal ideation. Before moving forward, please know that support is available right now. You don't have to hold this alone.";
-  }
-  // Consent education module — any non-zero Q6 or Q7
-  const consentEl=document.getElementById('consentModule');
-  if(consentEl){
-    consentEl.style.display=consent_module_triggered?'block':'none';
+  } else if(consent_score>=0.6){
+    box.style.display='block';
+    box.style.background='rgba(196,147,58,0.1)';
+    box.style.borderColor='rgba(196,147,58,0.4)';
+    txt.textContent="Your responses suggest significant difficulty with consent communication in erotic contexts. The skills section below is particularly relevant — the SAFETY KEEPER and SOVEREIGN cards are worth exploring first.";
+    document.querySelector('#crisisBox p:last-child').textContent="For support: RAINN 1-800-656-4673 · NCADV 1-800-799-7233";
   }
 }
 
-// ── TIER ───────────────────────────────────────────────────
-// Headline pulled directly from Soleil's own INTERPS text for whichever dimension
-// scored highest — never composed/extrapolated. Value framing (good/bad) is only
-// applied for Unmet Needs, Mental Health Load, and the consent/abuse flags; every
-// other dimension is presented descriptively, with no judgment on score level.
+// ── TOP AREAS ────────────────────────────────────────────────
+function getDimLabel(dim, score){
+  if(dim.id==='erotic'){
+    if(score<.3) return "Sensuality & Ace Spectrum";
+    if(score<.6) return "Erotic & Sensual Range";
+    return "Erotic & Kink Intensity";
+  }
+  return dim.label;
+}
+
+// Descriptive only — no tier, no color-coded verdict. Names the highest-scoring
+// dimensions and quotes their interpretation text directly. A map, not a verdict.
 function buildTier(){
   document.getElementById('nameDisplay').textContent=name;
   const sortedDims=[...DIMS].sort((a,b)=>(scores[b.id]||0)-(scores[a.id]||0));
   const topDim=sortedDims[0];
   const topScore=scores[topDim.id]||0;
   const headline=getInterp(topDim.id,topScore);
-  const previewNames=sortedDims.slice(0,3).map(d=>d.label).join(' · ');
+  const previewNames=sortedDims.slice(0,3).map(d=>getDimLabel(d,scores[d.id]||0)).join(' · ');
   const box=document.getElementById('tierBox');
-  box.style.background='rgba(255,255,255,0.03)';
-  box.style.borderLeft='4px solid #C4933A';
-  document.getElementById('tierLabel').style.color='#C4933A';
+  box.style.background='rgba(196,147,58,0.06)';
+  box.style.borderLeft='4px solid #906010';
+  document.getElementById('tierLabel').style.color='#906010';
   document.getElementById('tierLabel').textContent='Your highest-scoring areas';
-  document.getElementById('tierTagline').style.color='#F2EDE4';
+  document.getElementById('tierTagline').style.color='#1A1410';
   document.getElementById('tierTagline').textContent=previewNames;
   document.getElementById('tierText').textContent=headline;
-}
-
-// ── MOBIUS MESH CARD — gift, fully unlocked (all 6 trait dims visible) ──
-function buildMeshCardGift(){
-  const mount=document.getElementById('mesh-card-gift');
-  if(!mount) return;
-  const traitDims=[
-    {id:'identity',        label:'Identity',        color:'#FF7A59'},
-    {id:'erotic',          label:'Erotic',          color:'#FF3D8F'},
-    {id:'emotional',       label:'Emotional',       color:'#5AA0D9'},
-    {id:'relational',      label:'R. Flexibility',  color:'#C97FE0'},
-    {id:'somatic',         label:'Somatic',         color:'#A78BD9'},
-    {id:'digital',         label:'Digital',         color:'#5577D9'},
-  ];
-  const statusDims=[
-    {id:'needs',           label:'Unmet Needs',    color:'#1FB8A8'},
-    {id:'mentalhealth',    label:'Mental Health',  color:'#D9A23B'},
-    {id:'neurodivergence', label:'Neuro',          color:'#5FBF6A'},
-  ];
-  const traitHtml=traitDims.map(d=>{
-    const v=(scores[d.id]||0)*5;
-    return `<div class="mmc-trait-row"><span class="mmc-trait-label">${d.label}</span><span class="mmc-trait-value" style="color:${d.color}">${v.toFixed(1)}</span></div>`;
-  }).join('');
-  const statusHtml=statusDims.map(d=>{
-    const v=(scores[d.id]||0)*5;
-    const pct=(v/5)*100;
-    return `<div class="mmc-status-row"><span class="mmc-status-tag">${d.label}</span><div class="mmc-status-track"><div class="mmc-status-fill" style="width:${pct}%;background:${d.color}"></div></div></div>`;
-  }).join('');
-  mount.innerHTML=`
-    <div id="mmc-root">
-      <p class="mmc-gift-label">✦ your gift — fully unlocked ✦</p>
-      <div class="mmc-card">
-        <div class="mmc-identity">
-          <div class="mmc-avatar">◈</div>
-          <div>
-            <div class="mmc-id-eyebrow">cyborgdreamz · mesh profile</div>
-            <div class="mmc-id-name">${name}</div>
-            <div class="mmc-id-tagline">a map, not a verdict</div>
-          </div>
-        </div>
-        <div class="mmc-panel">
-          <div class="mmc-panel-title">Connection</div>
-          ${traitHtml}
-        </div>
-        <div class="mmc-panel" style="margin-bottom:0">
-          <div class="mmc-panel-title" style="font-size:12px">Current state</div>
-          ${statusHtml}
-        </div>
-        <div class="mmc-brand-row">
-          <div class="mmc-word">Mobius<span> Mesh</span></div>
-        </div>
-      </div>
-    </div>`;
 }
 
 // ── RADAR ─────────────────────────────────────────────────
 function buildRadar(){
   const svg=document.getElementById('radarSvg');
   const cx=240,cy=240,r=170,n=DIMS.length;
-  const letters=['A','B','C','D','E','F','G','H','I'];
   const angles=DIMS.map((_,i)=>(i/n)*Math.PI*2-Math.PI/2);
   const pt=(a,v)=>({x:cx+Math.cos(a)*r*v,y:cy+Math.sin(a)*r*v});
   let html='';
@@ -419,22 +300,13 @@ function buildRadar(){
   DIMS.forEach((d,i)=>{
     const v=scores[d.id]||0;
     const dp=pt(angles[i],v);
-    const lp=pt(angles[i],1.22);
+    const lp=pt(angles[i],1.28);
+    const anchor=Math.cos(angles[i])>.2?'end':Math.cos(angles[i])<-.2?'start':'middle';
+    const short=d.label.split(' ').slice(0,2).join(' ');
     html+=`<circle cx="${dp.x.toFixed(1)}" cy="${dp.y.toFixed(1)}" r="5" fill="${d.color}" opacity="0.9"\/>`;
-    html+=`<circle cx="${lp.x.toFixed(1)}" cy="${lp.y.toFixed(1)}" r="13" fill="${d.color}" opacity="0.18"\/>`;
-    html+=`<text x="${lp.x.toFixed(1)}" y="${lp.y.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-size="17" font-weight="600" fill="${d.color}" font-family="'DM Mono',monospace">${letters[i]}<\/text>`;
+    html+=`<text x="${lp.x.toFixed(1)}" y="${lp.y.toFixed(1)}" text-anchor="${anchor}" dominant-baseline="middle" font-size="9" fill="${d.color}" font-family="'DM Mono',monospace" opacity="0.85">${short}<\/text>`;
   });
   svg.innerHTML=html;
-
-  // Legend — letter key below the chart
-  const legendHtml=DIMS.map((d,i)=>
-    `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:16px;margin-bottom:6px">
-       <span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:${d.color};color:#1A1D2E;font-size:11px;font-weight:600">${letters[i]}<\/span>
-       <span style="font-size:10px;color:#8A8EAA">${d.label}<\/span>
-     <\/span>`
-  ).join('');
-  const legendEl=document.getElementById('radarLegend');
-  if(legendEl) legendEl.innerHTML=legendHtml;
 }
 
 // ── DIMENSION CARDS ────────────────────────────────────────
@@ -456,6 +328,7 @@ function buildDimCards(){
       <div class="dim-bar-track"><div class="dim-bar-fill" style="width:0%;background:${d.color}" data-w="${pct}"><\/div><\/div>
       <div style="font-size:10px;color:#8A8EAA;margin-bottom:6px">${(score*5).toFixed(1)} / 5<\/div>
       <div style="font-size:10.5px;color:#8A8EAA;line-height:1.65;font-style:italic;border-top:1px solid #363A55;padding-top:8px">${getInterp(d.id,score)}<\/div>
+      ${d.id==='mentalhealth'&&(activation_general!==null||mh_origin.length||mh_patterns.length)?`<div style="margin-top:10px;padding:8px 10px;background:rgba(255,255,255,0.04);border-radius:4px;font-size:10.5px;color:#8A8EAA;line-height:1.8">${activation_general!==null?'<div><span style="font-weight:600;color:#C9B8A8">Baseline activation:</span> '+(activation_general*5).toFixed(1)+'/5 — '+(activation_general<0.4?'leaning Stuck Off':activation_general>0.6?'leaning Stuck On':'Regulated')+'</div>':''}${activation_relational!==null?'<div><span style="font-weight:600;color:#C9B8A8">In relationships:</span> '+(activation_relational*5).toFixed(1)+'/5 — '+(activation_relational<0.4?'leaning Stuck Off':activation_relational>0.6?'leaning Stuck On':'Regulated')+'</div>':''}${mh_origin.length?'<div><span style="font-weight:600;color:#C9B8A8">Origin:</span> '+mh_origin.join(', ')+'</div>':''}${mh_patterns.length?'<div><span style="font-weight:600;color:#C9B8A8">Patterns:</span> '+mh_patterns.join(', ')+'</div>':''}</div>`:''}
     `;
     grid.appendChild(div);
   });
@@ -464,9 +337,32 @@ function buildDimCards(){
   },100);
 }
 
-// Note: the personalized AI/human pathway recommendation logic that used to live
-// here is preserved in project notes for reuse once the Ethical AI Suite and
-// Human Relating Plan pages exist on soleilmerroir.com.
+// ── RELATIONSHIP TYPE RECOMMENDATIONS (personalized) ───────
+function buildPathways(){
+  const rel=scores.relational||0;
+  const erotic=scores.erotic||0;
+  const somatic=scores.somatic||0;
+  const nd=scores.neurodivergence||0;
+  const digital=scores.digital||0;
+  const mh=scores.mentalhealth||0;
+  const comm=scores.communication||0;
+
+  // AI pathway personalization
+  let aiText="Curated AI tools matched to your actual needs — with ethics built in, no companion features.";
+  if(digital>0.6) aiText="Your high digital relating score suggests AI tools are already significant in your life. The Ethical AI Suite helps you use them with intention and clear boundaries rather than dependency.";
+  else if(digital<0.3) aiText="Your digital relating score is low — AI tools can be genuinely useful for specific tasks. The Ethical AI Suite focuses on task-based use with clear purpose and limits.";
+  document.getElementById('aiPathwayText').textContent=aiText;
+
+  // Human pathway personalization
+  let humanTitle="A graduated plan for rebuilding human relational capacity";
+  let humanText="Online and AFK — starting where you actually are.";
+  if(nd>0.6) humanText="Given your neurodivergence profile, this plan starts with explicitly structured, low-sensory contexts and builds toward embodied connection at your pace.";
+  if(rel>0.6) humanText="Your high relational flexibility suggests openness to multiple structures. The plan includes non-monogamous community, kink-aware spaces, and explicit relationship design.";
+  if(mh>0.6) humanText="Given your mental health load, this plan starts with therapeutic community and peer support before moving toward more vulnerable relational contexts.";
+  if(comm>0.6) humanText="Communication and repair show up as a current skill-development area. This plan includes explicit skill-building on conflict, directness, and repair before emphasizing new relational structures.";
+  document.getElementById('humanPathwayTitle').textContent=humanTitle;
+  document.getElementById('humanPathwayText').textContent=humanText;
+}
 
 // ── SKILL PILLS ────────────────────────────────────────────
 function buildSkillPills(){
@@ -499,9 +395,9 @@ function buildSkillPills(){
 // ── INIT ───────────────────────────────────────────────────
 checkCrisis();
 buildTier();
-buildMeshCardGift();
 buildRadar();
 buildDimCards();
+buildPathways();
 buildSkillPills();
 </script>
 </body>
