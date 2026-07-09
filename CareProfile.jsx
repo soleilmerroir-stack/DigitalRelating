@@ -3,28 +3,31 @@
  * Phryne · Care Exchange Profile
  *
  * WHAT THIS DOES
- * Reads the member's stored quiz scores from Supabase, runs a single
- * Claude API call to generate three analysis blocks, stores the result
- * back to care_profiles, and displays the three sections with toggle
- * controls for selective sharing.
+ * 1. If no quiz scores exist yet — shows BrevoSync so the member
+ *    can import from Brevo with one tap (explicit consent, first-time).
+ * 2. Once scores are loaded — generates three AI analysis blocks
+ *    (communication factors, status factors, knowledge/terrain)
+ *    via a single Claude API call, stores them in Supabase.
+ * 3. Member controls which sections appear in shared links, created
+ *    via ExchangeShare at the bottom of the page.
  *
- * HOW TO USE IN THE PHRYNE ROUTER
- * import CareProfile from './CareProfile';
- * // Add to your route config:
+ * ROUTE
  * { path: '/profile/care', element: <CareProfile /> }
  *
- * ENVIRONMENT VARIABLES NEEDED (already in your Vite .env)
- * VITE_SUPABASE_URL
- * VITE_SUPABASE_ANON_KEY
- * VITE_ANTHROPIC_API_KEY   ← new; add to Render env vars too
+ * ENVIRONMENT VARIABLES (.env + Render)
+ * VITE_SUPABASE_URL         (already set)
+ * VITE_SUPABASE_ANON_KEY    (already set)
+ * VITE_ANTHROPIC_API_KEY    (new — add to Render env vars)
  *
  * DEPENDENCIES
  * @supabase/supabase-js   (already installed)
- * qrcode.react            (npm install qrcode.react)  — for Step 3 share UI
+ * npm install qrcode.react  (optional, for QR codes in share UI)
  */
 
 import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import BrevoSync from './BrevoSync';
+import ExchangeShare from './ExchangeShare';
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -45,7 +48,7 @@ const C = {
   muted:   '#9090B5',
 };
 
-// Section config — drives rendering and the AI prompt
+// ── Section config ───────────────────────────────────────────
 const SECTIONS = [
   {
     id:    'communication',
@@ -53,8 +56,7 @@ const SECTIONS = [
     sub:   'factors to consider in peer exchange',
     color: C.cyan,
     icon:  '◈',
-    dims:  ['communication', 'neurodivergence', 'activation'],
-    shareKey: 'share_communication',
+    shareKey: 'shareable_communication',
   },
   {
     id:    'status',
@@ -62,8 +64,7 @@ const SECTIONS = [
     sub:   'needs and conditions that shape what works',
     color: C.amber,
     icon:  '◉',
-    dims:  ['needs', 'mentalhealth', 'activation'],
-    shareKey: 'share_status',
+    shareKey: 'shareable_status',
   },
   {
     id:    'knowledge',
@@ -71,15 +72,35 @@ const SECTIONS = [
     sub:   'what I hold and know well',
     color: C.purple,
     icon:  '◆',
-    dims:  ['erotic', 'emotional', 'relational', 'somatic'],
-    shareKey: 'share_knowledge',
+    shareKey: 'shareable_knowledge',
   },
 ];
 
+// ── Score → profile column mapping (used after BrevoSync) ───
+function applyBrevoScores(prev, scores) {
+  return {
+    ...prev,
+    score_needs:               scores.needs           ?? prev?.score_needs,
+    score_mentalhealth:        scores.mentalhealth    ?? prev?.score_mentalhealth,
+    score_neurodivergence:     scores.neurodivergence ?? prev?.score_neurodivergence,
+    score_communication:       scores.communication   ?? prev?.score_communication,
+    score_erotic:              scores.erotic          ?? prev?.score_erotic,
+    score_emotional:           scores.emotional       ?? prev?.score_emotional,
+    score_relational:          scores.relational      ?? prev?.score_relational,
+    score_somatic:             scores.somatic         ?? prev?.score_somatic,
+    score_digital:             scores.digital         ?? prev?.score_digital,
+    activation_general:        scores.activation_general    ?? prev?.activation_general,
+    activation_relational:     scores.activation_relational ?? prev?.activation_relational,
+    mh_origin_tags:            scores.mh_origin_tags            ?? prev?.mh_origin_tags,
+    mh_manifestation_patterns: scores.mh_manifestation_patterns ?? prev?.mh_manifestation_patterns,
+    brevo_synced_at:           new Date().toISOString(),
+  };
+}
+
 // ── Prompt builder ───────────────────────────────────────────
 function buildPrompt(profile) {
-  const fmt = v => v != null ? `${v}/5` : 'not answered';
-  const lean = v => v == null ? 'unknown'
+  const fmt  = v  => v != null ? `${v}/5` : 'not answered';
+  const lean = v  => v == null ? 'unknown'
     : v < 2 ? 'leaning Stuck Off (flat, lethargic, disconnected)'
     : v > 3 ? 'leaning Stuck On (wired, hypervigilant, flooded)'
     : 'relatively regulated';
@@ -104,12 +125,8 @@ Relating dimensions (presence, not strain):
 - Somatic & Spiritual: ${fmt(profile.score_somatic)}
 - Digital Relating: ${fmt(profile.score_digital)}
 
-${profile.mh_origin_tags?.length
-  ? `MH origin context: ${profile.mh_origin_tags.join(', ')}`
-  : ''}
-${profile.mh_manifestation_patterns?.length
-  ? `Patterns present: ${profile.mh_manifestation_patterns.join(', ')}`
-  : ''}
+${profile.mh_origin_tags?.length ? `MH origin context: ${profile.mh_origin_tags.join(', ')}` : ''}
+${profile.mh_manifestation_patterns?.length ? `Patterns present: ${profile.mh_manifestation_patterns.join(', ')}` : ''}
 
 Generate exactly three sections. Each section is 2–4 sentences. Write in first person ("I tend to..."). Do not use clinical diagnosis language. Do not add caveats or disclaimers. Do not repeat the numeric scores. Write as if the person themselves is sharing context with a peer who cares about them.
 
@@ -151,7 +168,7 @@ async function loadProfile(userId) {
     .select('*')
     .eq('user_id', userId)
     .single();
-  if (error && error.code !== 'PGRST116') throw error; // 116 = no rows
+  if (error && error.code !== 'PGRST116') throw error;
   return data;
 }
 
@@ -176,7 +193,7 @@ async function updateShareToggles(userId, toggles) {
   if (error) throw error;
 }
 
-// ── Components ───────────────────────────────────────────────
+// ── Sub-components ───────────────────────────────────────────
 function SectionCard({ section, text, toggled, onToggle, loading }) {
   return (
     <div style={{
@@ -187,7 +204,6 @@ function SectionCard({ section, text, toggled, onToggle, loading }) {
       marginBottom: 16,
       transition: 'border-color .2s',
     }}>
-      {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
         <div>
           <span style={{ color: section.color, fontFamily: 'monospace', fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', display: 'block', marginBottom: 4 }}>
@@ -195,38 +211,35 @@ function SectionCard({ section, text, toggled, onToggle, loading }) {
           </span>
           <span style={{ color: C.muted, fontSize: 12 }}>{section.sub}</span>
         </div>
-        {/* Share toggle */}
         <button
           onClick={() => onToggle(!toggled)}
           title={toggled ? 'Remove from shared view' : 'Include in shared view'}
           style={{
-            background: toggled ? section.color + '22' : 'transparent',
-            border: `1px solid ${toggled ? section.color : C.border}`,
-            borderRadius: 20,
-            padding: '5px 14px',
-            color: toggled ? section.color : C.muted,
-            fontSize: 10,
+            background:    toggled ? section.color + '22' : 'transparent',
+            border:        `1px solid ${toggled ? section.color : C.border}`,
+            borderRadius:  20,
+            padding:       '5px 14px',
+            color:         toggled ? section.color : C.muted,
+            fontSize:      10,
             letterSpacing: 1.5,
             textTransform: 'uppercase',
-            cursor: 'pointer',
-            fontFamily: 'monospace',
-            transition: 'all .15s',
-            whiteSpace: 'nowrap',
+            cursor:        'pointer',
+            fontFamily:    'monospace',
+            transition:    'all .15s',
+            whiteSpace:    'nowrap',
           }}
         >
           {toggled ? '✓ Sharing' : 'Not sharing'}
         </button>
       </div>
-
-      {/* Analysis text */}
       <div style={{
-        borderTop: `1px solid ${C.border}`,
+        borderTop:  `1px solid ${C.border}`,
         paddingTop: 14,
-        color: loading ? C.muted : C.txt,
-        fontSize: 14,
+        color:      loading ? C.muted : C.txt,
+        fontSize:   14,
         lineHeight: 1.75,
-        fontStyle: loading ? 'italic' : 'normal',
-        minHeight: 60,
+        fontStyle:  loading ? 'italic' : 'normal',
+        minHeight:  60,
       }}>
         {loading ? 'Generating…' : (text || 'Not yet generated.')}
       </div>
@@ -238,10 +251,18 @@ function ScoreChip({ label, value, color }) {
   if (value == null) return null;
   return (
     <span style={{
-      display: 'inline-flex', alignItems: 'center', gap: 6,
-      background: color + '18', border: `1px solid ${color}33`,
-      borderRadius: 4, padding: '3px 10px', marginRight: 8, marginBottom: 8,
-      fontSize: 11, fontFamily: 'monospace', color,
+      display:      'inline-flex',
+      alignItems:   'center',
+      gap:          6,
+      background:   color + '18',
+      border:       `1px solid ${color}33`,
+      borderRadius: 4,
+      padding:      '3px 10px',
+      marginRight:  8,
+      marginBottom: 8,
+      fontSize:     11,
+      fontFamily:   'monospace',
+      color,
     }}>
       {label}: {value}/5
     </span>
@@ -250,13 +271,13 @@ function ScoreChip({ label, value, color }) {
 
 // ── Main component ───────────────────────────────────────────
 export default function CareProfile() {
-  const [user,     setUser]     = useState(null);
-  const [profile,  setProfile]  = useState(null);
-  const [analysis, setAnalysis] = useState({ communication: null, status: null, knowledge: null });
-  const [toggles,  setToggles]  = useState({ share_communication: true, share_status: true, share_knowledge: true });
-  const [genState, setGenState] = useState('idle'); // idle | loading | done | error
-  const [genError, setGenError] = useState(null);
-  const [saved,    setSaved]    = useState(false);
+  const [user,      setUser]      = useState(null);
+  const [profile,   setProfile]   = useState(null);
+  const [analysis,  setAnalysis]  = useState({ communication: null, status: null, knowledge: null });
+  const [toggles,   setToggles]   = useState({ shareable_communication: true, shareable_status: true, shareable_knowledge: true });
+  const [genState,  setGenState]  = useState('idle'); // idle | loading | done | error
+  const [genError,  setGenError]  = useState(null);
+  const [saved,     setSaved]     = useState(false);
 
   // Load session + profile
   useEffect(() => {
@@ -273,13 +294,18 @@ export default function CareProfile() {
             knowledge:     p.analysis_knowledge,
           });
           setToggles({
-            share_communication: p.shareable_communication ?? true,
-            share_status:        p.shareable_status ?? true,
-            share_knowledge:     p.shareable_knowledge ?? true,
+            shareable_communication: p.shareable_communication ?? true,
+            shareable_status:        p.shareable_status        ?? true,
+            shareable_knowledge:     p.shareable_knowledge     ?? true,
           });
         })
         .catch(console.error);
     });
+  }, []);
+
+  // Called by BrevoSync after a successful import
+  const handleSyncComplete = useCallback((scores) => {
+    setProfile(prev => applyBrevoScores(prev || {}, scores));
   }, []);
 
   // Generate analysis
@@ -311,70 +337,89 @@ export default function CareProfile() {
     }
   }, [toggles, user]);
 
-  // ── Render ─────────────────────────────────────────────────
-  const hasScores = profile && (profile.score_needs != null);
+  // ── Derived state ───────────────────────────────────────────
+  const hasScores  = profile && (profile.score_needs != null);
   const hasAnalysis = analysis.communication || analysis.status || analysis.knowledge;
-  const loading = genState === 'loading';
+  const loading    = genState === 'loading';
 
   return (
     <div style={{
-      background: C.bg, minHeight: '100vh',
-      color: C.txt, fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
-      padding: '0 0 80px',
+      background: C.bg,
+      minHeight:  '100vh',
+      color:      C.txt,
+      fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
+      padding:    '0 0 80px',
     }}>
-      {/* Header */}
-      <div style={{ borderBottom: `1px solid ${C.border}`, padding: '20px 24px 18px', position: 'sticky', top: 0, background: C.bg, zIndex: 10 }}>
+
+      {/* ── Header ── */}
+      <div style={{
+        borderBottom: `1px solid ${C.border}`,
+        padding:      '20px 24px 18px',
+        position:     'sticky',
+        top:          0,
+        background:   C.bg,
+        zIndex:       10,
+      }}>
         <div style={{ fontFamily: 'monospace', fontSize: 10, color: C.muted, letterSpacing: 3, textTransform: 'uppercase', marginBottom: 4 }}>
           VHE · Care Exchange Profile
         </div>
-        <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: C.txt }}>Your Exchange Profile</h1>
+        <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: C.txt }}>
+          Your Exchange Profile
+        </h1>
       </div>
 
       <div style={{ maxWidth: 680, margin: '0 auto', padding: '0 24px' }}>
 
-        {/* Intro */}
+        {/* ── Intro ── */}
         <div style={{ margin: '24px 0 20px', padding: '18px 20px', background: C.surface, borderRadius: 8, borderLeft: `3px solid ${C.pink}` }}>
           <p style={{ margin: 0, fontSize: 13, color: C.muted, lineHeight: 1.7 }}>
-            This profile translates your quiz results into plain language you can share with a peer before or during an exchange. <strong style={{ color: C.txt }}>You control what gets shared.</strong> Each section can be toggled on or off independently. AI generates the text — you decide what goes out.
+            This profile translates your quiz results into plain language you can share with a peer before or during an exchange.{' '}
+            <strong style={{ color: C.txt }}>You control what gets shared.</strong>{' '}
+            Each section can be toggled on or off independently. AI generates the text — you decide what goes out.
           </p>
         </div>
 
-        {/* Score chips (informational, status only) */}
+        {/* ── Brevo sync — always visible ── */}
+        {/* Shows consent + import button when no scores exist.    */}
+        {/* Shows a compact re-sync strip when scores are present. */}
+        <BrevoSync
+          supabase={supabase}
+          lastSyncedAt={profile?.brevo_synced_at}
+          onSyncComplete={handleSyncComplete}
+        />
+
+        {/* ── Score chips (status dimensions only, informational) ── */}
         {hasScores && (
           <div style={{ marginBottom: 20 }}>
             <div style={{ fontSize: 10, letterSpacing: 2, color: C.muted, textTransform: 'uppercase', fontFamily: 'monospace', marginBottom: 10 }}>
               From your quiz
             </div>
-            <ScoreChip label="Basic Needs" value={profile.score_needs} color={C.cyan} />
-            <ScoreChip label="Mental Health Load" value={profile.score_mentalhealth} color={C.amber} />
-            <ScoreChip label="ND & Access" value={profile.score_neurodivergence} color={C.green} />
-            <ScoreChip label="Comms & Repair" value={profile.score_communication} color={C.pink} />
+            <ScoreChip label="Basic Needs"       value={profile.score_needs}           color={C.cyan}   />
+            <ScoreChip label="Mental Health Load" value={profile.score_mentalhealth}    color={C.amber}  />
+            <ScoreChip label="ND & Access"        value={profile.score_neurodivergence} color={C.green}  />
+            <ScoreChip label="Comms & Repair"     value={profile.score_communication}   color={C.pink}   />
           </div>
         )}
 
-        {/* No scores yet */}
-        {!hasScores && (
-          <div style={{ padding: '20px 24px', background: C.surface, borderRadius: 8, border: `1px solid ${C.border}`, marginBottom: 20 }}>
-            <p style={{ margin: 0, color: C.muted, fontSize: 13 }}>
-              No quiz scores found for your account. Complete the Relationship Ecosystem Quiz first — your results will be saved here automatically when you use your community access code.
-            </p>
-          </div>
-        )}
-
-        {/* Generate / Regenerate button */}
+        {/* ── Generate / Regenerate ── */}
         {hasScores && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
             <button
               onClick={handleGenerate}
               disabled={loading}
               style={{
-                background: loading ? C.surface : C.pink,
-                color: loading ? C.muted : C.bg,
-                border: loading ? `1px solid ${C.border}` : 'none',
-                borderRadius: 6, padding: '12px 24px',
-                fontFamily: 'monospace', fontSize: 11, letterSpacing: 2,
-                textTransform: 'uppercase', cursor: loading ? 'not-allowed' : 'pointer',
-                fontWeight: 700, transition: 'all .15s',
+                background:    loading ? C.surface : C.pink,
+                color:         loading ? C.muted   : C.bg,
+                border:        loading ? `1px solid ${C.border}` : 'none',
+                borderRadius:  6,
+                padding:       '12px 24px',
+                fontFamily:    'monospace',
+                fontSize:      11,
+                letterSpacing: 2,
+                textTransform: 'uppercase',
+                cursor:        loading ? 'not-allowed' : 'pointer',
+                fontWeight:    700,
+                transition:    'all .15s',
               }}
             >
               {loading ? 'Generating…' : hasAnalysis ? 'Regenerate from quiz' : 'Generate profile'}
@@ -392,7 +437,7 @@ export default function CareProfile() {
           </div>
         )}
 
-        {/* Three analysis section cards */}
+        {/* ── Three analysis section cards ── */}
         {SECTIONS.map(sec => (
           <SectionCard
             key={sec.id}
@@ -404,15 +449,17 @@ export default function CareProfile() {
           />
         ))}
 
-        {/* Share entry point — rendered by ExchangeShare.jsx (Step 3) */}
+        {/* ── Share UI — only once analysis exists ── */}
         {hasAnalysis && (
-          <div id="exchange-share-mount" style={{ marginTop: 32 }}>
-            {/* ExchangeShare component mounts here */}
-            {/* Import and render <ExchangeShare userId={user?.id} toggles={toggles} /> */}
+          <div style={{ marginTop: 32 }}>
+            <ExchangeShare
+              userId={user?.id}
+              toggles={toggles}
+            />
           </div>
         )}
 
-        {/* AI transparency note */}
+        {/* ── AI transparency note ── */}
         <div style={{ marginTop: 28, padding: '14px 18px', borderRadius: 6, border: `1px solid ${C.border}`, background: C.surface }}>
           <p style={{ margin: 0, fontSize: 11, color: C.muted, lineHeight: 1.65 }}>
             <span style={{ color: C.cyan, fontFamily: 'monospace' }}>AI · infrastructure only</span>
@@ -424,40 +471,3 @@ export default function CareProfile() {
     </div>
   );
 }
-
-/**
- * INTEGRATION STEPS
- * ─────────────────
- *
- * 1. Run the SQL migration first (001_care_profiles.sql).
- *    Confirm care_profiles and exchange_shares tables exist in Supabase.
- *
- * 2. When a member completes the quiz with a Phryne community code,
- *    upsert their scores into care_profiles:
- *
- *    await supabase.from('care_profiles').upsert({
- *      user_id:                currentUser.id,
- *      score_needs:            quizScores.needs,
- *      score_mentalhealth:     quizScores.mentalhealth,
- *      score_neurodivergence:  quizScores.neurodivergence,
- *      score_communication:    quizScores.communication,
- *      score_erotic:           quizScores.erotic,
- *      score_emotional:        quizScores.emotional,
- *      score_relational:       quizScores.relational,
- *      score_somatic:          quizScores.somatic,
- *      score_digital:          quizScores.digital,
- *      activation_general:     quizScores.activation_general,
- *      activation_relational:  quizScores.activation_relational,
- *      mh_origin_tags:         quizScores.mh_origin_tags,
- *      mh_manifestation_patterns: quizScores.mh_manifestation_patterns,
- *    }, { onConflict: 'user_id' });
- *
- * 3. Add VITE_ANTHROPIC_API_KEY to your .env and Render environment.
- *    Render → Environment → Add environment variable.
- *
- * 4. Add route to your router:
- *    import CareProfile from './CareProfile';
- *    <Route path="/profile/care" element={<CareProfile />} />
- *
- * 5. Add <ExchangeShare /> (Step 3 file) to the mount point above.
- */
