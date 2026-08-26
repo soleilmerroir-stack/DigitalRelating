@@ -68,11 +68,17 @@ body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height
 #mmc-root .mmc-trait-value{font-size:13px;font-weight:700}
 #mmc-root .mmc-status-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
 #mmc-root .mmc-status-tag{font-size:8px;letter-spacing:.06em;color:rgba(242,239,250,0.62);width:60px;flex-shrink:0;text-transform:uppercase}
-#mmc-root .mmc-status-track{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,0.08);overflow:hidden}
+#mmc-root .mmc-status-track{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,0.08);overflow:hidden;position:relative}
 #mmc-root .mmc-status-fill{height:100%;border-radius:3px}
+#mmc-root .mmc-status-marker{position:absolute;top:-2px;width:2px;height:9px;background:#F2EFFA;opacity:0.85;border-radius:1px}
+#mmc-root .mmc-status-sub{font-size:8px;color:rgba(242,239,250,0.4);margin:2px 0 6px 68px;line-height:1.5}
 #mmc-root .mmc-brand-row{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)}
 #mmc-root .mmc-brand-row .mmc-word{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(242,239,250,0.62)}
 #mmc-root .mmc-brand-row .mmc-word span{color:#1FB8A8}
+.dim-card-meta{margin:8px 0 0;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:4px}
+.meta-row{font-size:10.5px;color:#F2EDE4;margin-bottom:3px;line-height:1.5}
+.meta-row:last-child{margin-bottom:0}
+.meta-label{font-weight:600;color:#8A8EAA}
 </style>
 </head>
 <body>
@@ -149,7 +155,7 @@ body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height
   <!-- DIMENSION CARDS — FREE -->
   <div class="gold-rule"></div>
   <div class="eyebrow" style="margin-bottom:8px">Your 9 dimensions</div>
-  <p class="sub" style="margin-bottom:16px">Each bar shows your score. The interpretation below each is your free overview.</p>
+  <p class="sub" style="margin-bottom:16px">Each bar shows your score. The description below each is what that dimension measures — not a read on your specific number.</p>
   <div class="dim-grid fade-up" id="dimGrid"></div>
 
   <!-- LOCKED — PAID SECTION TEASER -->
@@ -223,15 +229,15 @@ body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height
 <script>
 // ── DIMENSIONS ─────────────────────────────────────────────
 const DIMS=[
-  {id:"needs",         label:"Unmet Basic Needs",            color:"#107870"},
-  {id:"mentalhealth",  label:"Mental Health Load",            color:"#906010"},
-  {id:"identity",      label:"Identity & Body Stressors",     color:"#B85020"},
-  {id:"erotic",        label:"Erotic & Kink",                 color:"#8040A8"},
-  {id:"emotional",     label:"Emotional Nurturance",          color:"#2878A0"},
-  {id:"relational",    label:"Relational Architecture & Vision", color:"#C04878"},
-  {id:"somatic",       label:"Somatic & Spiritual Importance", color:"#5830A0"},
-  {id:"neurodivergence",label:"Neurodivergence",              color:"#3A7030"},
-  {id:"digital",       label:"Digital Relating",              color:"#2A4A8A"},
+  {id:"needs",         label:"Unmet Basic Needs",            color:"#107870", desc:"Gaps in community, basic needs, self-regulation, sex ed."},
+  {id:"mentalhealth",  label:"Mental Health Load",            color:"#906010", desc:"Nervous system activation, origin, and manifestation — not a severity checklist."},
+  {id:"identity",      label:"Identity & Body Stressors",     color:"#B85020", desc:"Gender expansiveness, somatic awareness, identity & religious trauma."},
+  {id:"erotic",        label:"Erotic & Kink",                 color:"#8040A8", desc:"Desire, kink, power dynamics, pain, sensuality, frequency."},
+  {id:"emotional",     label:"Emotional Nurturance",          color:"#2878A0", desc:"Need for co-regulation, emotional processing, calming experiences."},
+  {id:"relational",    label:"Relational Architecture & Vision", color:"#C04878", desc:"Openness to entanglement, commitment needs, multiple connections."},
+  {id:"somatic",       label:"Somatic & Spiritual Importance", color:"#5830A0", desc:"Body-based awareness, breathwork, spirituality and ritual in play."},
+  {id:"neurodivergence",label:"Neurodivergence",              color:"#3A7030", desc:"Sensory, attention, communication, memory, stimming, time perception."},
+  {id:"digital",       label:"Digital Relating",              color:"#2A4A8A", desc:"AI use, parasocial connection, and digital substitution patterns."},
 ];
 
 const INTERPS={
@@ -311,6 +317,35 @@ const shame_rejection=parseFloat(params.get('shame_rejection')||'0');   // Q6 /5
 const pushback_rejection=parseFloat(params.get('pushback_rejection')||'0'); // Q7 /5
 const consent_module_triggered=shame_rejection>0||pushback_rejection>0;
 
+// Fixed: consent_score and shame_erotic were referenced in buildSkillPills()
+// but never declared anywhere in this file, throwing a ReferenceError on every
+// load and silently killing the skill pills section.
+// consent_score is derived from the two consent-difficulty flags already read
+// above (Q6/Q7) — the higher of the two stands in for overall consent difficulty.
+const consent_score=Math.max(shame_rejection,pushback_rejection);
+// shame_erotic has no real source anywhere in this file or its URL params —
+// erotic shame is a distinct construct from rejection shame (shame_rejection)
+// and I didn't want to misattribute one flag as a stand-in for the other, since
+// that would misfire the SHAME SHIFTER skill-pill logic on the wrong signal.
+// Defaulted to 0 (never triggers) until there's a real quiz question/param for it.
+const shame_erotic=0;
+// (from the July 9 quiz build). All optional: a link built before that change
+// simply won't carry these params, and everything below degrades gracefully.
+const activation_general=params.has('activation_general')?parseFloat(params.get('activation_general')):null;       // 0-5, distance-from-center already applied in quiz scoring — this is the raw reading
+const activation_relational=params.has('activation_relational')?parseFloat(params.get('activation_relational')):null; // 0-5
+const mh_origin_tags=(params.get('mh_origin_tags')||'').split(',').map(s=>s.trim()).filter(Boolean);
+const mh_manifestation_patterns=(params.get('mh_manifestation_patterns')||'').split(',').map(s=>s.trim()).filter(Boolean);
+
+// Neutral descriptive label for an activation reading — no "good/bad," just where
+// on the dial it sits. Matches the "REGULATED" center-label language from the quiz.
+function activationLean(v){
+  if(v===null||isNaN(v)) return null;
+  const norm=v/5;
+  if(norm<0.4) return 'leaning Stuck Off';
+  if(norm>0.6) return 'leaning Stuck On';
+  return 'Regulated';
+}
+
 // ── CRISIS CHECK ───────────────────────────────────────────
 function checkCrisis(){
   const box=document.getElementById('crisisBox');
@@ -372,7 +407,22 @@ function buildMeshCardGift(){
   const statusHtml=statusDims.map(d=>{
     const v=(scores[d.id]||0)*5;
     const pct=(v/5)*100;
-    return `<div class="mmc-status-row"><span class="mmc-status-tag">${d.label}</span><div class="mmc-status-track"><div class="mmc-status-fill" style="width:${pct}%;background:${d.color}"></div></div></div>`;
+    let row=`<div class="mmc-status-row"><span class="mmc-status-tag">${d.label}</span><div class="mmc-status-track"><div class="mmc-status-fill" style="width:${pct}%;background:${d.color}"></div>`;
+    // Mental Health Load gets a second marker on the same track showing the
+    // relational-context reading alongside the baseline fill, when that data exists.
+    if(d.id==='mentalhealth'&&activation_relational!==null&&!isNaN(activation_relational)){
+      const relPct=(activation_relational/5)*100;
+      row+=`<div class="mmc-status-marker" style="left:calc(${relPct}% - 1px)"></div>`;
+    }
+    row+=`</div></div>`;
+    if(d.id==='mentalhealth'){
+      const subParts=[];
+      const relLean=activationLean(activation_relational);
+      if(relLean) subParts.push('in relationships: '+relLean);
+      if(mh_origin_tags.length) subParts.push(mh_origin_tags.join(', '));
+      if(subParts.length) row+=`<div class="mmc-status-sub">${subParts.join(' · ')}</div>`;
+    }
+    return row;
   }).join('');
   mount.innerHTML=`
     <div id="mmc-root">
@@ -451,11 +501,21 @@ function buildDimCards(){
     const div=document.createElement('div');
     div.className='card card-accent';
     div.style.borderLeftColor=d.color;
+    let metaHtml='';
+    if(d.id==='mentalhealth'&&(activation_general!==null||activation_relational!==null||mh_origin_tags.length||mh_manifestation_patterns.length)){
+      const rows=[];
+      if(activation_general!==null&&!isNaN(activation_general)) rows.push(`<div class="meta-row"><span class="meta-label">Baseline activation:<\/span> ${activation_general.toFixed(1)}/5 — ${activationLean(activation_general)}<\/div>`);
+      if(activation_relational!==null&&!isNaN(activation_relational)) rows.push(`<div class="meta-row"><span class="meta-label">In relationships:<\/span> ${activation_relational.toFixed(1)}/5 — ${activationLean(activation_relational)}<\/div>`);
+      if(mh_origin_tags.length) rows.push(`<div class="meta-row"><span class="meta-label">Origin:<\/span> ${mh_origin_tags.join(', ')}<\/div>`);
+      if(mh_manifestation_patterns.length) rows.push(`<div class="meta-row"><span class="meta-label">Patterns:<\/span> ${mh_manifestation_patterns.join(', ')}<\/div>`);
+      metaHtml=`<div class="dim-card-meta">${rows.join('')}<\/div>`;
+    }
     div.innerHTML=`
       <div style="font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:${d.color};margin-bottom:6px">${d.label}</div>
       <div class="dim-bar-track"><div class="dim-bar-fill" style="width:0%;background:${d.color}" data-w="${pct}"><\/div><\/div>
       <div style="font-size:10px;color:#8A8EAA;margin-bottom:6px">${(score*5).toFixed(1)} / 5<\/div>
-      <div style="font-size:10.5px;color:#8A8EAA;line-height:1.65;font-style:italic;border-top:1px solid #363A55;padding-top:8px">${getInterp(d.id,score)}<\/div>
+      <div style="font-size:10.5px;color:#8A8EAA;line-height:1.65;border-top:1px solid #363A55;padding-top:8px">${d.desc}<\/div>
+      ${metaHtml}
     `;
     grid.appendChild(div);
   });

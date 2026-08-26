@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Character Card — cyborgdreamz</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing:border-box; }
+  html,body { margin:0; padding:0; background:#05070A; font-family:'Inter',sans-serif; }
+  .stage { width:380px; height:560px; margin:40px auto; position:relative; }
+  .card {
+    width:380px; height:560px; border-radius:16px; position:relative; overflow:hidden;
+    background:radial-gradient(circle at 50% 18%, #131a26 0%, #0a0e14 55%, #05070A 100%);
+    border:1.5px solid #C9A84C;
+    box-shadow:0 0 0 1px rgba(255,255,255,0.03), 0 18px 40px rgba(0,0,0,0.55);
+  }
+  .card-inner { padding:22px 22px 18px; height:100%; }
+  .glow-ring {
+    position:absolute; top:-90px; left:50%; margin-left:-130px;
+    width:260px; height:260px; border-radius:50%;
+    background:radial-gradient(circle, #C9A84C 0%, transparent 68%);
+    opacity:0.16; pointer-events:none;
+  }
+  .eyebrow { font-size:8.5px; letter-spacing:.28em; text-transform:uppercase; color:#C9A84C; text-align:center; margin-bottom:10px; opacity:0.9; }
+  .name {
+    font-family:'Cinzel',serif; font-weight:700; font-size:26px; letter-spacing:.04em;
+    color:#C9A84C; text-align:center; text-transform:uppercase; margin-bottom:6px;
+  }
+  .tagline { font-size:11px; font-style:italic; color:#c7cdd6; text-align:center; line-height:1.5; margin-bottom:16px; padding:0 6px; }
+  .diamond-row { text-align:center; margin-bottom:16px; }
+  .diamond { width:6px; height:6px; background:#C9A84C; display:inline-block; margin:0 5px; transform:rotate(45deg); opacity:0.85; }
+  .radar-wrap { text-align:center; margin-bottom:14px; }
+  .divider { height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent); margin:0 0 14px; }
+  .row { font-size:10.5px; line-height:1.5; color:#aab3c0; margin-bottom:8px; padding-left:2px; }
+  .row .k { font-family:'Cinzel',serif; font-weight:600; letter-spacing:.08em; text-transform:uppercase; font-size:8.5px; color:#C9A84C; display:block; margin-bottom:2px; }
+  .footer { text-align:center; margin-top:18px; }
+  .footer .for { font-size:9.5px; color:#8a94a3; margin-bottom:4px; }
+  .footer .brand { font-size:8px; letter-spacing:.15em; text-transform:uppercase; color:#5a6270; }
+  .note { text-align:center; font-size:9px; color:#4a515c; font-style:italic; margin-top:6px; padding:0 10px; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="card" id="theCard">
+    <div class="glow-ring" id="glowRing"></div>
+    <div class="card-inner">
+      <div class="eyebrow">cyborgdreamz &middot; relational ecosystem</div>
+      <div class="name" id="cardName">&mdash;</div>
+      <div class="tagline" id="cardTagline">&mdash;</div>
+      <div class="diamond-row"><span class="diamond"></span><span class="diamond"></span><span class="diamond"></span></div>
+
+      <div class="radar-wrap">
+        <svg id="radarSvg" viewBox="0 0 220 220" width="180" height="180"></svg>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="row"><span class="k">Most present</span><span id="row1v">&mdash;</span></div>
+      <div class="row"><span class="k">Also present</span><span id="row2v">&mdash;</span></div>
+
+      <div class="footer">
+        <div class="for" id="forName">for friend</div>
+        <div class="brand">soleilmerroir.com &middot; @cyborgdreamz</div>
+      </div>
+    </div>
+  </div>
+  <div class="note">A map, not a verdict &mdash; one profile among many possible readings.</div>
+</div>
+
+<script>
+// ── ES5-safe throughout: this file is rendered by wkhtmltoimage's old
+// WebKit engine, which does not support const/let, arrow functions,
+// template literals, or URLSearchParams. Do not "modernize" this file
+// without re-testing the PNG export.
+
+function getParam(name) {
+  var match = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+  return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : null;
+}
+
+var DIMS = [
+  { id: "needs",          label: "Unmet Basic Needs",           color: "#C9A84C" },
+  { id: "mentalhealth",   label: "Mental Health Load",          color: "#E0954B" },
+  { id: "identity",       label: "Identity & Body Stressors",   color: "#D9559B" },
+  { id: "erotic",         label: "Erotic & Sensual Importance", color: "#8B3B8B" },
+  { id: "relational",     label: "Relational Style Flexibility",color: "#C77DC7" },
+  { id: "emotional",      label: "Emotional Nurturance",        color: "#4FC7B5" },
+  { id: "somatic",        label: "Somatic & Spiritual",         color: "#00D9C0" },
+  { id: "neurodivergence",label: "Neurodivergence",             color: "#E0954B" },
+  { id: "digital",        label: "Digital Relating",            color: "#4FC7B5" }
+];
+
+var TIERS = {
+  healthy: { label: "Grounded",   color: "#4FC7B5", tagline: "Intentional, embodied, connected." },
+  concern: { label: "Drifting",   color: "#E0954B", tagline: "Moving away from center. Worth looking at." },
+  problem: { label: "Deep Drift", color: "#D9559B", tagline: "The gap between digital and human is wide." }
+};
+
+var name = getParam('name') || 'friend';
+var tierKey = getParam('tier') || 'healthy';
+var scores = {};
+for (var i = 0; i < DIMS.length; i++) {
+  var d = DIMS[i];
+  var raw = parseFloat(getParam(d.id) || '0');
+  if (isNaN(raw)) raw = 0;
+  var v = raw / 5;
+  if (v < 0) v = 0;
+  if (v > 1) v = 1;
+  scores[d.id] = v;
+}
+
+var t = TIERS[tierKey] || TIERS.healthy;
+
+function setColor(elId, color, prop) {
+  var el = document.getElementById(elId);
+  if (el) el.style[prop] = color;
+}
+setColor('theCard', t.color, 'borderColor');
+document.getElementById('glowRing').style.background = 'radial-gradient(circle, ' + t.color + ' 0%, transparent 68%)';
+document.getElementById('cardName').style.color = t.color;
+document.getElementById('cardName').textContent = t.label;
+document.getElementById('cardTagline').textContent = t.tagline;
+document.getElementById('forName').textContent = 'for ' + name;
+var kEls = document.querySelectorAll('.row .k');
+for (var ki = 0; ki < kEls.length; ki++) { kEls[ki].style.color = t.color; }
+var diamonds = document.querySelectorAll('.diamond');
+for (var di = 0; di < diamonds.length; di++) { diamonds[di].style.background = t.color; }
+
+// Two highest-scoring dimensions, shown neutrally (no ranking language, no value judgment)
+var sorted = DIMS.slice().sort(function (a, b) { return (scores[b.id] || 0) - (scores[a.id] || 0); });
+document.getElementById('row1v').textContent = sorted[0].label;
+document.getElementById('row2v').textContent = sorted[1].label;
+
+// Mini radar, same math as results.html, scaled down
+function buildRadar() {
+  var svg = document.getElementById('radarSvg');
+  var cx = 110, cy = 110, r = 80, n = DIMS.length;
+  var angles = [];
+  for (var a = 0; a < n; a++) { angles.push((a / n) * Math.PI * 2 - Math.PI / 2); }
+  function pt(angle, v) { return { x: cx + Math.cos(angle) * r * v, y: cy + Math.sin(angle) * r * v }; }
+  var html = '';
+  var rings = [0.5, 1];
+  for (var ri = 0; ri < rings.length; ri++) {
+    var pts = [];
+    for (var pi = 0; pi < angles.length; pi++) { pts.push(pt(angles[pi], rings[ri])); }
+    var d0 = '';
+    for (var pj = 0; pj < pts.length; pj++) { d0 += (pj === 0 ? 'M' : 'L') + pts[pj].x.toFixed(1) + ',' + pts[pj].y.toFixed(1) + ' '; }
+    html += '<path d="' + d0 + 'Z" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>';
+  }
+  var dataPoints = [];
+  for (var di2 = 0; di2 < DIMS.length; di2++) { dataPoints.push(pt(angles[di2], scores[DIMS[di2].id] || 0)); }
+  var d1 = '';
+  for (var dj = 0; dj < dataPoints.length; dj++) { d1 += (dj === 0 ? 'M' : 'L') + dataPoints[dj].x.toFixed(1) + ',' + dataPoints[dj].y.toFixed(1) + ' '; }
+  html += '<path d="' + d1 + 'Z" fill="' + t.color + '22" stroke="' + t.color + '" stroke-width="1.6"/>';
+  for (var dk = 0; dk < DIMS.length; dk++) {
+    var dp = pt(angles[dk], scores[DIMS[dk].id] || 0);
+    html += '<circle cx="' + dp.x.toFixed(1) + '" cy="' + dp.y.toFixed(1) + '" r="3" fill="' + DIMS[dk].color + '" opacity="0.9"/>';
+  }
+  svg.innerHTML = html;
+}
+buildRadar();
+</script>
+</body>
+</html>
