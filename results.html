@@ -188,7 +188,7 @@ body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height
   <!-- SKILL PILLS -->
   <div class="gold-rule"></div>
   <div class="eyebrow" style="margin-bottom:8px">Your priority skill cards</div>
-  <p class="sub" style="margin-bottom:14px">Based on your top 3 dimensions. Full skill deck at soleilmerroir.com/skill-deck — 3 cards free.</p>
+  <p class="sub" style="margin-bottom:14px">Based on your top 3 dimensions. Open the full skill deck — 3 cards free.</p>
   <div class="skill-pills fade-up" id="skillPills"></div>
 
   <!-- CTAs -->
@@ -199,7 +199,7 @@ body{background:#1A1D2E;color:#F2EDE4;font-family:'DM Mono',monospace;min-height
       <p style="font-size:11px;color:#F2EDE4;line-height:1.6">AI &amp; Digital Intimacy Companion Workbook + in-depth results + full skill deck + community invite</p>
       <span style="font-size:10px;color:#C4933A;display:block;margin-top:8px">$20 →</span>
     </a>
-    <a href="https://soleilmerroir.com/skill-deck" class="cta-card" style="border-color:rgba(196,96,122,0.3);background:rgba(196,96,122,0.06);text-decoration:none">
+    <a href="skill-deck.html" class="cta-card" style="border-color:rgba(196,96,122,0.3);background:rgba(196,96,122,0.06);text-decoration:none">
       <div style="font-size:10px;color:#C4607A;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px">Skill Deck</div>
       <p style="font-size:11px;color:#F2EDE4;line-height:1.6">10 relational skill cards · what AI dependency does to each · how to level up · 3 free</p>
       <span style="font-size:10px;color:#C4607A;display:block;margin-top:8px">3 cards free →</span>
@@ -420,7 +420,7 @@ function buildMeshCardGift(){
           <div class="mmc-avatar">◈</div>
           <div>
             <div class="mmc-id-eyebrow">cyborgdreamz · mesh profile</div>
-            <div class="mmc-id-name">${name}</div>
+            <div class="mmc-id-name">${String(name).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];})}</div>
             <div class="mmc-id-tagline">a map, not a verdict</div>
           </div>
         </div>
