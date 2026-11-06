@@ -30,6 +30,13 @@ const AI_TYPES = [
 ];
 
 const FREE_CARDS = ["empath", "regulator", "connector"];
+const STRIPE_URL = "https://buy.stripe.com/4gM6oJfmQaMcafmgtQ57W00";
+// Soft unlock: Email 2 links here with ?access=<ACCESS_KEY>. This is not real security (anyone with the link can use it);
+// change the key here and in Email 2 if it ever gets shared around.
+const ACCESS_KEY = "companion26";
+const HAS_ACCESS = (function () {
+  try { return new URLSearchParams(window.location.search).get("access") === ACCESS_KEY; } catch (e) { return false; }
+})();
 
 const SKILLS = [
   {
@@ -271,7 +278,7 @@ const Card = ({ skill, locked, highlighted, activeType }) => {
                 ⚠ AI Effect
               </div>
               <p style={{ fontFamily: "sans-serif", fontSize: 10.5, color: locked ? "rgba(255,255,255,0.18)" : "rgba(232,232,244,0.6)", lineHeight: 1.6, margin: 0 }}>
-                {locked ? "Purchase the workbook to unlock this skill card and all 7 others." : skill.aiEffect}
+                {locked ? "Get the workbook to unlock this skill card and all 7 others." : skill.aiEffect}
               </p>
             </div>
 
@@ -375,12 +382,12 @@ function SkillDeckCompanion() {
               Ten relational skills — what AI dependency does to each one, and how to level them back up.
             </p>
             <p style={{ fontFamily: "monospace", fontSize: 8.5, color: "rgba(232,232,244,0.3)", letterSpacing: 1 }}>
-              Free preview: 3 cards unlocked. Full deck included with the AI Relating Workbook.
+              {HAS_ACCESS ? "All 10 cards unlocked — thank you for your purchase." : "Free preview: 3 cards unlocked. Full deck included with your workbook purchase."}
             </p>
           </div>
 
           {/* Purchase card */}
-          <div style={{
+          {!HAS_ACCESS && <div style={{
             background: "linear-gradient(135deg, rgba(255,45,120,0.12), rgba(123,47,255,0.08))",
             border: "1px solid rgba(255,45,120,0.25)", borderRadius: 8,
             padding: "20px 22px", minWidth: 220, textAlign: "center",
@@ -392,9 +399,9 @@ function SkillDeckCompanion() {
               $20
             </div>
             <div style={{ fontFamily: "sans-serif", fontSize: 11, color: "rgba(232,232,244,0.5)", marginBottom: 14, lineHeight: 1.5 }}>
-              All 10 skill cards<br />+ full 33-page workbook
+              All 10 skill cards<br />+ Companion Workbook + in-depth results
             </div>
-            <a href="https://soleilmerroir.com" target="_blank" rel="noreferrer" style={{
+            <a href={STRIPE_URL} target="_blank" rel="noreferrer" style={{
               display: "block", background: "#ff2d78", color: "#06060e",
               fontFamily: "monospace", fontSize: 9, letterSpacing: 2, fontWeight: 700,
               padding: "10px 16px", borderRadius: 4, textDecoration: "none",
@@ -406,7 +413,7 @@ function SkillDeckCompanion() {
             <div style={{ fontFamily: "monospace", fontSize: 7, color: "rgba(255,255,255,0.25)", letterSpacing: 1 }}>
               Have a therapist? Ask about the referral discount.
             </div>
-          </div>
+          </div>}
         </div>
 
         {/* ── TYPE SELECTOR ── */}
@@ -452,11 +459,11 @@ function SkillDeckCompanion() {
         {/* ── FREE PREVIEW BANNER ── */}
         <div style={{ display: "flex", gap: 10, marginBottom: 24, flexWrap: "wrap", alignItems: "center" }}>
           <div style={{ fontFamily: "monospace", fontSize: 8, letterSpacing: 2, color: "rgba(255,255,255,0.3)", textTransform: "uppercase" }}>
-            {FREE_CARDS.length} cards free · {SKILLS.length - FREE_CARDS.length} locked
+            {HAS_ACCESS ? "All 10 cards unlocked" : `${FREE_CARDS.length} cards free · ${SKILLS.length - FREE_CARDS.length} locked`}
           </div>
           <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
           <div style={{ fontFamily: "monospace", fontSize: 8, letterSpacing: 2, color: "rgba(255,255,255,0.25)", textTransform: "uppercase" }}>
-            Unlock all 10 → soleilmerroir.com
+            {HAS_ACCESS ? "" : "Unlock all 10 with the workbook"}
           </div>
         </div>
 
@@ -467,7 +474,7 @@ function SkillDeckCompanion() {
           gap: 22, paddingBottom: 60,
         }}>
           {sortedSkills.map(skill => {
-            const isLocked = !FREE_CARDS.includes(skill.id);
+            const isLocked = !HAS_ACCESS && !FREE_CARDS.includes(skill.id);
             const isHighlighted = prioritySkills.includes(skill.id);
             return (
               <Card
@@ -482,7 +489,7 @@ function SkillDeckCompanion() {
         </div>
 
         {/* ── BOTTOM CTA ── */}
-        <div style={{
+        {!HAS_ACCESS && <div style={{
           position: "relative", zIndex: 1,
           background: "linear-gradient(135deg, rgba(255,45,120,0.1), rgba(0,229,255,0.06))",
           border: "1px solid rgba(255,45,120,0.2)", borderRadius: 8,
@@ -492,13 +499,13 @@ function SkillDeckCompanion() {
             Ready to unlock the full deck?
           </div>
           <div style={{ fontFamily: "sans-serif", fontWeight: 900, fontSize: 28, color: "#e8e8f4", marginBottom: 8, letterSpacing: 1 }}>
-            $20 · All 10 Skills + 33-Page Workbook
+            $20 · All 10 Skills + Workbook + In-Depth Results
           </div>
           <p style={{ fontSize: 13, color: "rgba(232,232,244,0.5)", maxWidth: 480, margin: "0 auto 20px", lineHeight: 1.7, fontWeight: 300 }}>
-            The full workbook includes the AI type assessment, ecosystem map, relationship history, DBT skills, MI tools, and all 10 skill cards fully unlocked.
+            Includes the AI &amp; Digital Intimacy Companion Workbook, your personalized in-depth results, and all 10 skill cards fully unlocked.
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="https://soleilmerroir.com" target="_blank" rel="noreferrer" style={{
+            <a href={STRIPE_URL} target="_blank" rel="noreferrer" style={{
               background: "#ff2d78", color: "#06060e",
               fontFamily: "monospace", fontSize: 9, letterSpacing: 2, fontWeight: 700,
               padding: "12px 28px", borderRadius: 4, textDecoration: "none",
@@ -516,9 +523,9 @@ function SkillDeckCompanion() {
             </a>
           </div>
           <div style={{ marginTop: 14, fontFamily: "monospace", fontSize: 7.5, color: "rgba(255,255,255,0.2)", letterSpacing: 1 }}>
-            Therapist? Email via soleilmerroir.com for the clinician referral code.
+            Therapist? Use your clinician referral code at checkout.
           </div>
-        </div>
+        </div>}
       </div>
 
       {/* Footer */}
